@@ -1,6 +1,4 @@
-return {
-	_Base = function(DataInfo)
-		local PCR_1 = Instance.new("ScreenGui")
+local PCR_1 = Instance.new("ScreenGui")
 		local TweenService = game:GetService('TweenService');
 		local uis = game:GetService("UserInputService")
 		local RunService = game:GetService("RunService")
@@ -622,7 +620,7 @@ return {
 		WEBSITE.Size = UDim2.new(0, 197, 0, 23)
 		WEBSITE.ZIndex = 3
 		WEBSITE.Font = Enum.Font.ArialBold
-		WEBSITE.Text = DataInfo.Build_Core1 
+		WEBSITE.Text = _G.DataCore.Build_Core1 
 		WEBSITE.TextColor3 = Color3.fromRGB(199, 199, 199)
 		WEBSITE.TextSize = 14.000
 		WEBSITE.TextXAlignment = Enum.TextXAlignment.Left
@@ -637,7 +635,7 @@ return {
 		LABEL2.Size = UDim2.new(0, 197, 0, 23)
 		LABEL2.ZIndex = 3
 		LABEL2.Font = Enum.Font.ArialBold
-		LABEL2.Text = DataInfo.Build_Core2
+		LABEL2.Text = _G.DataCore.Build_Core2
 		LABEL2.TextColor3 = Color3.fromRGB(199, 199, 199)
 		LABEL2.TextSize = 14.000
 		LABEL2.TextXAlignment = Enum.TextXAlignment.Right
@@ -2296,6 +2294,3 @@ return {
 		library.GUI = PCR_1 
 
 		return library
-	end,
-	
-}
