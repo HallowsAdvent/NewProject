@@ -193,6 +193,7 @@ function OpenedColor(text,ColourDisplay,Action,def)
 	local COLORPALLETE = Instance.new("Frame")
 	local ANIMATEFRAME01 = Instance.new("Frame")
 	local Holder = Instance.new("Frame")
+	_G.FrameHolder_celebrial = Holder
 	local BG = Instance.new("Frame")
 	local S12 = Instance.new("Frame")
 	local ColourWheel = Instance.new("ImageButton")
