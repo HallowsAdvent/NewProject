@@ -1,4 +1,5 @@
 local PCR_1 = Instance.new("ScreenGui")
+_G.IsScreenGui_toggler_actor = PCR_1
 local TweenService = game:GetService('TweenService');
 local uis = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
