@@ -14,7 +14,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		}
 
 
-		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
+		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source3',{},{
 
 			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
 			Build_Core2 = "days left: "..tostring(ScriptData.ScriptDaysL),
@@ -87,6 +87,12 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			
 			FastUsage = {
 				PromptsBool = true,
+			},
+			
+			CameraHack = {
+				FreecamBool = true,
+				MoreZoomBool = true,
+				InvisCameraBool = true,
 			},
 		}
 
@@ -258,6 +264,23 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end
 			end
 		end
+		
+		B.Scripts.Toggle_CameraProperties = function(Boolean, Property)
+			local CameraDistance = function()
+				if Boolean then Player.CameraMaxZoomDistance = 1000 else Player.CameraMaxZoomDistance = 10 end
+			end
+			
+			local CameraMode = function()
+				if Boolean then Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
+				else Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
+			end
+			
+			if string.lower(Property) == "distance" then
+				CameraDistance()
+			elseif string.lower(Property) == "mode" then
+				CameraMode()
+			end
+		end
 
 		B.Scripts.Toggle_LockpickResize = function(Boolean)
 			local PlayerGui = Player.PlayerGui
@@ -374,7 +397,18 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
 			B.Values.FastUsage.PromptsBool = Boolean
 		end)
-
+		
+		Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
+			B.Values.CameraHack.MoreZoomBool = Boolean
+			B.Scripts.Toggle_CameraProperties(Boolean, "distance")
+		end)
+		
+		Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
+			B.Values.CameraHack.InvisCameraBool = Boolean
+			B.Scripts.Toggle_CameraProperties(Boolean, "mode")
+		end)
+		
+		
 		--  \\  Other  //  --
 
 
