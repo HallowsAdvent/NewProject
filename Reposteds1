@@ -14,7 +14,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		}
 
 
-		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source3',{},{
+		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
 
 			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
 			Build_Core2 = "days left: "..tostring(ScriptData.ScriptDaysL),
