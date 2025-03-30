@@ -333,6 +333,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			coroutine.wrap(function()
 				while true do task.wait(7.5)
 					if B.Values.Wallhacking.EspBool == true then
+						B.Scripts.Toggle_ExtraSensoryPerception(false)
+						task.wait(.05)
 						B.Scripts.Toggle_ExtraSensoryPerception(true)
 					end
 				end
