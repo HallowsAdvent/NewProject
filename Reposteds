@@ -14,7 +14,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		}
 
 
-		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
+		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source3',{},{
 
 			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
 			Build_Core2 = "days left: "..tostring(ScriptData.ScriptDaysL),
@@ -82,7 +82,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			},
 
 			Lockpicking = {
-				LockpickBool = true
+				LockpickBool = true,
+			},
+			
+			FastUsage = {
+				PromptsBool = true,
 			},
 		}
 
@@ -289,14 +293,42 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					end
 				end
 			end)
-
+			
+			game:GetService("ProximityPromptService").PromptShown:Connect(function(ActualPrompt)
+				if B.Values.FastUsage.PromptsBool == true then
+					if ActualPrompt:GetAttribute("flag_duration") == nil then
+						ActualPrompt:SetAttribute("flag_duration", ActualPrompt.HoldDuration)
+					end
+					ActualPrompt.HoldDuration = 0
+				elseif ActualPrompt:GetAttribute("flag_duration") ~= nil then
+					if ActualPrompt:GetAttribute("flag_duration") ~= ActualPrompt.HoldDuration then
+						ActualPrompt.HoldDuration = ActualPrompt:GetAttribute("flag_duration")
+					end
+				end
+			end)
+			
 			coroutine.wrap(function()
-				while true do task.wait(10)
+				while true do task.wait(7.5)
 					if B.Values.Wallhacking.EspBool == true then
 						B.Scripts.Toggle_ExtraSensoryPerception(true)
 					end
 				end
 			end)()
+			
+			Player.CharacterAdded:Connect(function()
+				task.wait(.8)
+				
+				if B.Values.Walkspeed.SpeedBool == true then
+					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
+				end
+				if B.Values.Acceleration.AccelBool == true then
+					B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
+				end
+				if B.Values.StaminaMods.StaminaBool == true then
+					B.Scripts.Toggle_InfinityStamina(true)
+				end
+				
+			end)
 		end)
 
 
@@ -318,7 +350,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
 			B.Values.Walkspeed.SpeedValue = Number
-			if B.Values.Walkspeed.SpeedBool == true then
+			if B.Values.Walkspeed.SpeedBool == false then
 				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
 			end
 		end)
@@ -338,7 +370,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.StaminaMods.StaminaBool = Boolean
 			B.Scripts.Toggle_InfinityStamina(B.Values.StaminaMods.StaminaBool)
 		end)
-
+		
+		Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
+			B.Values.FastUsage.PromptsBool = Boolean
+		end)
 
 		--  \\  Other  //  --
 
@@ -352,13 +387,13 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end)
 
 		--  \\  Lockpicking  //  --
-		Sections.Misc.Character:AddToggle('Easy lockpicks', false, nil, function(Boolean)
+		Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
 			B.Values.Lockpicking.LockpickBool = Boolean
 			B.Scripts.Toggle_LockpickResize(Boolean)
 		end)
 
 		--  \\  Esp  //  --
-		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', false, Enum.KeyCode.J, function(Boolean)
+		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.EspBool, Enum.KeyCode.J, function(Boolean)
 			B.Values.Wallhacking.EspBool = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerception(Boolean)
 		end)
@@ -374,14 +409,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			spawn(function()
 				while wait(1) do
-					local time = os.date("%H:%M:%S", os.time())
+					local time = 'TIME: '..os.date("%H:%M:%S", os.time())
 					local fps = A.fps
 					local t = ''
-					if #fps < 2 then
-						t = 'Time: '..time..', fps: '..'0'..fps..', ms: '..ms
-					else
-						t = 'Time: '..time..', fps: '..fps..', ms: '..ms
-					end
+					t = time..fps
 
 					B.Assets.Windows.WaterM:ChangeText(t)
 				end
