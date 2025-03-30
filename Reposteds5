@@ -59,6 +59,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		local Sections = B.Assets.Sections
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local PlayerService = game:GetService("Players")
+		local RunService = game:GetService("RunService")
 		local Player = PlayerService.LocalPlayer
 
 		B.Values =  {
@@ -84,15 +85,19 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Lockpicking = {
 				LockpickBool = true,
 			},
-			
+
 			FastUsage = {
 				PromptsBool = true,
 			},
-			
+
 			CameraHack = {
 				FreecamBool = true,
 				MoreZoomBool = true,
 				InvisCameraBool = true,
+			},
+			
+			Flinging = {
+				FlingBool = true,
 			},
 		}
 
@@ -249,6 +254,52 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			end
 		end
 
+		B.Scripts.Give_TeleportTool = function()
+			local TpTool = Instance.new("Tool")
+			TpTool.Name = "Teleport Tool"
+			TpTool.RequiresHandle = false
+			TpTool.Parent = Player.Backpack
+			TpTool.Activated:Connect(function()
+				local Char = Player.Character or workspace:FindFirstChild(Player.Name)
+				local Mouse = Player:GetMouse()
+				local HRP = Char and Char:FindFirstChild("HumanoidRootPart")
+				if not Char or not HRP then return end
+				HRP.CFrame = CFrame.new(Mouse.Hit.X, Mouse.Hit.Y + 3, Mouse.Hit.Z, select(4, HRP.CFrame:components()))
+			end)
+		end
+
+		B.Scripts.Toggle_Fling = function(Boolean)
+			if Boolean then
+				coroutine.wrap(function()
+					repeat RunService.Heartbeat:Wait()
+						local character = Player.Character
+						local root = character:WaitForChild("HumanoidRootPart")
+						local vel, movel = nil, 0.1
+
+						while not (character and character.Parent and root and root.Parent) do
+							RunService.Heartbeat:Wait()
+							character = Player.Character
+							root = character:WaitForChild("HumanoidRootPart")
+						end
+
+						vel = root.Velocity
+						root.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+
+						RunService.RenderStepped:Wait()
+						if character and character.Parent and root and root.Parent then
+							root.Velocity = vel
+						end
+
+						RunService.Stepped:Wait()
+						if character and character.Parent and root and root.Parent then
+							root.Velocity = vel + Vector3.new(0, movel, 0)
+							movel = movel * -1
+						end
+					until B.Values.Flinging.FlingBool ~= true
+				end)()
+			end
+		end
+
 		B.Scripts.Toggle_ExtraSensoryPerception = function(Boolean)
 			if Boolean then
 				for _,i in PlayerService:GetChildren() do
@@ -264,17 +315,17 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end
 			end
 		end
-		
+
 		B.Scripts.Toggle_CameraProperties = function(Boolean, Property)
 			local CameraDistance = function()
 				if Boolean then Player.CameraMaxZoomDistance = 1000 else Player.CameraMaxZoomDistance = 10 end
 			end
-			
+
 			local CameraMode = function()
 				if Boolean then Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
 				else Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
 			end
-			
+
 			if string.lower(Property) == "distance" then
 				CameraDistance()
 			elseif string.lower(Property) == "mode" then
@@ -316,7 +367,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					end
 				end
 			end)
-			
+
 			game:GetService("ProximityPromptService").PromptShown:Connect(function(ActualPrompt)
 				if B.Values.FastUsage.PromptsBool == true then
 					if ActualPrompt:GetAttribute("flag_duration") == nil then
@@ -329,7 +380,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					end
 				end
 			end)
-			
+
 			coroutine.wrap(function()
 				while true do task.wait(7.5)
 					if B.Values.Wallhacking.EspBool == true then
@@ -339,10 +390,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					end
 				end
 			end)()
-			
+
 			Player.CharacterAdded:Connect(function()
 				task.wait(.8)
-				
+
 				if B.Values.Walkspeed.SpeedBool == true then
 					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
 				end
@@ -352,7 +403,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				if B.Values.StaminaMods.StaminaBool == true then
 					B.Scripts.Toggle_InfinityStamina(true)
 				end
-				
+
 			end)
 		end)
 
@@ -395,22 +446,26 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.StaminaMods.StaminaBool = Boolean
 			B.Scripts.Toggle_InfinityStamina(B.Values.StaminaMods.StaminaBool)
 		end)
-		
+
 		Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
 			B.Values.FastUsage.PromptsBool = Boolean
 		end)
-		
+
 		Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
 			B.Values.CameraHack.MoreZoomBool = Boolean
 			B.Scripts.Toggle_CameraProperties(Boolean, "distance")
 		end)
-		
+
 		Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
 			B.Values.CameraHack.InvisCameraBool = Boolean
 			B.Scripts.Toggle_CameraProperties(Boolean, "mode")
 		end)
 		
-		
+		Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
+			B.Values.Flinging.FlingBool = Boolean
+			B.Scripts.Toggle_Fling(Boolean)
+		end)
+
 		--  \\  Other  //  --
 
 
@@ -428,6 +483,14 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Scripts.Toggle_LockpickResize(Boolean)
 		end)
 
+		--Sections.Misc.Character:AddTextBox('Disguise (Client)',nil,false,5,function(a) 
+		--	--
+		--end)
+
+		Sections.Misc.Character:AddButton('Get Teleport-Tool',false,nil, function() 
+			B.Scripts.Give_TeleportTool()
+		end)
+
 		--  \\  Esp  //  --
 		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.EspBool, Enum.KeyCode.J, function(Boolean)
 			B.Values.Wallhacking.EspBool = Boolean
@@ -440,21 +503,16 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
 		end)
 
-		task.spawn(function()
-			local ms = A.ms or 'hehe wha'
-
-			spawn(function()
-				while wait(1) do
-					local time = 'TIME: '..os.date("%H:%M:%S", os.time())
-					local fps = A.fps
-					local t = ''
-					t = time.." "..fps
-
-					B.Assets.Windows.WaterM:ChangeText(t)
-				end
-
-				B.Assets.Windows.WaterM:Visible(true)
-			end)
-		end)
+		coroutine.wrap(function()
+			while wait(1) do
+				local time = 'TIME '..os.date("%H:%M:%S", os.time())
+				local fps = A.fps
+				local t = ''			
+				t = time.." / "..fps
+				B.Assets.Windows.WaterM:ChangeText(t)
+			end
+		end)()
+		
+		B.Assets.Windows.WaterM:Visible(true)
 	end)
 end
