@@ -537,72 +537,76 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		
 		
 		--  \\  Cope's Stuff  //  --
-		local area = {}
-		area.S = Sections.CopeTrials
-		area.P = workspace.Map.CopeTrialsDirectory
-		area.HLs = Instance.new("Folder", workspace.Terrain)
-		area.CM_e = Instance.new("Folder", workspace.Terrain)
-		
-		area.S.CopeDoors:AddLabel("We're working on this stage.")
-		area.S.CopeForest:AddLabel("There esp page only")
-		
-		area.S.CopeForest:AddToggle('Toggle "Pages"-Esp', B.Values.Wallhacking.PagesBool, function(Boolean)
-			B.Values.Wallhacking.PagesBool = Boolean
-			
-			if area.P:FindFirstChild("Hunt") then
-				task.wait()
-				if Boolean == true then
-					local pages = area.P.Hunt.Scriptables.Pages:GetChildren()
-					for _, v in pages do
-						if string.find(string.lower(v.Name), "page") then
+		pcall(function()
+			if workspace.Map:FindFirstChild("CopeTrialsDirectory") then
+				local area = {}
+				area.S = Sections.CopeTrials
+				area.P = workspace.Map.CopeTrialsDirectory
+				area.HLs = Instance.new("Folder", workspace.Terrain)
+				area.CM_e = Instance.new("Folder", workspace.Terrain)
+
+				area.S.CopeDoors:AddLabel("We're working on this stage.")
+				area.S.CopeForest:AddLabel("There esp page only")
+
+				area.S.CopeForest:AddToggle('Toggle "Pages"-Esp', B.Values.Wallhacking.PagesBool, function(Boolean)
+					B.Values.Wallhacking.PagesBool = Boolean
+
+					if area.P:FindFirstChild("Hunt") then
+						task.wait()
+						if Boolean == true then
+							local pages = area.P.Hunt.Scriptables.Pages:GetChildren()
+							for _, v in pages do
+								if string.find(string.lower(v.Name), "page") then
+									local HL = Instance.new("Highlight")
+									HL.FillTransparency = 1
+									HL.OutlineTransparency = 0
+
+									HL.OutlineColor = Color3.fromRGB(8, 230, 255)
+									HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+
+									HL.Enabled = true
+									HL.Parent = area.HLs
+									HL.Adornee = v
+								end
+							end
+						elseif Boolean == false then
+							for _, hl in area.HLs:GetChildren() do
+								hl:Destroy()
+							end
+						end	
+					end
+				end)
+
+				area.S.CopeForest:AddColorPallete('Change Pages-Esp Color', B.Values.Wallhacking.CopeColors.Pages,function(a) 
+					B.Values.Wallhacking.CopeColors.Pages = a
+					for _, v in area.HLs:GetChildren() do
+						v.OutlineColor = a
+					end
+				end)
+
+				area.S.CopeForest:AddToggle('Toggle Cope-Esp', B.Values.Wallhacking.CopeBool, function(Boolean)
+					B.Values.Wallhacking.CopeBool = Boolean
+
+					if area.P:FindFirstChild("Hunt") then
+						task.wait()
+						if Boolean == true then
 							local HL = Instance.new("Highlight")
 							HL.FillTransparency = 1
-							HL.OutlineTransparency = 0
-							
-							HL.OutlineColor = Color3.fromRGB(8, 230, 255)
+							HL.OutlineTransparency = 0.75
+
+							HL.OutlineColor = Color3.fromRGB(255, 0, 0)
 							HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-							
+
 							HL.Enabled = true
-							HL.Parent = area.HLs
-							HL.Adornee = v
-						end
+							HL.Parent = area.CM_e
+							HL.Adornee = area.P.Hunt.Copeman
+						elseif Boolean == false then
+							for _, hl in area.CM_e:GetChildren() do
+								hl:Destroy()
+							end
+						end	
 					end
-				elseif Boolean == false then
-					for _, hl in area.HLs:GetChildren() do
-						hl:Destroy()
-					end
-				end	
-			end
-		end)
-		
-		area.S.CopeForest:AddColorPallete('Change Pages-Esp Color', B.Values.Wallhacking.CopeColors.Pages,function(a) 
-			B.Values.Wallhacking.CopeColors.Pages = a
-			for _, v in area.HLs:GetChildren() do
-				v.OutlineColor = a
-			end
-		end)
-		
-		area.S.CopeForest:AddToggle('Toggle Cope-Esp', B.Values.Wallhacking.CopeBool, function(Boolean)
-			B.Values.Wallhacking.CopeBool = Boolean
-
-			if area.P:FindFirstChild("Hunt") then
-				task.wait()
-				if Boolean == true then
-					local HL = Instance.new("Highlight")
-					HL.FillTransparency = 1
-					HL.OutlineTransparency = 0.75
-
-					HL.OutlineColor = Color3.fromRGB(255, 0, 0)
-					HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-
-					HL.Enabled = true
-					HL.Parent = area.CM_e
-					HL.Adornee = area.P.Hunt.Copeman
-				elseif Boolean == false then
-					for _, hl in area.CM_e:GetChildren() do
-						hl:Destroy()
-					end
-				end	
+				end)
 			end
 		end)
 		
