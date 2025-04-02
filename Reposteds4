@@ -14,13 +14,13 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		}
 
 
-		A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
+		local A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
 
 			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
 			Build_Core2 = "days left: "..tostring(ScriptData.ScriptDaysL),
 		}
 
-		Init = function(DataCore)
+		local Init = function(DataCore)
 			_G.DataCore = DataCore
 		end
 
@@ -37,20 +37,27 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			--Combat = A:AddWindow('Combat'),
 			Visual = A:AddWindow('Visual'),
-			Misc =   A:AddWindow('Misc'),	
+			Misc =   A:AddWindow('Misc'),
+			CopeTrials = A:AddWindow('Cope-Trials II'),
+			
 			WaterM = A:AddWatermark('')
 		}
-
+		local wd = B.Assets.Windows
+		
 		B.Assets.Sections = {
 
 			Combat = {},
 			Visual = {
 
-				Sense = B.Assets.Windows.Visual:AddSection('Palpability')
+				Sense = wd.Visual:AddSection('Palpability')
 			},
 			Misc = {
-				Character = B.Assets.Windows.Misc:AddSection('Character Modifier'),
-				Movement = B.Assets.Windows.Misc:AddSection('Movement Modifier'),
+				Character = wd.Misc:AddSection('Character Modifier'),
+				Movement = wd.Misc:AddSection('Movement Modifier'),
+			},
+			CopeTrials = {
+				CopeDoors = wd.CopeTrials:AddSection('Cope Doors'),
+				CopeForest = wd.CopeTrials:AddSection('Hunting Forest'),
 			},
 		}
 
@@ -80,6 +87,12 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			Wallhacking = {
 				EspBool = true,
+				PagesBool = true,
+				CopeBool = true,
+				CopeColors = {
+					Pages = Color3.fromRGB(8, 230, 255),
+					CopeMan = Color3.fromRGB(255, 0, 0),					
+				}
 			},
 
 			Lockpicking = {
@@ -95,7 +108,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				MoreZoomBool = true,
 				InvisCameraBool = true,
 			},
-			
+
 			Flinging = {
 				FlingBool = true,
 			},
@@ -166,7 +179,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				I4.AnchorPoint = EspConfig.FramePoint
 			end)
 		end
-
+		
 		B.Scripts.Toggle_InfinityStamina = function(Boolean)
 			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
 
@@ -415,7 +428,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--  || ========== ||  --
 		--  \\  Movement  //  --
 
-
+		
+		
+		
+		
 		--  \\  Speed  //  --
 		Sections.Misc.Movement:AddLabel('Speed-Hacking')
 
@@ -430,7 +446,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
 			end
 		end)
-
+		
+		
+		
+		
 		--  \\  Acceleration  //  --
 		Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
 
@@ -438,7 +457,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.Acceleration.AccelValue = Number
 			B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
 		end)
-
+		
+		
+		
+		
 		--  \\  Stamina  //  --
 		Sections.Misc.Character:AddLabel('Other')	
 
@@ -460,12 +482,15 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.CameraHack.InvisCameraBool = Boolean
 			B.Scripts.Toggle_CameraProperties(Boolean, "mode")
 		end)
-		
+
 		Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
 			B.Values.Flinging.FlingBool = Boolean
 			B.Scripts.Toggle_Fling(Boolean)
 		end)
-
+		
+		
+		
+		
 		--  \\  Other  //  --
 
 
@@ -476,7 +501,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
 			B.Scripts.Toggle_BodyRotation(Boolean)
 		end)
-
+		
+		
+		
+		
 		--  \\  Lockpicking  //  --
 		Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
 			B.Values.Lockpicking.LockpickBool = Boolean
@@ -490,7 +518,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddButton('Get Teleport-Tool',false,nil, function() 
 			B.Scripts.Give_TeleportTool()
 		end)
-
+		
+		
+		
+		
 		--  \\  Esp  //  --
 		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.EspBool, Enum.KeyCode.J, function(Boolean)
 			B.Values.Wallhacking.EspBool = Boolean
@@ -502,7 +533,81 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
 		end)
+		
+		
+		
+		--  \\  Cope's Stuff  //  --
+		local area = {}
+		area.S = Sections.CopeTrials
+		area.P = workspace.Map.CopeTrialsDirectory
+		area.HLs = Instance.new("Folder", workspace.Terrain)
+		area.CM_e = Instance.new("Folder", workspace.Terrain)
+		
+		area.S.CopeDoors:AddLabel("We're working on this stage.")
+		area.S.CopeForest:AddLabel("There esp page only")
+		
+		area.S.CopeForest:AddToggle('Toggle "Pages"-Esp', B.Values.Wallhacking.PagesBool, function(Boolean)
+			B.Values.Wallhacking.PagesBool = Boolean
+			
+			if area.P:FindFirstChild("Hunt") then
+				task.wait()
+				if Boolean == true then
+					local pages = area.P.Hunt.Scriptables.Pages:GetChildren()
+					for _, v in pages do
+						if string.find(string.lower(v.Name), "page") then
+							local HL = Instance.new("Highlight")
+							HL.FillTransparency = 1
+							HL.OutlineTransparency = 0
+							
+							HL.OutlineColor = Color3.fromRGB(8, 230, 255)
+							HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+							
+							HL.Enabled = true
+							HL.Parent = area.HLs
+							HL.Adornee = v
+						end
+					end
+				elseif Boolean == false then
+					for _, hl in area.HLs:GetChildren() do
+						hl:Destroy()
+					end
+				end	
+			end
+		end)
+		
+		area.S.CopeForest:AddColorPallete('Change Pages-Esp Color', B.Values.Wallhacking.CopeColors.Pages,function(a) 
+			B.Values.Wallhacking.CopeColors.Pages = a
+			for _, v in area.HLs:GetChildren() do
+				v.OutlineColor = a
+			end
+		end)
+		
+		area.S.CopeForest:AddToggle('Toggle Cope-Esp', B.Values.Wallhacking.CopeBool, function(Boolean)
+			B.Values.Wallhacking.CopeBool = Boolean
 
+			if area.P:FindFirstChild("Hunt") then
+				task.wait()
+				if Boolean == true then
+					local HL = Instance.new("Highlight")
+					HL.FillTransparency = 1
+					HL.OutlineTransparency = 0.75
+
+					HL.OutlineColor = Color3.fromRGB(255, 0, 0)
+					HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+
+					HL.Enabled = true
+					HL.Parent = area.CM_e
+					HL.Adornee = area.P.Hunt.Copeman
+				elseif Boolean == false then
+					for _, hl in area.CM_e:GetChildren() do
+						hl:Destroy()
+					end
+				end	
+			end
+		end)
+		
+		
+		
 		coroutine.wrap(function()
 			while wait(1) do
 				local time = 'TIME '..os.date("%H:%M:%S", os.time())
@@ -512,7 +617,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				B.Assets.Windows.WaterM:ChangeText(t)
 			end
 		end)()
-		
+
 		B.Assets.Windows.WaterM:Visible(true)
 	end)
 end
