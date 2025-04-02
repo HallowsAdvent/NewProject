@@ -549,32 +549,34 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				area.S.CopeForest:AddLabel("There esp page only")
 
 				area.S.CopeForest:AddToggle('Toggle "Pages"-Esp', B.Values.Wallhacking.PagesBool, function(Boolean)
-					B.Values.Wallhacking.PagesBool = Boolean
+					pcall(function()
+						B.Values.Wallhacking.PagesBool = Boolean
 
-					if area.P:FindFirstChild("Hunt") then
-						task.wait()
-						if Boolean == true then
-							local pages = area.P.Hunt.Scriptables.Pages:GetChildren()
-							for _, v in pages do
-								if string.find(string.lower(v.Name), "page") then
-									local HL = Instance.new("Highlight")
-									HL.FillTransparency = 1
-									HL.OutlineTransparency = 0
+						if area.P:FindFirstChild("Hunt") then
+							task.wait()
+							if Boolean == true then
+								local pages = area.P.Hunt.Scriptables.Pages:GetChildren()
+								for _, v in pages do
+									if string.find(string.lower(v.Name), "page") then
+										local HL = Instance.new("Highlight")
+										HL.FillTransparency = 1
+										HL.OutlineTransparency = 0
 
-									HL.OutlineColor = Color3.fromRGB(8, 230, 255)
-									HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+										HL.OutlineColor = Color3.fromRGB(8, 230, 255)
+										HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 
-									HL.Enabled = true
-									HL.Parent = area.HLs
-									HL.Adornee = v
+										HL.Enabled = true
+										HL.Parent = area.HLs
+										HL.Adornee = v
+									end
 								end
-							end
-						elseif Boolean == false then
-							for _, hl in area.HLs:GetChildren() do
-								hl:Destroy()
-							end
-						end	
-					end
+							elseif Boolean == false then
+								for _, hl in area.HLs:GetChildren() do
+									hl:Destroy()
+								end
+							end	
+						end
+					end)
 				end)
 
 				area.S.CopeForest:AddColorPallete('Change Pages-Esp Color', B.Values.Wallhacking.CopeColors.Pages,function(a) 
@@ -585,27 +587,29 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end)
 
 				area.S.CopeForest:AddToggle('Toggle Cope-Esp', B.Values.Wallhacking.CopeBool, function(Boolean)
-					B.Values.Wallhacking.CopeBool = Boolean
+					pcall(function()
+						B.Values.Wallhacking.CopeBool = Boolean
 
-					if area.P:FindFirstChild("Hunt") then
-						task.wait()
-						if Boolean == true then
-							local HL = Instance.new("Highlight")
-							HL.FillTransparency = 1
-							HL.OutlineTransparency = 0.75
+						if area.P:FindFirstChild("Hunt") then
+							task.wait()
+							if Boolean == true then
+								local HL = Instance.new("Highlight")
+								HL.FillTransparency = 1
+								HL.OutlineTransparency = 0.75
 
-							HL.OutlineColor = Color3.fromRGB(255, 0, 0)
-							HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+								HL.OutlineColor = Color3.fromRGB(255, 0, 0)
+								HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 
-							HL.Enabled = true
-							HL.Parent = area.CM_e
-							HL.Adornee = area.P.Hunt.Copeman
-						elseif Boolean == false then
-							for _, hl in area.CM_e:GetChildren() do
-								hl:Destroy()
-							end
-						end	
-					end
+								HL.Enabled = true
+								HL.Parent = area.CM_e
+								HL.Adornee = area.P.Hunt.Copeman
+							elseif Boolean == false then
+								for _, hl in area.CM_e:GetChildren() do
+									hl:Destroy()
+								end
+							end	
+						end
+					end)
 				end)
 			end
 		end)
