@@ -691,7 +691,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 										HL.Adornee = directories.dir3.Copeman
 									end
 								end
-							until not workspace.Map.CopeTrialsDirectory:FindFirstChild("Hunt")
+							until Player.Character == nil
 						end
 
 						init.new()
@@ -701,7 +701,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				repeat task.wait(1) 
 				until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory")
 				list.__printmemory()
-
+				
+				print("You're getting if hunting forest")
+				
 				repeat task.wait(2) 
 				until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory") 
 				list.__printhunt()
