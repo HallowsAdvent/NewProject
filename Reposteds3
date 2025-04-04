@@ -39,11 +39,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Visual = A:AddWindow('Visual'),
 			Misc =   A:AddWindow('Misc'),
 			CopeTrials = A:AddWindow('Cope-Trials II'),
-			
+
 			WaterM = A:AddWatermark('')
 		}
 		local wd = B.Assets.Windows
-		
+
 		B.Assets.Sections = {
 
 			Combat = {},
@@ -179,7 +179,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				I4.AnchorPoint = EspConfig.FramePoint
 			end)
 		end
-		
+
 		B.Scripts.Toggle_InfinityStamina = function(Boolean)
 			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
 
@@ -428,10 +428,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--  || ========== ||  --
 		--  \\  Movement  //  --
 
-		
-		
-		
-		
+
+
+
+
 		--  \\  Speed  //  --
 		Sections.Misc.Movement:AddLabel('Speed-Hacking')
 
@@ -446,10 +446,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
 			end
 		end)
-		
-		
-		
-		
+
+
+
+
 		--  \\  Acceleration  //  --
 		Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
 
@@ -457,10 +457,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.Acceleration.AccelValue = Number
 			B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
 		end)
-		
-		
-		
-		
+
+
+
+
 		--  \\  Stamina  //  --
 		Sections.Misc.Character:AddLabel('Other')	
 
@@ -487,10 +487,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.Flinging.FlingBool = Boolean
 			B.Scripts.Toggle_Fling(Boolean)
 		end)
-		
-		
-		
-		
+
+
+
+
 		--  \\  Other  //  --
 
 
@@ -501,10 +501,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
 			B.Scripts.Toggle_BodyRotation(Boolean)
 		end)
-		
-		
-		
-		
+
+
+
+
 		--  \\  Lockpicking  //  --
 		Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
 			B.Values.Lockpicking.LockpickBool = Boolean
@@ -518,10 +518,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddButton('Get Teleport-Tool',false,nil, function() 
 			B.Scripts.Give_TeleportTool()
 		end)
-		
-		
-		
-		
+
+
+
+
 		--  \\  Esp  //  --
 		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.EspBool, Enum.KeyCode.J, function(Boolean)
 			B.Values.Wallhacking.EspBool = Boolean
@@ -533,31 +533,134 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
 		end)
-		
-		
-		
-		--  \\  Cope's Stuff  //  --
-		pcall(function()
-			if workspace.Map:FindFirstChild("CopeTrialsDirectory") then
-				local area = {}
-				area.S = Sections.CopeTrials
-				area.P = workspace.Map.CopeTrialsDirectory
-				area.HLs = Instance.new("Folder", workspace.Terrain)
-				area.CM_e = Instance.new("Folder", workspace.Terrain)
 
-				area.S.CopeDoors:AddLabel("We're working on this stage.")
-				area.S.CopeForest:AddLabel("There esp page only")
+		task.wait(2)
+		
+		if workspace.Map:FindFirstChild("CopeTrialsDirectory") then
+			pcall(function()
+				task.wait(1)
 
-				area.S.CopeForest:AddToggle('Toggle "Pages"-Esp', B.Values.Wallhacking.PagesBool, function(Boolean)
-					pcall(function()
-						B.Values.Wallhacking.PagesBool = Boolean
+				local list = {
 
-						if area.P:FindFirstChild("Hunt") then
-							task.wait()
-							if Boolean == true then
-								local pages = area.P.Hunt.Scriptables.Pages:GetChildren()
-								for _, v in pages do
-									if string.find(string.lower(v.Name), "page") then
+					__printmemory = function()
+						local directories = {}
+						directories.dir1 = workspace.Map
+
+						if directories.dir1:FindFirstChild("CopeTrialsDirectory") then
+							directories.dir2 = directories.dir1.CopeTrialsDirectory	
+							if directories.dir2:FindFirstChild("Memory") then
+								directories.dir3 = directories.dir2.Memory
+							end
+						end	
+
+						local init = {}
+
+						init.new = function()
+							local data={}
+							data.stress_folder = Instance.new("Folder", workspace.Terrain)
+
+							data.directory = directories.dir3.Scriptables
+							data.stages = {}
+
+							task.spawn(function()
+								local no_fall_brick = Instance.new("Part", directories.dir3.Parts.RockBase)
+								no_fall_brick.Name = "CubeBruh"
+								no_fall_brick.Anchored = true
+								no_fall_brick.CanCollide = true
+								no_fall_brick.Transparency = 0.75
+								no_fall_brick.CastShadow = false
+
+								no_fall_brick.Massless = true
+								no_fall_brick.Size = Vector3.new(333, 1, 55)
+								no_fall_brick.Position = Vector3.new(999.444, 928.053, 98.319)
+								no_fall_brick.Rotation = Vector3.new(0, 0, 0)
+							end)
+
+							for _, v in data.directory.Stages:GetChildren() do if string.find(string.lower(v.Name), "stage") and v:FindFirstChild("Rows") then data.stages[v.Name] = v end end
+
+							for _, Stage in data.stages do
+								print(Stage)
+
+								local Symbols = {}
+								local Rows = {}
+
+								for _, r1 in Stage.Symbols:GetChildren() do
+									Symbols[r1.Name] = r1
+								end
+								for _, r1 in Stage.Rows:GetChildren() do
+									Rows[r1.Name] = r1
+								end
+
+								for _, S in Symbols do
+									local entire_name = "Row"..S.Name
+
+									local current_row = Rows[entire_name]
+									local platforms = current_row:GetChildren()
+
+									local symbol
+									local platform
+
+									local s_id
+
+									print(platforms)
+
+									for _, part in S.Part:GetChildren() do
+										if string.find(string.lower(part.Name),"symbol_") then 
+											symbol = part 
+										end 
+									end 
+
+									s_id = symbol.MeshId
+
+									for _, platformz in platforms do 
+										for _, mesh_obj in platformz:GetChildren() do
+											if string.find(string.lower(mesh_obj.Name),"symbol_") then 
+												if mesh_obj.MeshId == s_id then 
+													platform = mesh_obj.Parent 
+												end 
+											end 
+										end
+									end
+
+
+
+									task.spawn(function()
+										local highlight = Instance.new("Highlight")
+										highlight.OutlineTransparency = 1
+										highlight.FillTransparency = 0.5
+										highlight.FillColor = Color3.fromRGB(0, 255, 0)
+										highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+										highlight.Enabled = true
+
+										highlight.Adornee = platform
+										highlight.Parent = data.stress_folder
+									end)
+								end
+							end		
+						end
+
+						init.new()
+					end,
+
+					__printhunt = function()
+						local directories = {}
+						directories.dir1 = workspace.Map
+
+						if directories.dir1:FindFirstChild("CopeTrialsDirectory") then
+							directories.dir2 = directories.dir1.CopeTrialsDirectory	
+							if directories.dir2:FindFirstChild("Hunt") then
+								directories.dir3 = directories.dir2.Hunt
+							end
+						end	
+
+						local init = {}
+
+						init.new = function()
+							repeat task.wait(1)
+								local pages = {}
+
+								for _, v in directories.dir3.Scriptables.Pages:GetChildren() do
+									if not v:FindFirstChildOfClass("Highlight") then
 										local HL = Instance.new("Highlight")
 										HL.FillTransparency = 1
 										HL.OutlineTransparency = 0
@@ -566,56 +669,44 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 										HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 
 										HL.Enabled = true
-										HL.Parent = area.HLs
+										HL.Parent = v
 										HL.Adornee = v
 									end
 								end
-							elseif Boolean == false then
-								for _, hl in area.HLs:GetChildren() do
-									hl:Destroy()
+
+								if directories.dir3:FindFirstChild("Copeman") then
+									if not directories.dir3.Copeman:FindFirstChildOfClass("Highlight") then
+										local HL = Instance.new("Highlight")
+										HL.FillTransparency = 1
+										HL.OutlineTransparency = 0
+
+										HL.OutlineColor = Color3.fromRGB(255, 0, 0)
+										HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+
+										HL.Enabled = true
+										HL.Parent = directories.dir3.Copeman
+										HL.Adornee = directories.dir3.Copeman
+									end
 								end
-							end	
+							until not workspace.Map.CopeTrialsDirectory:FindFirstChild("Hunt")
 						end
-					end)
-				end)
 
-				area.S.CopeForest:AddColorPallete('Change Pages-Esp Color', B.Values.Wallhacking.CopeColors.Pages,function(a) 
-					B.Values.Wallhacking.CopeColors.Pages = a
-					for _, v in area.HLs:GetChildren() do
-						v.OutlineColor = a
-					end
-				end)
+						init.new()
+					end,
+				}
 
-				area.S.CopeForest:AddToggle('Toggle Cope-Esp', B.Values.Wallhacking.CopeBool, function(Boolean)
-					pcall(function()
-						B.Values.Wallhacking.CopeBool = Boolean
+				repeat task.wait(1) 
+				until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory")
+				list.__printmemory()
 
-						if area.P:FindFirstChild("Hunt") then
-							task.wait()
-							if Boolean == true then
-								local HL = Instance.new("Highlight")
-								HL.FillTransparency = 1
-								HL.OutlineTransparency = 0.75
+				repeat task.wait(2) 
+				until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory") 
+				list.__printhunt()
 
-								HL.OutlineColor = Color3.fromRGB(255, 0, 0)
-								HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+				-- Ends Cope's Stuff
+			end)
+		end
 
-								HL.Enabled = true
-								HL.Parent = area.CM_e
-								HL.Adornee = area.P.Hunt.Copeman
-							elseif Boolean == false then
-								for _, hl in area.CM_e:GetChildren() do
-									hl:Destroy()
-								end
-							end	
-						end
-					end)
-				end)
-			end
-		end)
-		
-		
-		
 		coroutine.wrap(function()
 			while wait(1) do
 				local time = 'TIME '..os.date("%H:%M:%S", os.time())
