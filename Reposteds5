@@ -38,7 +38,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			--Combat = A:AddWindow('Combat'),
 			Visual = A:AddWindow('Visual'),
 			Misc =   A:AddWindow('Misc'),
-			CopeTrials = A:AddWindow('Cope-Trials II'),
+			CopeTrials = A:AddWindow('Cope-Trials'),
 
 			WaterM = A:AddWatermark('')
 		}
@@ -56,8 +56,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Movement = wd.Misc:AddSection('Movement Modifier'),
 			},
 			CopeTrials = {
-				CopeDoors = wd.CopeTrials:AddSection('Cope Doors'),
-				CopeForest = wd.CopeTrials:AddSection('Hunting Forest'),
+				info = wd.CopeTrials:AddSection('Information'),
 			},
 		}
 
@@ -533,8 +532,12 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
 		end)
-
+		
+		Sections.CopeTrials.info:AddLabel('Script will be runned automaticly after getting in trials.')	
+		
 		task.wait(2)
+		
+		
 		
 		if workspace.Map:FindFirstChild("CopeTrialsDirectory") then
 			pcall(function()
