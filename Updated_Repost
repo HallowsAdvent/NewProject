@@ -1,0 +1,909 @@
+if _G.Celebrial_nonYieldLoaded ~= true then
+	_G.Celebrial_nonYieldLoaded = true
+	task.spawn(function()
+		local ScriptData = {
+
+			ScriptLevel = 		"1",
+			ScriptBuild = 		"Legit",
+
+			ScriptDaysL =		"-inf",
+			ScriptCalls =		"Celebrial",	
+
+			ScriptSpprt =		"[Criminality]",
+			ScriptSVrsn =		"unknown",
+		}
+
+
+		local A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
+
+			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
+			Build_Core2 = "days left: "..tostring(ScriptData.ScriptDaysL),
+		}
+
+		local Init = function(DataCore)
+			_G.DataCore = DataCore
+		end
+
+		if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
+
+		B.Plugins = {}
+		B.Scripts = {}
+		B.Assets =  {}
+
+		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
+
+
+		B.Assets.Windows = {
+
+			Combat = A:AddWindow('Combat'),
+			Visual = A:AddWindow('Visual'),
+			Misc =   A:AddWindow('Misc'),
+			--CopeTrials = A:AddWindow('Cope-Trials'),
+
+			WaterM = A:AddWatermark('')
+		}
+		local wd = B.Assets.Windows
+
+		B.Assets.Sections = {
+
+			Combat = {
+				Aim = wd.Combat:AddSection('Aim-locking')	
+			},
+			Visual = {
+
+				Sense = wd.Visual:AddSection('Palpability')
+			},
+			Misc = {
+				Character = wd.Misc:AddSection('Character Modifier'),
+				Movement = wd.Misc:AddSection('Movement Modifier'),
+			},
+			--CopeTrials = {
+			--	info = wd.CopeTrials:AddSection('Information'),
+			--},
+		}
+
+		--  //  0  \\  --
+
+		local Sections = B.Assets.Sections
+		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local PlayerService = game:GetService("Players")
+		local RunService = game:GetService("RunService")
+		local Player = PlayerService.LocalPlayer
+
+		local camera = workspace.CurrentCamera
+		local mousee = Player:GetMouse()
+
+		B.Values =  {
+
+			Aimlock = {
+				TargetPart = "Head",
+				TargetSense = 0.5,
+				AimlockBool = true,
+				DistanceValue = 250,
+				DownedCheck = true,
+				DeadCheck = true,
+			},
+
+			Walkspeed = {
+				SpeedValue = 1,
+				SpeedBool = true,
+			},
+
+			Acceleration = {
+				AccelValue = 1,
+				AccelBool = true,
+			},
+
+			StaminaMods = {
+				StaminaBool = true,
+			},
+
+			Wallhacking = {
+				EspBool = true,
+				PagesBool = true,
+				CopeBool = true,
+				CopeColors = {
+					Pages = Color3.fromRGB(8, 230, 255),
+					CopeMan = Color3.fromRGB(255, 0, 0),					
+				}
+			},
+
+			Lockpicking = {
+				LockpickBool = true,
+			},
+
+			FastUsage = {
+				PromptsBool = true,
+			},
+
+			CameraHack = {
+				FreecamBool = true,
+				MoreZoomBool = true,
+				InvisCameraBool = true,
+			},
+
+			Flinging = {
+				FlingBool = true,
+			},
+		}
+
+
+		--  \\ Aimlock Settings //  --
+		_G.CircleSides = 64
+		_G.CircleColor = Color3.fromRGB(60, 255, 0)
+		_G.CircleTransparency = 0
+		_G.CircleRadius = 200
+		_G.CircleFilled = false
+		_G.CircleVisible = true
+		_G.CircleThickness = 1
+
+		local FOVCircle = Drawing.new("Circle")
+		FOVCircle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+		FOVCircle.Radius = _G.CircleRadius
+		FOVCircle.Filled = _G.CircleFilled
+		FOVCircle.Color = _G.CircleColor
+		FOVCircle.Visible = _G.CircleVisible
+		FOVCircle.Transparency = _G.CircleTransparency
+		FOVCircle.NumSides = _G.CircleSides
+		FOVCircle.Thickness = _G.CircleThickness
+		--  // End of Settings \\  --
+
+
+
+		local EspConfig = {
+			BillSize = UDim2.new(1000,0,1000,0),
+			FrameSize = UDim2.new(0.005,0,0.005,0),
+			FramePos = UDim2.new(0.5,0,0.5,0),
+			FramePoint = Vector2.new(0.5,0.5),
+			FrameColor = Color3.fromRGB(255,255,255),
+			Gm = game.Workspace.Terrain,
+			Gm1 = "espcnc"
+		}
+
+		local new_esp = function(i)
+			local V,ProtectedCreation = pcall(function()
+				local EspFolder
+				if not EspConfig.Gm:FindFirstChild("espcnc") then
+					EspFolder = Instance.new("Folder",EspConfig.Gm)
+					EspFolder.Name = EspConfig.Gm1
+				else
+					EspFolder = EspConfig.Gm
+				end
+
+				local char = i.Character
+				local humpart
+				if char:FindFirstChild("HumanoidRootPart") then
+					humpart = char:WaitForChild("HumanoidRootPart")
+				end
+
+				local I1 = Instance.new("BillboardGui")
+				local I2 = Instance.new("Frame")
+				local I3 = Instance.new("UIStroke")
+				local I4 = Instance.new("TextLabel")
+
+
+				I1.Enabled = true
+				I1.Parent = EspConfig.Gm:WaitForChild(EspConfig.Gm1)
+				I1.Adornee = humpart
+				I1.LightInfluence = 0
+				I1.AlwaysOnTop = true
+				I1.Size = EspConfig.BillSize
+				I1.ResetOnSpawn = false
+				I1.Name = i.Name
+
+				I2.Position = EspConfig.FramePos
+				I2.Size = EspConfig.FrameSize
+				I2.BackgroundTransparency = 1
+				I2.AnchorPoint = EspConfig.FramePoint
+				I2.Parent = I1
+
+				I3.Thickness = 2
+				I3.Color = EspConfig.FrameColor
+				I3.Parent = I2
+				I3.LineJoinMode = Enum.LineJoinMode.Miter
+
+				I4.Parent = I1
+				I4.Text = i.Name
+				I4.BackgroundTransparency = 1
+				I4.TextColor3 = EspConfig.FrameColor
+				I4.TextStrokeTransparency = 0
+				I4.TextSize = 14
+				I4.TextWrapped = true
+				I4.Font = "MontserratBold"
+				I4.Position = UDim2.new(0.5,0,0.503,0)
+				I4.Size = UDim2.new(0,500,0,50)
+				I4.AnchorPoint = EspConfig.FramePoint
+			end)
+		end
+
+		B.Scripts.Toggle_InfinityStamina = function(Boolean)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+
+			if NewFolder then
+				if Boolean then
+					local meanline = NewFolder.Currents:FindFirstChild("2.39418")
+
+					if not meanline then
+						local instance_boolean = Instance.new("BoolValue")
+						instance_boolean.Value = true
+						instance_boolean.Name = "2.39418"
+						instance_boolean.Parent = NewFolder.Currents
+					end
+				else
+					if NewFolder.Currents:FindFirstChild("2.39418") then
+						NewFolder.Currents["2.39418"]:Destroy()
+					end
+				end
+			end
+		end
+
+		B.Scripts.Change_WalkSpeed = function(Boolean, Number)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+			Number = Number or 0
+
+			if NewFolder then
+				if Boolean then
+					local meanline
+
+					if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
+						meanline = NewFolder.Currents
+						meanline.Value = Number
+					else
+						meanline = Instance.new("NumberValue")
+						meanline.Name = "SP_ADONIS"
+						meanline.Value = Number
+						meanline.Parent = NewFolder.Currents
+					end	
+				else
+					local meanline
+
+					if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
+						meanline = NewFolder.Currents.SP_ADONIS
+						meanline:Destroy()
+					end
+				end
+			end
+		end
+
+		B.Scripts.Change_Acceleration = function(Number)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+			Number = Number or 1
+
+			if NewFolder then
+				local meanline = NewFolder:FindFirstChild("AccelerationModifier")
+				if meanline then
+					meanline.Value = Number
+				end
+			end
+		end
+
+		B.Scripts.Toggle_NeckMovement = function(Boolean)
+			if Player.Character then
+				Player.Character:SetAttribute("NoNeckMovement", Boolean)
+			end
+		end
+
+		B.Scripts.Toggle_BodyRotation = function(Boolean)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+
+			if NewFolder then
+				if Boolean then
+					local meanline = NewFolder.Currents:FindFirstChild("ROTROOT")
+
+					if not meanline then
+						local instance_boolean = Instance.new("BoolValue")
+						instance_boolean.Name = "ROTROOT"
+						instance_boolean.Parent = NewFolder.Currents
+					end
+				else
+					if NewFolder.Currents:FindFirstChild("ROTROOT") then
+						NewFolder.Currents["ROTROOT"]:Destroy()
+					end
+				end
+			end
+		end
+
+		B.Scripts.Give_TeleportTool = function()
+			local TpTool = Instance.new("Tool")
+			TpTool.Name = "Teleport Tool"
+			TpTool.RequiresHandle = false
+			TpTool.Parent = Player.Backpack
+			TpTool.Activated:Connect(function()
+				local Char = Player.Character or workspace:FindFirstChild(Player.Name)
+				local Mouse = Player:GetMouse()
+				local HRP = Char and Char:FindFirstChild("HumanoidRootPart")
+				if not Char or not HRP then return end
+				HRP.CFrame = CFrame.new(Mouse.Hit.X, Mouse.Hit.Y + 3, Mouse.Hit.Z, select(4, HRP.CFrame:components()))
+			end)
+		end
+
+		B.Scripts.Toggle_Fling = function(Boolean)
+			if Boolean then
+				coroutine.wrap(function()
+					repeat RunService.Heartbeat:Wait()
+						local character = Player.Character
+						local root = character:WaitForChild("HumanoidRootPart")
+						local vel, movel = nil, 0.1
+
+						while not (character and character.Parent and root and root.Parent) do
+							RunService.Heartbeat:Wait()
+							character = Player.Character
+							root = character:WaitForChild("HumanoidRootPart")
+						end
+
+						vel = root.Velocity
+						root.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+
+						RunService.RenderStepped:Wait()
+						if character and character.Parent and root and root.Parent then
+							root.Velocity = vel
+						end
+
+						RunService.Stepped:Wait()
+						if character and character.Parent and root and root.Parent then
+							root.Velocity = vel + Vector3.new(0, movel, 0)
+							movel = movel * -1
+						end
+					until B.Values.Flinging.FlingBool ~= true
+				end)()
+			end
+		end
+
+		B.Scripts.Toggle_ExtraSensoryPerception = function(Boolean)
+			if Boolean then
+				for _,i in PlayerService:GetChildren() do
+					if i.Name ~= Player.Name then
+						if i.Character then
+							new_esp(i)
+						end
+					end
+				end
+			else
+				if EspConfig.Gm:FindFirstChild(EspConfig.Gm1) then
+					EspConfig.Gm[EspConfig.Gm1]:Destroy()
+				end
+			end
+		end
+
+		B.Scripts.Toggle_CameraProperties = function(Boolean, Property)
+			local CameraDistance = function()
+				if Boolean then Player.CameraMaxZoomDistance = 1000 else Player.CameraMaxZoomDistance = 10 end
+			end
+
+			local CameraMode = function()
+				if Boolean then Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
+				else Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
+			end
+
+			if string.lower(Property) == "distance" then
+				CameraDistance()
+			elseif string.lower(Property) == "mode" then
+				CameraMode()
+			end
+		end
+
+		B.Scripts.Toggle_LockpickResize = function(Boolean)
+			local PlayerGui = Player.PlayerGui
+
+			local Baty = function(gui)
+				if gui:FindFirstChild("MF") then
+					for _, T in gui.MF.LP_Frame.Frames:GetChildren() do
+						if T:IsA("Frame") and T:FindFirstChild("Bar") then
+							if Boolean then
+								T.Bar.UIScale.Scale = 15
+							else
+								T.Bar.UIScale.Scale = 1
+							end
+						end
+					end
+				end
+			end
+
+			if PlayerGui:FindFirstChild("LockpickGUI") then
+				Baty(PlayerGui.LockpickGUI)
+			end
+		end
+
+		task.spawn(function() -- Handling Specific Events / Connections
+			local PlayerGui = Player.PlayerGui
+
+			PlayerGui.ChildAdded:Connect(function(AddedChild)
+				if AddedChild.Name == "LockpickGUI" then
+					if B.Values.Lockpicking.LockpickBool == true then
+						B.Scripts.Toggle_LockpickResize(true)
+					else
+						B.Scripts.Toggle_LockpickResize(false)
+					end
+				end
+			end)
+
+			game:GetService("ProximityPromptService").PromptShown:Connect(function(ActualPrompt)
+				if B.Values.FastUsage.PromptsBool == true then
+					if ActualPrompt:GetAttribute("flag_duration") == nil then
+						ActualPrompt:SetAttribute("flag_duration", ActualPrompt.HoldDuration)
+					end
+					ActualPrompt.HoldDuration = 0
+				elseif ActualPrompt:GetAttribute("flag_duration") ~= nil then
+					if ActualPrompt:GetAttribute("flag_duration") ~= ActualPrompt.HoldDuration then
+						ActualPrompt.HoldDuration = ActualPrompt:GetAttribute("flag_duration")
+					end
+				end
+			end)
+
+			coroutine.wrap(function()
+				while true do task.wait(7.5)
+					if B.Values.Wallhacking.EspBool == true then
+						B.Scripts.Toggle_ExtraSensoryPerception(false)
+						task.wait(.05)
+						B.Scripts.Toggle_ExtraSensoryPerception(true)
+					end
+				end
+			end)()
+
+			Player.CharacterAdded:Connect(function()
+				task.wait(.8)
+
+				if B.Values.Walkspeed.SpeedBool == true then
+					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
+				end
+				if B.Values.Acceleration.AccelBool == true then
+					B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
+				end
+				if B.Values.StaminaMods.StaminaBool == true then
+					B.Scripts.Toggle_InfinityStamina(true)
+				end
+
+			end)
+		end)
+
+
+
+
+		--  //  1  \\  --
+
+
+		--  //    Misc    \\  --
+		--  || ========== ||  --
+		--  \\  Movement  //  --
+
+
+
+
+
+		--  \\  Speed  //  --
+		Sections.Misc.Movement:AddLabel('Speed-Hacking')
+
+		Sections.Misc.Movement:AddToggle('Toggle Speed', B.Values.Walkspeed.SpeedBool, Enum.KeyCode.Z, function(Boolean)
+			B.Values.Walkspeed.SpeedBool = Boolean
+			B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
+		end)
+
+		Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
+			B.Values.Walkspeed.SpeedValue = Number
+			if B.Values.Walkspeed.SpeedBool == false then
+				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
+			end
+		end)
+
+
+
+
+		--  \\  Acceleration  //  --
+		Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
+
+		Sections.Misc.Movement:AddSlider('Change Acceleration', 10, 0, 1, function(Number)
+			B.Values.Acceleration.AccelValue = Number
+			B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
+		end)
+
+
+
+
+		--  \\  Stamina  //  --
+		Sections.Misc.Character:AddLabel('Other')	
+
+		Sections.Misc.Character:AddToggle('Toggle Inf-Stamina', B.Values.StaminaMods.StaminaBool, Enum.KeyCode.I, function(Boolean)
+			B.Values.StaminaMods.StaminaBool = Boolean
+			B.Scripts.Toggle_InfinityStamina(B.Values.StaminaMods.StaminaBool)
+		end)
+
+		Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
+			B.Values.FastUsage.PromptsBool = Boolean
+		end)
+
+		Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
+			B.Values.CameraHack.MoreZoomBool = Boolean
+			B.Scripts.Toggle_CameraProperties(Boolean, "distance")
+		end)
+
+		Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
+			B.Values.CameraHack.InvisCameraBool = Boolean
+			B.Scripts.Toggle_CameraProperties(Boolean, "mode")
+		end)
+
+		Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
+			B.Values.Flinging.FlingBool = Boolean
+			B.Scripts.Toggle_Fling(Boolean)
+		end)
+
+
+
+
+		--  \\  Other  //  --
+
+
+		Sections.Misc.Character:AddToggle('Disable Neck-Movement', true, nil, function(Boolean)
+			B.Scripts.Toggle_NeckMovement(Boolean)
+		end)
+
+		Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
+			B.Scripts.Toggle_BodyRotation(Boolean)
+		end)
+
+
+
+
+		--  \\  Lockpicking  //  --
+		Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
+			B.Values.Lockpicking.LockpickBool = Boolean
+			B.Scripts.Toggle_LockpickResize(Boolean)
+		end)
+
+		--Sections.Misc.Character:AddTextBox('Disguise (Client)',nil,false,5,function(a) 
+		--	--
+		--end)
+
+		Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
+			B.Scripts.Give_TeleportTool()
+		end)
+
+
+
+
+		--  \\  Esp  //  --
+		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.EspBool, Enum.KeyCode.J, function(Boolean)
+			B.Values.Wallhacking.EspBool = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerception(Boolean)
+		end)
+
+		Sections.Misc.Character:AddLabel('Menu')	
+
+		Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
+			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
+		end)
+
+
+
+		--  \\  Aim-Lock  //  --
+		pcall(function()
+			local Aimlock_temps = {	
+				target = nil,
+				is_m2_p = false,
+			}
+
+			local f_d = {}
+
+			f_d.Target = nil
+			f_d.getTarget = function()
+				local Distance = B.Values.Aimlock.DistanceValue
+				local Part = B.Values.Aimlock.TargetPart
+				local Target = nil
+
+				for _, P in PlayerService:GetPlayers() do
+					if P ~= Player then
+						if P.Character then
+							if P.Character:FindFirstChild("Humanoid") then
+								if P.Character:FindFirstChild("HumanoidRootPart") then
+									if (Player.Character.HumanoidRootPart.Position - P.Character.HumanoidRootPart.Position).Magnitude < B.Values.Aimlock.DistanceValue then
+										local doM = function()
+											local char = P.Character
+											local root, vis = camera:WorldToViewportPoint(char[Part].Position)
+											if vis then
+												local m = (Vector2.new(mousee.X, mousee.Y) - Vector2.new(root.X, root.Y)).Magnitude
+												if m < Distance and m < FOVCircle.Radius then
+													Distance = m
+													Target = char
+												end
+											end
+										end
+
+
+										if B.Values.Aimlock.DeadCheck then
+											if P.Character.Humanoid.Health > 0 then
+												if B.Values.Aimlock.DownedCheck then
+													local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(P.Name) or nil
+													if NewFolder then
+														if NewFolder.Downed.Value ~= true then
+															doM()
+														end
+													end
+												else
+													doM()
+												end
+											end
+										else
+											doM()
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+				return Target
+			end
+
+			local UIS = game:GetService("UserInputService")
+			local TSS = game:GetService("TweenService")
+
+			local RSS = game:GetService("RunService")
+			local PSS = game:GetService("Players")
+
+			UIS.InputEnded:Connect(function(Input, GameProccess)
+				if GameProccess then return end
+				if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+					Aimlock_temps.is_m2_p = false
+				end
+			end)
+
+			UIS.InputBegan:Connect(function(Input, GameProccess)
+				if GameProccess then return end
+				if B.Values.Aimlock.AimlockBool then
+					if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+						Aimlock_temps.is_m2_p = true
+					end
+				end
+			end)
+
+			coroutine.wrap(function()
+				while true do RSS.Heartbeat:Wait()
+					pcall(function()
+						if Player.Character then
+							if Player.Character:FindFirstChild("HumanoidRootPart") then
+								local gotten_vctr
+								local chart = f_d.getTarget()
+
+								if chart then
+									gotten_vctr = chart[B.Values.Aimlock.TargetPart].Position
+
+
+									local tss = TSS:Create(camera, TweenInfo.new(B.Values.Aimlock.TargetSense, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.lookAt(camera.CFrame.Position, gotten_vctr)})
+									if UIS.MouseBehavior == Enum.MouseBehavior.LockCenter and Aimlock_temps.is_m2_p == true then
+										tss:Play()
+										coroutine.wrap(function()
+											task.wait()
+											if UIS.MouseBehavior ~= Enum.MouseBehavior.LockCenter or Aimlock_temps.is_m2_p ~= true then
+												tss:Pause()
+											end
+										end)()
+									end
+								end
+							end
+						end
+					end)
+				end
+			end)()
+
+			Sections.Combat.Aim:AddLabel('Aim Trigger')
+
+			Sections.Combat.Aim:AddToggle('Toggle Locking', B.Values.Aimlock.AimlockBool, Enum.KeyCode.L, function(Boolean)
+				B.Values.Aimlock.AimlockBool = Boolean
+			end)
+
+			Sections.Combat.Aim:AddToggle('Dead Check', B.Values.Aimlock.DeadCheck, nil, function(Boolean)
+				B.Values.Aimlock.DeadCheck = Boolean
+			end)
+
+			Sections.Combat.Aim:AddToggle('Downed Check', B.Values.Aimlock.DownedCheck, nil, function(Boolean)
+				B.Values.Aimlock.DownedCheck = Boolean
+			end)
+
+			Sections.Combat.Aim:AddSlider('Locking Sense', 3, 0.075, 0.5, function(Number)
+				B.Values.Aimlock.TargetSense = Number
+			end)
+
+			Sections.Combat.Aim:AddSlider('Locking Distance', 2000, 100, 450, function(Number)
+				B.Values.Aimlock.DistanceValue = Number
+			end)
+
+			Sections.Combat.Aim:AddDropdown('Locking Part',{'Head','Torso','HumanoidRootPart'},'Head',function(a) 
+				B.Values.Aimlock.TargetPart = a
+			end)
+		end)
+
+
+
+
+
+		--Sections.CopeTrials.info:AddLabel('Script will be runned automaticly after getting in trials.')	
+
+		--task.wait(2)
+
+
+
+		--if workspace.Map:FindFirstChild("CopeTrialsDirectory") then
+		--	pcall(function()
+		--		task.wait(1)
+
+		--		local list = {
+
+		--			__printmemory = function()
+		--				local directories = {}
+		--				directories.dir1 = workspace.Map
+
+		--				if directories.dir1:FindFirstChild("CopeTrialsDirectory") then
+		--					directories.dir2 = directories.dir1.CopeTrialsDirectory	
+		--					if directories.dir2:FindFirstChild("Memory") then
+		--						directories.dir3 = directories.dir2.Memory
+		--					end
+		--				end	
+
+		--				local init = {}
+
+		--				init.new = function()
+		--					local data={}
+		--					data.stress_folder = Instance.new("Folder", workspace.Terrain)
+
+		--					data.directory = directories.dir3.Scriptables
+		--					data.stages = {}
+
+		--					task.spawn(function()
+		--						local no_fall_brick = Instance.new("Part", directories.dir3.Parts.RockBase)
+		--						no_fall_brick.Name = "CubeBruh"
+		--						no_fall_brick.Anchored = true
+		--						no_fall_brick.CanCollide = true
+		--						no_fall_brick.Transparency = 0.75
+		--						no_fall_brick.CastShadow = false
+
+		--						no_fall_brick.Massless = true
+		--						no_fall_brick.Size = Vector3.new(333, 1, 55)
+		--						no_fall_brick.Position = Vector3.new(999.444, 928.053, 98.319)
+		--						no_fall_brick.Rotation = Vector3.new(0, 0, 0)
+		--					end)
+
+		--					for _, v in data.directory.Stages:GetChildren() do if string.find(string.lower(v.Name), "stage") and v:FindFirstChild("Rows") then data.stages[v.Name] = v end end
+
+		--					for _, Stage in data.stages do
+		--						print(Stage)
+
+		--						local Symbols = {}
+		--						local Rows = {}
+
+		--						for _, r1 in Stage.Symbols:GetChildren() do
+		--							Symbols[r1.Name] = r1
+		--						end
+		--						for _, r1 in Stage.Rows:GetChildren() do
+		--							Rows[r1.Name] = r1
+		--						end
+
+		--						for _, S in Symbols do
+		--							local entire_name = "Row"..S.Name
+
+		--							local current_row = Rows[entire_name]
+		--							local platforms = current_row:GetChildren()
+
+		--							local symbol
+		--							local platform
+
+		--							local s_id
+
+		--							print(platforms)
+
+		--							for _, part in S.Part:GetChildren() do
+		--								if string.find(string.lower(part.Name),"symbol_") then 
+		--									symbol = part 
+		--								end 
+		--							end 
+
+		--							s_id = symbol.MeshId
+
+		--							for _, platformz in platforms do 
+		--								for _, mesh_obj in platformz:GetChildren() do
+		--									if string.find(string.lower(mesh_obj.Name),"symbol_") then 
+		--										if mesh_obj.MeshId == s_id then 
+		--											platform = mesh_obj.Parent 
+		--										end 
+		--									end 
+		--								end
+		--							end
+
+
+
+		--							task.spawn(function()
+		--								local highlight = Instance.new("Highlight")
+		--								highlight.OutlineTransparency = 1
+		--								highlight.FillTransparency = 0.5
+		--								highlight.FillColor = Color3.fromRGB(0, 255, 0)
+		--								highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+		--								highlight.Enabled = true
+
+		--								highlight.Adornee = platform
+		--								highlight.Parent = data.stress_folder
+		--							end)
+		--						end
+		--					end		
+		--				end
+
+		--				init.new()
+		--			end,
+
+		--			__printhunt = function()
+		--				local directories = {}
+		--				directories.dir1 = workspace.Map
+
+		--				if directories.dir1:FindFirstChild("CopeTrialsDirectory") then
+		--					directories.dir2 = directories.dir1.CopeTrialsDirectory	
+		--					if directories.dir2:FindFirstChild("Hunt") then
+		--						directories.dir3 = directories.dir2.Hunt
+		--					end
+		--				end	
+
+		--				local init = {}
+
+		--				init.new = function()
+		--					repeat task.wait(1)
+		--						local pages = {}
+
+		--						for _, v in directories.dir3.Scriptables.Pages:GetChildren() do
+		--							if not v:FindFirstChildOfClass("Highlight") then
+		--								local HL = Instance.new("Highlight")
+		--								HL.FillTransparency = 1
+		--								HL.OutlineTransparency = 0
+
+		--								HL.OutlineColor = Color3.fromRGB(8, 230, 255)
+		--								HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+
+		--								HL.Enabled = true
+		--								HL.Parent = v
+		--								HL.Adornee = v
+		--							end
+		--						end
+
+		--						if directories.dir3:FindFirstChild("Copeman") then
+		--							if not directories.dir3.Copeman:FindFirstChildOfClass("Highlight") then
+		--								local HL = Instance.new("Highlight")
+		--								HL.FillTransparency = 1
+		--								HL.OutlineTransparency = 0
+
+		--								HL.OutlineColor = Color3.fromRGB(255, 0, 0)
+		--								HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+
+		--								HL.Enabled = true
+		--								HL.Parent = directories.dir3.Copeman
+		--								HL.Adornee = directories.dir3.Copeman
+		--							end
+		--						end
+		--					until Player.Character == nil
+		--				end
+
+		--				init.new()
+		--			end,
+		--		}
+
+		--		repeat task.wait(1) 
+		--		until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory")
+		--		list.__printmemory()
+
+		--		print("You're getting if hunting forest")
+
+		--		repeat task.wait(2) 
+		--		until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory") 
+		--		list.__printhunt()
+
+		--		-- Ends Cope's Stuff
+		--	end)
+		--end
+
+		coroutine.wrap(function()
+			while wait(1) do
+				local time = 'TIME '..os.date("%H:%M:%S", os.time())
+				local fps = A.fps
+				local t = ''			
+				t = time.." / "..fps
+				B.Assets.Windows.WaterM:ChangeText(t)
+			end
+		end)()
+
+		B.Assets.Windows.WaterM:Visible(true)
+	end)
+end
