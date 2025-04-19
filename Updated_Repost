@@ -638,7 +638,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			local RSS = game:GetService("RunService")
 			local PSS = game:GetService("Players")
-
+			
+			local chart
+			
 			UIS.InputEnded:Connect(function(Input, GameProccess)
 				if GameProccess then return end
 				if Input.UserInputType == Enum.UserInputType.MouseButton2 then
@@ -651,17 +653,17 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				if B.Values.Aimlock.AimlockBool then
 					if Input.UserInputType == Enum.UserInputType.MouseButton2 then
 						Aimlock_temps.is_m2_p = true
+						chart = f_d.getTarget()
 					end
 				end
 			end)
-
+			
 			coroutine.wrap(function()
 				while true do RSS.Heartbeat:Wait()
 					pcall(function()
 						if Player.Character then
 							if Player.Character:FindFirstChild("HumanoidRootPart") then
 								local gotten_vctr
-								local chart = f_d.getTarget()
 
 								if chart then
 									gotten_vctr = chart[B.Values.Aimlock.TargetPart].Position
