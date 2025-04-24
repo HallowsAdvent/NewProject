@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality v0.33",
+			ScriptSpprt =		"Criminality v0.34",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -300,20 +300,25 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Size = UDim2.new(0,500,0,50),
 				AnchorPoint = I_esp.FramePoint
 			}, EDBT.ScreenBoard)
+			
+			warn("is printed esp")
 		end
 
 		B.Scripts.Toggle_InfinityStamina = function(Boolean)
-			local NewFolder = M.Functions.FindInstance({Class = "Folder", Name = M.Local.Player.Name}, M.Services.ReplicatedStorage["CharStats"], false)
-			
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+
 			if NewFolder then
 				if Boolean then
-					local meanline = M.Functions.FindInstance({Class = "BoolValue", Name = "2.39418"}, NewFolder.Currents, false)
-					
+					local meanline = NewFolder.Currents:FindFirstChild("2.39418")
+
 					if not meanline then
-						M.Functions.CreateInstance("BoolValue", {Value = true, Name = "2.39418"}, NewFolder.Currents)
+						local instance_boolean = Instance.new("BoolValue")
+						instance_boolean.Value = true
+						instance_boolean.Name = "2.39418"
+						instance_boolean.Parent = NewFolder.Currents
 					end
 				else
-					if M.Functions.FindInstance({Class = "BoolValue", Name = "2.39418"}, NewFolder.Currents, false) then
+					if NewFolder.Currents:FindFirstChild("2.39418") then
 						NewFolder.Currents["2.39418"]:Destroy()
 					end
 				end
@@ -321,23 +326,26 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		B.Scripts.Change_WalkSpeed = function(Boolean, Number)
-			local NewFolder = M.Functions.FindInstance({Class = "Folder", Name = M.Local.Player.Name}, M.Services.ReplicatedStorage["CharStats"], false)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
 			Number = Number or 0
 
 			if NewFolder then
 				if Boolean then
 					local meanline
 
-					if M.Functions.FindInstance({Class = "NumberValue", Name = "SP_ADONIS"}, NewFolder.Currents, false) then
+					if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
 						meanline = NewFolder.Currents
 						meanline.Value = Number
 					else
-						meanline = M.Functions.CreateInstance("NumberValue", {Value = Number, Name = "SP_ADONIS"}, NewFolder.Currents)
+						meanline = Instance.new("NumberValue")
+						meanline.Name = "SP_ADONIS"
+						meanline.Value = Number
+						meanline.Parent = NewFolder.Currents
 					end	
 				else
 					local meanline
 
-					if M.Functions.FindInstance({Class = "NumberValue", Name = "SP_ADONIS"}, NewFolder.Currents, false) then
+					if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
 						meanline = NewFolder.Currents.SP_ADONIS
 						meanline:Destroy()
 					end
@@ -346,7 +354,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		B.Scripts.Change_Acceleration = function(Number)
-			local NewFolder = M.Functions.FindInstance({Class = "Folder", Name = M.Local.Player.Name}, M.Services.ReplicatedStorage["CharStats"], false)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
 			Number = Number or 1
 
 			if NewFolder then
@@ -358,23 +366,25 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		B.Scripts.Toggle_NeckMovement = function(Boolean)
-			if M.Functions.GetOwnCharacter() then
-				M.Functions.GetOwnCharacter():SetAttribute("NoNeckMovement", Boolean)
+			if Player.Character then
+				Player.Character:SetAttribute("NoNeckMovement", Boolean)
 			end
 		end
 
 		B.Scripts.Toggle_BodyRotation = function(Boolean)
-			local NewFolder = M.Functions.FindInstance({Class = "Folder", Name = M.Local.Player.Name}, M.Services.ReplicatedStorage["CharStats"], false)
+			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
 
 			if NewFolder then
 				if Boolean then
-					local meanline = M.Functions.FindInstance({Class = "BoolValue", Name = "ROTROOT"}, NewFolder.Currents, false)
+					local meanline = NewFolder.Currents:FindFirstChild("ROTROOT")
 
 					if not meanline then
-						local instance_boolean = M.Functions.CreateInstance("BoolValue", {Name = "ROTROOT"}, NewFolder.Currents)
+						local instance_boolean = Instance.new("BoolValue")
+						instance_boolean.Name = "ROTROOT"
+						instance_boolean.Parent = NewFolder.Currents
 					end
 				else
-					if M.Functions.FindInstance({Class = "BoolValue", Name = "ROTROOT"}, NewFolder.Currents, false) then
+					if NewFolder.Currents:FindFirstChild("ROTROOT") then
 						NewFolder.Currents["ROTROOT"]:Destroy()
 					end
 				end
@@ -402,26 +412,26 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		B.Scripts.Toggle_Fling = function(Boolean)
 			if Boolean then
 				coroutine.wrap(function()
-					repeat M.Services.RunService.Heartbeat:Wait()
-						local character = M.Functions.GetOwnCharacter()
+					repeat RunService.Heartbeat:Wait()
+						local character = Player.Character
 						local root = character:WaitForChild("HumanoidRootPart")
 						local vel, movel = nil, 0.1
 
 						while not (character and character.Parent and root and root.Parent) do
-							M.Services.RunService.Heartbeat:Wait()
-							character = M.Functions.GetOwnCharacter()
+							RunService.Heartbeat:Wait()
+							character = Player.Character
 							root = character:WaitForChild("HumanoidRootPart")
 						end
 
 						vel = root.Velocity
 						root.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
 
-						M.Services.RunService.RenderStepped:Wait()
+						RunService.RenderStepped:Wait()
 						if character and character.Parent and root and root.Parent then
 							root.Velocity = vel
 						end
 
-						M.Services.RunService.Stepped:Wait()
+						RunService.Stepped:Wait()
 						if character and character.Parent and root and root.Parent then
 							root.Velocity = vel + Vector3.new(0, movel, 0)
 							movel = movel * -1
@@ -433,6 +443,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		B.Scripts.Toggle_ExtraSensoryPerceptionPlayers = function(Boolean)
 			if Boolean then
+				print("players sensory")
 				for _, Player in M.Services.Players:GetPlayers() do
 					if Player ~= M.Local.Player then
 						if M.Functions.GetCharacter(Player) then
@@ -451,6 +462,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		B.Scripts.Toggle_ExtraSensoryPerceptionObjects = function(Boolean, Folder, CustomDBT)
 			if Boolean then
 				if Folder then
+					print("got object sensory")
 					for _, Object in Folder:GetChildren() do
 						if CustomDBT.Text == "Crate" or CustomDBT.Text == "Scrap" then
 							local color_ = B.Values.Wallhacking.Crates.ColorWhite
@@ -483,12 +495,12 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		B.Scripts.Toggle_CameraProperties = function(Boolean, Property)
 			local CameraDistance = function()
-				if Boolean then M.Local.Player.CameraMaxZoomDistance = 1000 else M.Local.Player.CameraMaxZoomDistance = 10 end
+				if Boolean then Player.CameraMaxZoomDistance = 1000 else Player.CameraMaxZoomDistance = 10 end
 			end
 
 			local CameraMode = function()
-				if Boolean then M.Local.Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
-				else M.Local.Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
+				if Boolean then Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
+				else Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
 			end
 
 			if string.lower(Property) == "distance" then
@@ -521,7 +533,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		task.spawn(function() -- Handling Specific Events / Connections
-			local PlayerGui = M.Local.Player.PlayerGui
+			local PlayerGui = Player.PlayerGui
 
 			PlayerGui.ChildAdded:Connect(function(AddedChild)
 				if AddedChild.Name == "LockpickGUI" then
@@ -556,8 +568,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end
 			end)()
 
-			M.Local.Player.CharacterAdded:Connect(function()
-				task.wait(.976)
+			Player.CharacterAdded:Connect(function()
+				task.wait(.8)
 
 				if B.Values.Walkspeed.SpeedBool == true then
 					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
