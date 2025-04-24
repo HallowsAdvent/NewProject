@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality v0.32",
+			ScriptSpprt =		"Criminality v0.33",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -50,7 +50,6 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Aim = wd.Combat:AddSection('Aim-locking')	
 			},
 			Visual = {
-
 				Sense = wd.Visual:AddSection('Palpability')
 			},
 			Misc = {
@@ -670,25 +669,54 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--	--
 		--end)
 
-		M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
-			B.Scripts.Give_TeleportTool()
-		end)
+		--M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
+		--	B.Scripts.Give_TeleportTool()
+		--end)
 
 
 
 
 		--  \\  Esp  //  --
 		
+		
+		--Players
+		M.Library.Sections.Visual.Sense:AddLabel('Players')
+		
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.Players.Enabled, Enum.KeyCode.K, function(Boolean)
 			B.Values.Wallhacking.Players.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(Boolean)
 		end)
 		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Players.Color,function(a) 
+			B.Values.Wallhacking.Players.Color = a
+		end)
+		
+		
+		--Crates
+		M.Library.Sections.Visual.Sense:AddLabel('Crates')
+
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Crate-Esp', B.Values.Wallhacking.Crates.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Crates.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Crate"})
 		end)
 		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
+			B.Values.Wallhacking.Crates.ColorWhite = a
+		end)
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGreen,function(a) 
+			B.Values.Wallhacking.Crates.ColorGreen = a
+		end)
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
+			B.Values.Wallhacking.Crates.ColorRed = a
+		end)
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
+			B.Values.Wallhacking.Crates.ColorGold = a
+		end)
+		
+		
+		--Safes
+		M.Library.Sections.Visual.Sense:AddLabel('Safes')
+
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Safe-Esp', B.Values.Wallhacking.Safes.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Safes.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.BredMakurz, {Folder = F_esp.Safes, Text = "Safe", Color = B.Values.Wallhacking.Safes.Color})
@@ -698,18 +726,37 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.Wallhacking.Registers.Enabled = Boolean
 		end)
 		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
+			B.Values.Wallhacking.Safes.Color = a
+		end)
+		
+		
+		--ATMs
+		M.Library.Sections.Visual.Sense:AddLabel('ATMs')
 		
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.ATMs.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.ATMz, {Folder = F_esp.ATMs, Text = "ATM", Color = B.Values.Wallhacking.ATMs.Color})
 		end)
 		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
+			B.Values.Wallhacking.ATMs.Color = a
+		end)
+		
+		--Dealers
+		M.Library.Sections.Visual.Sense:AddLabel('Dealers')
+		
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Dealers.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.Shopz, {Folder = F_esp.Dealers, Text = "Dealer", Color = B.Values.Wallhacking.Dealers.Color})
 		end)
 		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
+			B.Values.Wallhacking.Dealers.Color = a
+		end)
 		
+		
+		--end
 		
 		
 		--  \\  Menu  //  --
