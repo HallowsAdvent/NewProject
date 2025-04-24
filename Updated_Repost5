@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality v0.37",
+			ScriptSpprt =		"Criminality v0.38",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -70,11 +70,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		local camera = workspace.CurrentCamera
 		local mousee = Player:GetMouse()
-		
-		
-		
+
+
+
 		local M = {}
-		
+
 		M.Functions = {}
 		M.Library = {}
 		M.Local = {}
@@ -82,26 +82,26 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Services = {
 			ReplicatedFirst = 				game:GetService("ReplicatedFirst"),
 			ReplicatedStorage = 			game:GetService("ReplicatedStorage"),
-			
+
 			StarterGui = 					game:GetService("StarterGui"),
 			StarterPack = 					game:GetService("StarterPack"),
 			StarterPlayer = 				game:GetService("StarterPlayer"),
-			
+
 			Players = 						game:GetService("Players"),
 			Lighting = 						game:GetService("Lighting"),
 			Workspace = 					game:GetService("Workspace"),
-			
+
 			RunService = 					game:GetService("RunService"),
 			TweenService = 					game:GetService("TweenService"),
 		}
-		
+
 		M.Library.Sections = B.Assets.Sections
-		
+
 		M.Local.Camera = M.Services.Workspace.CurrentCamera
 		M.Local.Player = M.Services.Players.LocalPlayer
 		M.Local.Mouse = M.Local.Player:GetMouse()
-		
-		
+
+
 		M.Functions.CreateInstance = function(instance, PropertyBase, Parent)
 			local connected_instance = Instance.new(instance)
 			for PropertyName, PropertyValue in PropertyBase do
@@ -109,15 +109,15 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					connected_instance[PropertyName] = PropertyValue
 				end
 			end 
-			
-			if Parent then connected_instance.Parent = Parent end
+
+			if Parent then if Parent.ClassName == "CoreGui" then connected_instance = Parent else connected_instance.Parent = Parent end
 			return connected_instance
 		end
-		
+
 		M.Functions.FindInstance = function(PropertyTable, ParentFolder, IsMulti)
 			local PossibleFinds = {}
 			local PossibleFind = nil
-			
+
 			if ParentFolder then
 				for _, V in ParentFolder do
 					if string.lower(V.ClassName) == string.lower(PropertyTable.Class) and string.lower(V.Name) == string.lower(PropertyTable.Name) then
@@ -130,11 +130,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end
 			end
 		end
-		
+
 		M.Functions.GetOwnCharacter = function()
 			return M.Local.Player.Character
 		end
-		
+
 		M.Functions.GetCharacter = function(Player)
 			if Player ~= M.Local.Player then
 				return Player.Character
@@ -142,7 +142,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				return M.Functions.GetOwnCharacter()
 			end
 		end
-		
+
 		B.Values =  {
 
 			Aimlock = {
@@ -173,7 +173,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					Enabled = true,
 					Color = Color3.fromRGB(255, 255, 255)
 				},
-				
+
 				Crates = {
 					Enabled = true,
 					ColorWhite = Color3.fromRGB(189, 189, 189),
@@ -181,17 +181,17 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					ColorRed = Color3.fromRGB(193, 37, 37),
 					ColorGold = Color3.fromRGB(229, 191, 41)
 				},
-				
+
 				Dealers = {
 					Enabled = true,
 					Color = Color3.fromRGB(58, 137, 255),
 				},
-				
+
 				ATMs = {
 					Enabled = true,
 					Color = Color3.fromRGB(80, 255, 191),
 				},
-				
+
 				Safes = {
 					Enabled = true,
 					Registers = true,
@@ -217,7 +217,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				FlingBool = true,
 			},
 		}
-		
+
 		local AimlockTable = {
 			Radius = 200,
 			Color = Color3.fromRGB(60, 255, 0),
@@ -233,8 +233,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		for PropertyName, PropertyValue in AimlockTable do
 			I_aimlock[PropertyName] = PropertyValue
 		end
-		
-		
+
+
 		local I_esp = {
 			BillSize = UDim2.new(1000,0,1000,0),
 			FrameSize = UDim2.new(0.005,0,0.005,0),
@@ -244,17 +244,17 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Gm = game.Workspace.Terrain,
 			Gm1 = "espcnc"
 		}
-		
+
 		local M_esp = M.Functions.CreateInstance("Folder", {Name = "ESP"}, game.CoreGui)
 		local F_esp = {
-			
+
 			Players = M.Functions.CreateInstance("Folder", {Name = "PlayerEsp"}, M_esp),
 			Scraps = M.Functions.CreateInstance("Folder", {Name = "ScrapEsp"}, M_esp),
 			Dealers = M.Functions.CreateInstance("Folder", {Name = "DealerEsp"}, M_esp),
 			ATMs = M.Functions.CreateInstance("Folder", {Name = "ATMsEsp"}, M_esp),
 			Safes = M.Functions.CreateInstance("Folder", {Name = "SafeEsp"}, M_esp),
 		}
-		
+
 		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
 			print("5")
 			local EDBT = {}
@@ -263,7 +263,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			EDBT.Parent = BasedProperties.Parent
 
 			EDBT.Objects = {}
-			
+
 			print("6")
 			EDBT.ScreenBoard = M.Functions.CreateInstance("BillBoardGui", {
 				Name = "N1",
@@ -273,7 +273,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				AlwaysOnTop = true,
 				Size = I_esp.BillSize
 			}, BasedProperties.Parent)
-			
+
 			print("7")
 			EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
 				Name = "N2",
@@ -282,7 +282,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				BackgroundTransparency = 1,
 				AnchorPoint = I_esp.FramePoint
 			}, EDBT.ScreenBoard)
-			
+
 			print("8")
 			EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
 				Name = "N3",
@@ -290,7 +290,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Color = BasedProperties.Color or I_esp.FrameColor,
 				LineJoinMode = Enum.LineJoinMode.Miter
 			}, EDBT.ScreenBoard)
-			
+
 			print("9")
 			EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
 				Name = "N4",
@@ -305,7 +305,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Size = UDim2.new(0,500,0,50),
 				AnchorPoint = I_esp.FramePoint
 			}, EDBT.ScreenBoard)
-			
+
 			warn("is printed esp")
 		end
 
@@ -401,14 +401,14 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Name = "CLICK-TP",
 				RequiresHandle = false,
 			}, M.Local.Player.Backpack)
-			
+
 			TeleportHandle.Activated:Connect(function(DBT)
 				DBT = {
 					Character = M.Functions.GetOwnCharacter(),
 					Mouse = M.Local.Mouse,
 					HRP = M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart")
 				}
-				
+
 				if not DBT.Character or not DBT.HRP then return end
 				DBT.CFrame = CFrame.new(DBT.Mouse.Hit.X, DBT.Mouse.Hit.Y + 3, DBT.Mouse.Hit.Z, select(4, DBT.HRP.CFrame:components()))
 			end)
@@ -467,7 +467,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				F_esp.Players:ClearAllChildren()
 			end
 		end
-		
+
 		B.Scripts.Toggle_ExtraSensoryPerceptionObjects = function(Boolean, Folder, CustomDBT)
 			if Boolean then
 				if Folder then
@@ -480,7 +480,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 							elseif Object:GetAttribute("LPBrs") == 1 then
 								color_ = B.Values.Wallhacking.Crates.ColorGreen
 							end
-							
+
 							B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = CustomDBT.Folder})
 						elseif CustomDBT.Text == "Safe" then
 							if B.Values.Wallhacking.Safes.Registers then
@@ -698,21 +698,21 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Esp  //  --
-		
-		
+
+
 		--Players
 		M.Library.Sections.Visual.Sense:AddLabel('Players')
-		
+
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.Players.Enabled, Enum.KeyCode.K, function(Boolean)
 			B.Values.Wallhacking.Players.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(Boolean)
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Players.Color,function(a) 
 			B.Values.Wallhacking.Players.Color = a
 		end)
-		
-		
+
+
 		--Crates
 		M.Library.Sections.Visual.Sense:AddLabel('Crates')
 
@@ -720,7 +720,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.Wallhacking.Crates.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Crate"})
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
 			B.Values.Wallhacking.Crates.ColorWhite = a
 		end)
@@ -733,8 +733,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
 			B.Values.Wallhacking.Crates.ColorGold = a
 		end)
-		
-		
+
+
 		--Safes
 		M.Library.Sections.Visual.Sense:AddLabel('Safes')
 
@@ -742,44 +742,44 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Values.Wallhacking.Safes.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.BredMakurz, {Folder = F_esp.Safes, Text = "Safe", Color = B.Values.Wallhacking.Safes.Color})
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddToggle('Registers Check', B.Values.Wallhacking.Safes.Registers, nil, function(Boolean)
 			B.Values.Wallhacking.Registers.Enabled = Boolean
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
 			B.Values.Wallhacking.Safes.Color = a
 		end)
-		
-		
+
+
 		--ATMs
 		M.Library.Sections.Visual.Sense:AddLabel('ATMs')
-		
+
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.ATMs.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.ATMz, {Folder = F_esp.ATMs, Text = "ATM", Color = B.Values.Wallhacking.ATMs.Color})
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
 			B.Values.Wallhacking.ATMs.Color = a
 		end)
-		
+
 		--Dealers
 		M.Library.Sections.Visual.Sense:AddLabel('Dealers')
-		
+
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Dealers.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.Shopz, {Folder = F_esp.Dealers, Text = "Dealer", Color = B.Values.Wallhacking.Dealers.Color})
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
 			B.Values.Wallhacking.Dealers.Color = a
 		end)
-		
-		
+
+
 		--end
-		
-		
+
+
 		--  \\  Menu  //  --
 		M.Library.Sections.Misc.Character:AddLabel('Menu')	
 
