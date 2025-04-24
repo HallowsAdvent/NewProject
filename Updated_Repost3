@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality v0.35",
+			ScriptSpprt =		"Criminality v0.36",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -263,7 +263,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			EDBT.Parent = BasedProperties.Parent
 
 			EDBT.Objects = {}
-
+			
+			print("6")
 			EDBT.ScreenBoard = M.Functions.CreateInstance("BillBoardGui", {
 				Name = "N1",
 				Enabled = true,
@@ -271,8 +272,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				LightInfluence = 0,
 				AlwaysOnTop = true,
 				Size = I_esp.BillSize
-			}, EDBT.Parent)
-
+			}, BasedProperties.Parent)
+			
+			print("7")
 			EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
 				Name = "N2",
 				Position = I_esp.FramePos,
@@ -280,14 +282,16 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				BackgroundTransparency = 1,
 				AnchorPoint = I_esp.FramePoint
 			}, EDBT.ScreenBoard)
-
+			
+			print("8")
 			EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
 				Name = "N3",
 				Thickness = 2,
 				Color = BasedProperties.Color or I_esp.FrameColor,
 				LineJoinMode = Enum.LineJoinMode.Miter
 			}, EDBT.ScreenBoard)
-
+			
+			print("9")
 			EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
 				Name = "N4",
 				Text = BasedProperties.Text or "",
