@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality",
+			ScriptSpprt =		"Criminality v0.29",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -256,52 +256,50 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end)
 		
 		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties)
-			pcall(function()
-				local EDBT = {}
+			local EDBT = {}
 
-				EDBT.NiceFolder = M_esp
-				EDBT.Parent = BasedProperties.Parent
+			EDBT.NiceFolder = M_esp
+			EDBT.Parent = BasedProperties.Parent
 
-				EDBT.Objects = {}
+			EDBT.Objects = {}
 
-				EDBT.ScreenBoard = M.Functions.CreateInstance("BillBoardGui", {
-					Name = "N1",
-					Enabled = true,
-					Adornee = Object,
-					LightInfluence = 0,
-					AlwaysOnTop = true,
-					Size = I_esp.BillSize
-				}, EDBT.Parent)
+			EDBT.ScreenBoard = M.Functions.CreateInstance("BillBoardGui", {
+				Name = "N1",
+				Enabled = true,
+				Adornee = Object,
+				LightInfluence = 0,
+				AlwaysOnTop = true,
+				Size = I_esp.BillSize
+			}, EDBT.Parent)
 
-				EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
-					Name = "N2",
-					Position = I_esp.FramePos,
-					Size = I_esp.FrameSize,
-					BackgroundTransparency = 1,
-					AnchorPoint = I_esp.FramePoint
-				}, EDBT.ScreenBoard)
+			EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
+				Name = "N2",
+				Position = I_esp.FramePos,
+				Size = I_esp.FrameSize,
+				BackgroundTransparency = 1,
+				AnchorPoint = I_esp.FramePoint
+			}, EDBT.ScreenBoard)
 
-				EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
-					Name = "N3",
-					Thickness = 2,
-					Color = BasedProperties.Color or I_esp.FrameColor,
-					LineJoinMode = Enum.LineJoinMode.Miter
-				}, EDBT.ScreenBoard)
+			EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
+				Name = "N3",
+				Thickness = 2,
+				Color = BasedProperties.Color or I_esp.FrameColor,
+				LineJoinMode = Enum.LineJoinMode.Miter
+			}, EDBT.ScreenBoard)
 
-				EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
-					Name = "N4",
-					Text = BasedProperties.Text or "",
-					TextSize = 14,
-					TextWrapped = true,
-					TextColor3 = BasedProperties.Color or I_esp.FrameColor,
-					TextStrokeTransparency = 0,
-					BackgroundTransparency = 1,
-					Font = "MontserratBold",
-					Position = UDim2.new(0.5,0,0.503,0),
-					Size = UDim2.new(0,500,0,50),
-					AnchorPoint = I_esp.FramePoint
-				}, EDBT.ScreenBoard)
-			end)
+			EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
+				Name = "N4",
+				Text = BasedProperties.Text or "",
+				TextSize = 14,
+				TextWrapped = true,
+				TextColor3 = BasedProperties.Color or I_esp.FrameColor,
+				TextStrokeTransparency = 0,
+				BackgroundTransparency = 1,
+				Font = "MontserratBold",
+				Position = UDim2.new(0.5,0,0.503,0),
+				Size = UDim2.new(0,500,0,50),
+				AnchorPoint = I_esp.FramePoint
+			}, EDBT.ScreenBoard)
 		end
 
 		B.Scripts.Toggle_InfinityStamina = function(Boolean)
