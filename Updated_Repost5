@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality v0.39",
+			ScriptSpprt =		"Criminality | v0.51",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -110,7 +110,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end
 			end 
 
-			if Parent then if Parent.ClassName == "CoreGui" then connected_instance = Parent else connected_instance.Parent = Parent end end
+			if Parent then connected_instance.Parent = Parent end
 			return connected_instance
 		end
 
@@ -175,10 +175,14 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				},
 
 				Crates = {
-					Enabled = true,
+					White_Enabled = true,
+					Green_Enabled = true,
+					Red_Enabled = true,
+					Gold_Enabled = true,
+					
 					ColorWhite = Color3.fromRGB(189, 189, 189),
 					ColorGreen = Color3.fromRGB(128, 255, 126),
-					ColorRed = Color3.fromRGB(193, 37, 37),
+					ColorRed = Color3.fromRGB(255, 74, 74),
 					ColorGold = Color3.fromRGB(229, 191, 41)
 				},
 
@@ -245,7 +249,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Gm1 = "espcnc"
 		}
 
-		local M_esp = M.Functions.CreateInstance("Folder", {Name = "ESP"}, game.CoreGui)
+		local M_esp = M.Functions.CreateInstance("Folder", {Name = "tempest attachments"}, game.Workspace.Terrain)
 		local F_esp = {
 
 			Players = M.Functions.CreateInstance("Folder", {Name = "PlayerEsp"}, M_esp),
@@ -254,9 +258,16 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ATMs = M.Functions.CreateInstance("Folder", {Name = "ATMsEsp"}, M_esp),
 			Safes = M.Functions.CreateInstance("Folder", {Name = "SafeEsp"}, M_esp),
 		}
+		
+		local Scrap_esp = {
+			Golds = M.Functions.CreateInstance("Folder", {Name = "Golds"}, F_esp.Scraps),
+			Reds = M.Functions.CreateInstance("Folder", {Name = "Reds"}, F_esp.Scraps),
+			Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
+			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
+		}
+		
 
 		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
-			print("5")
 			local EDBT = {}
 
 			EDBT.NiceFolder = M_esp
@@ -264,17 +275,16 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			EDBT.Objects = {}
 
-			print("6")
-			EDBT.ScreenBoard = M.Functions.CreateInstance("BillBoardGui", {
+			EDBT.ScreenBoard = M.Functions.CreateInstance("BillboardGui", {
 				Name = "N1",
 				Enabled = true,
 				Adornee = Object,
 				LightInfluence = 0,
 				AlwaysOnTop = true,
-				Size = I_esp.BillSize
+				Size = BasedProperties.GuiSize or I_esp.BillSize,
+				ResetOnSpawn = false,
 			}, BasedProperties.Parent)
 
-			print("7")
 			EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
 				Name = "N2",
 				Position = I_esp.FramePos,
@@ -283,15 +293,13 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				AnchorPoint = I_esp.FramePoint
 			}, EDBT.ScreenBoard)
 
-			print("8")
 			EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
 				Name = "N3",
 				Thickness = 2,
 				Color = BasedProperties.Color or I_esp.FrameColor,
 				LineJoinMode = Enum.LineJoinMode.Miter
-			}, EDBT.ScreenBoard)
+			}, EDBT.VectorFrame)
 
-			print("9")
 			EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
 				Name = "N4",
 				Text = BasedProperties.Text or "",
@@ -305,8 +313,6 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Size = UDim2.new(0,500,0,50),
 				AnchorPoint = I_esp.FramePoint
 			}, EDBT.ScreenBoard)
-
-			warn("is printed esp")
 		end
 
 		B.Scripts.Toggle_InfinityStamina = function(Boolean)
@@ -448,15 +454,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		B.Scripts.Toggle_ExtraSensoryPerceptionPlayers = function(Boolean)
 			if Boolean then
-				print("players sensory")
 				for _, Player in M.Services.Players:GetPlayers() do
-					print("1")
 					if Player ~= M.Local.Player then
-						print("2")
 						if Player.Character then
-							print("3")
 							if Player.Character:FindFirstChild("HumanoidRootPart") then
-								print("4")
 								local Apart = Player.Character:FindFirstChild("HumanoidRootPart")
 								B.Scripts.CreatePossibleEsp(Apart, {Text = Player.Name, Color = B.Values.Wallhacking.Players.Color, Parent = F_esp.Players})
 							end
@@ -471,17 +472,30 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		B.Scripts.Toggle_ExtraSensoryPerceptionObjects = function(Boolean, Folder, CustomDBT)
 			if Boolean then
 				if Folder then
-					print("got object sensory")
 					for _, Object in Folder:GetChildren() do
-						if CustomDBT.Text == "Crate" or CustomDBT.Text == "Scrap" then
+						if string.find(string.lower(CustomDBT.Text), "crate") or string.find(string.lower(CustomDBT.Text), "scrap") then
 							local color_ = B.Values.Wallhacking.Crates.ColorWhite
+							
+							local CurrentRare = Object:GetAttribute("LPBRs")
+							
 							if Object:GetAttribute("LPBRs") == 2 then
 								color_ = B.Values.Wallhacking.Crates.ColorRed
 							elseif Object:GetAttribute("LPBrs") == 1 then
 								color_ = B.Values.Wallhacking.Crates.ColorGreen
 							end
-
-							B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = CustomDBT.Folder})
+							
+							local LoadA = function(ParentProgress)
+								B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = ParentProgress, GuiSize = UDim2.new(0.004,0,0.002,0)})
+							end
+							
+							if CurrentRare == 1 and string.find(string.lower(CustomDBT.Text), "green") then
+								LoadA(Scrap_esp.Greens)
+							elseif CurrentRare == 2 and string.find(string.lower(CustomDBT.Text), "red") then
+								LoadA(Scrap_esp.Reds)
+							elseif CurrentRare == nil and string.find(string.lower(CustomDBT.Text), "white") and (Object.Name == "S1" or Object.Name == "S2") then
+								LoadA(Scrap_esp.Whites)
+							end
+							
 						elseif CustomDBT.Text == "Safe" then
 							if B.Values.Wallhacking.Safes.Registers then
 								if string.find(string.lower(Object.Name), "register") then
@@ -498,7 +512,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					end
 				end
 			else
-				CustomDBT.Folder:ClearAllChildren()
+				if CustomDBT.DeleteFolder then
+					CustomDBT.DeleteFolder:ClearAllChildren()
+				else
+					CustomDBT.Folder:ClearAllChildren()
+				end
 			end
 		end
 
@@ -569,7 +587,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			coroutine.wrap(function()
 				while true do task.wait(7.5)
-					if B.Values.Wallhacking.EspBool == true then
+					if B.Values.Wallhacking.Players.Enabled == true then
 						B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(false)
 						task.wait(.05)
 						B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(true)
@@ -716,23 +734,43 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--Crates
 		M.Library.Sections.Visual.Sense:AddLabel('Crates')
 
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle Crate-Esp', B.Values.Wallhacking.Crates.Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.Crates.Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Crate"})
+		
+		--Reds
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Red Crate-Esp', B.Values.Wallhacking.Crates.Red_Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Crates.Red_Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Red Crate", DeleteFolder = Scrap_esp.Reds})
 		end)
-
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
-			B.Values.Wallhacking.Crates.ColorWhite = a
+		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
+			B.Values.Wallhacking.Crates.ColorRed = a
+		end)
+		
+		
+		--Greens
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Green Crate-Esp', B.Values.Wallhacking.Crates.Green_Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Crates.Green_Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Green Crate", DeleteFolder = Scrap_esp.Greens})
 		end)
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGreen,function(a) 
 			B.Values.Wallhacking.Crates.ColorGreen = a
 		end)
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
-			B.Values.Wallhacking.Crates.ColorRed = a
+		
+		
+		--Whites
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle White Crate-Esp', B.Values.Wallhacking.Crates.White_Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Crates.White_Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "White Crate", DeleteFolder = Scrap_esp.Whites})
 		end)
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
-			B.Values.Wallhacking.Crates.ColorGold = a
+		
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
+			B.Values.Wallhacking.Crates.ColorWhite = a
 		end)
+		
+
+
+		--M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
+		--	B.Values.Wallhacking.Crates.ColorGold = a
+		--end)
 
 
 		--Safes
