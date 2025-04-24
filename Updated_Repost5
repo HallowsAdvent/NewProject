@@ -9,7 +9,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ScriptDaysL =		_G.daysLeft_Core,
 			ScriptCalls =		"Celebrial",	
 
-			ScriptSpprt =		"Criminality v0.38",
+			ScriptSpprt =		"Criminality v0.39",
 			ScriptSVrsn =		"unknown",
 		}
 
@@ -110,7 +110,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				end
 			end 
 
-			if Parent then if Parent.ClassName == "CoreGui" then connected_instance = Parent else connected_instance.Parent = Parent end
+			if Parent then if Parent.ClassName == "CoreGui" then connected_instance = Parent else connected_instance.Parent = Parent end end
 			return connected_instance
 		end
 
