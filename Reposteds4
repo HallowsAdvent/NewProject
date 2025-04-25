@@ -1,23 +1,30 @@
 if _G.Celebrial_nonYieldLoaded ~= true then
 	_G.Celebrial_nonYieldLoaded = true
 	task.spawn(function()
-		local ScriptData = {
-
-			ScriptLevel = 		"1",
-			ScriptBuild = 		"Legit",
-
-			ScriptDaysL =		"-inf",
-			ScriptCalls =		"Celebrial",	
-
-			ScriptSpprt =		"[Criminality]",
-			ScriptSVrsn =		"unknown",
+		local ScriptDB = {
+			
+			ScriptBuild =				"Alpha v1.00",
+			ScriptType =				"Legit",
+			
+			ScriptName =				"Celebrials",
+			ScriptSupport =				"Criminality",
+			
+			Membership_Info =			_G.Memberships_logger,
 		}
+		
+		local A = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2'
+		local B = {}
+		
+		B.Plugins = {}
+		B.Scripts = {}
+		B.Assets =  {}
 
+		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
 
-		local A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
+		local C = {
 
-			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
-			Build_Core2 = "days left: "..tostring(ScriptData.ScriptDaysL),
+			Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport,
+			Build_Core2 = "Subscribe-days left: "..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)),
 		}
 
 		local Init = function(DataCore)
@@ -26,19 +33,12 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
 
-		B.Plugins = {}
-		B.Scripts = {}
-		B.Assets =  {}
-
-		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
-
-
 		B.Assets.Windows = {
 
-			--Combat = A:AddWindow('Combat'),
+			Combat = A:AddWindow('Combat'),
 			Visual = A:AddWindow('Visual'),
 			Misc =   A:AddWindow('Misc'),
-			CopeTrials = A:AddWindow('Cope-Trials'),
+			--CopeTrials = A:AddWindow('Cope-Trials'),
 
 			WaterM = A:AddWatermark('')
 		}
@@ -46,29 +46,113 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		B.Assets.Sections = {
 
-			Combat = {},
+			Combat = {
+				Aim = wd.Combat:AddSection('Aim-locking')	
+			},
 			Visual = {
-
 				Sense = wd.Visual:AddSection('Palpability')
 			},
 			Misc = {
 				Character = wd.Misc:AddSection('Character Modifier'),
 				Movement = wd.Misc:AddSection('Movement Modifier'),
 			},
-			CopeTrials = {
-				info = wd.CopeTrials:AddSection('Information'),
-			},
+			--CopeTrials = {
+			--	info = wd.CopeTrials:AddSection('Information'),
+			--},
 		}
 
 		--  //  0  \\  --
-
 		local Sections = B.Assets.Sections
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local PlayerService = game:GetService("Players")
 		local RunService = game:GetService("RunService")
 		local Player = PlayerService.LocalPlayer
 
+		local camera = workspace.CurrentCamera
+		local mousee = Player:GetMouse()
+
+
+
+		local M = {}
+
+		M.Functions = {}
+		M.Library = {}
+		M.Local = {}
+		--
+		M.Services = {
+			ReplicatedFirst = 				game:GetService("ReplicatedFirst"),
+			ReplicatedStorage = 			game:GetService("ReplicatedStorage"),
+
+			StarterGui = 					game:GetService("StarterGui"),
+			StarterPack = 					game:GetService("StarterPack"),
+			StarterPlayer = 				game:GetService("StarterPlayer"),
+
+			Players = 						game:GetService("Players"),
+			Lighting = 						game:GetService("Lighting"),
+			Workspace = 					game:GetService("Workspace"),
+
+			RunService = 					game:GetService("RunService"),
+			TweenService = 					game:GetService("TweenService"),
+		}
+
+		M.Library.Sections = B.Assets.Sections
+
+		M.Local.Camera = M.Services.Workspace.CurrentCamera
+		M.Local.Player = M.Services.Players.LocalPlayer
+		M.Local.Mouse = M.Local.Player:GetMouse()
+
+
+		M.Functions.CreateInstance = function(instance, PropertyBase, Parent)
+			local connected_instance = Instance.new(instance)
+			for PropertyName, PropertyValue in PropertyBase do
+				if PropertyName ~= "Parent" then
+					connected_instance[PropertyName] = PropertyValue
+				end
+			end 
+
+			if Parent then connected_instance.Parent = Parent end
+			return connected_instance
+		end
+
+		M.Functions.FindInstance = function(PropertyTable, ParentFolder, IsMulti)
+			local PossibleFinds = {}
+			local PossibleFind = nil
+
+			if ParentFolder then
+				for _, V in ParentFolder do
+					if string.lower(V.ClassName) == string.lower(PropertyTable.Class) and string.lower(V.Name) == string.lower(PropertyTable.Name) then
+						if IsMulti then
+							table.insert(PossibleFinds, V)
+						else
+							PossibleFind = V
+						end
+					end
+				end
+			end
+		end
+
+		M.Functions.GetOwnCharacter = function()
+			return M.Local.Player.Character
+		end
+
+		M.Functions.GetCharacter = function(Player)
+			if Player ~= M.Local.Player then
+				return Player.Character
+			else
+				return M.Functions.GetOwnCharacter()
+			end
+		end
+
 		B.Values =  {
+
+			Aimlock = {
+				TargetPart = "Head",
+				TargetSense = 0.5,
+				AimlockBool = true,
+				DistanceValue = 250,
+				DownedCheck = true,
+				DeadCheck = true,
+			},
 
 			Walkspeed = {
 				SpeedValue = 1,
@@ -85,13 +169,38 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			},
 
 			Wallhacking = {
-				EspBool = true,
-				PagesBool = true,
-				CopeBool = true,
-				CopeColors = {
-					Pages = Color3.fromRGB(8, 230, 255),
-					CopeMan = Color3.fromRGB(255, 0, 0),					
-				}
+				Players = {
+					Enabled = true,
+					Color = Color3.fromRGB(255, 255, 255)
+				},
+
+				Crates = {
+					White_Enabled = true,
+					Green_Enabled = true,
+					Red_Enabled = true,
+					Gold_Enabled = true,
+
+					ColorWhite = Color3.fromRGB(189, 189, 189),
+					ColorGreen = Color3.fromRGB(128, 255, 126),
+					ColorRed = Color3.fromRGB(255, 74, 74),
+					ColorGold = Color3.fromRGB(229, 191, 41)
+				},
+
+				Dealers = {
+					Enabled = true,
+					Color = Color3.fromRGB(58, 137, 255),
+				},
+
+				ATMs = {
+					Enabled = true,
+					Color = Color3.fromRGB(80, 255, 191),
+				},
+
+				Safes = {
+					Enabled = true,
+					Registers = true,
+					Color = Color3.fromRGB(255, 190, 134),
+				},
 			},
 
 			Lockpicking = {
@@ -113,7 +222,24 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			},
 		}
 
-		local EspConfig = {
+		local AimlockTable = {
+			Radius = 200,
+			Color = Color3.fromRGB(60, 255, 0),
+			NumSides = 64,
+			Filled = false,
+			Visible = true,
+			Thickness = 1,
+			Transparency = 0,
+			Position = Vector2.new(M.Local.Camera.ViewportSize.X / 2, M.Local.Camera.ViewportSize.Y / 2)
+		}
+
+		local I_aimlock = Drawing.new("Circle")
+		for PropertyName, PropertyValue in AimlockTable do
+			I_aimlock[PropertyName] = PropertyValue
+		end
+
+
+		local I_esp = {
 			BillSize = UDim2.new(1000,0,1000,0),
 			FrameSize = UDim2.new(0.005,0,0.005,0),
 			FramePos = UDim2.new(0.5,0,0.5,0),
@@ -123,60 +249,70 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Gm1 = "espcnc"
 		}
 
-		local new_esp = function(i)
-			local V,ProtectedCreation = pcall(function()
-				local EspFolder
-				if not EspConfig.Gm:FindFirstChild("espcnc") then
-					EspFolder = Instance.new("Folder",EspConfig.Gm)
-					EspFolder.Name = EspConfig.Gm1
-				else
-					EspFolder = EspConfig.Gm
-				end
+		local M_esp = M.Functions.CreateInstance("Folder", {Name = "tempest attachments"}, game.Workspace.Terrain)
+		local F_esp = {
 
-				local char = i.Character
-				local humpart
-				if char:FindFirstChild("HumanoidRootPart") then
-					humpart = char:WaitForChild("HumanoidRootPart")
-				end
+			Players = M.Functions.CreateInstance("Folder", {Name = "PlayerEsp"}, M_esp),
+			Scraps = M.Functions.CreateInstance("Folder", {Name = "ScrapEsp"}, M_esp),
+			Dealers = M.Functions.CreateInstance("Folder", {Name = "DealerEsp"}, M_esp),
+			ATMs = M.Functions.CreateInstance("Folder", {Name = "ATMsEsp"}, M_esp),
+			Safes = M.Functions.CreateInstance("Folder", {Name = "SafeEsp"}, M_esp),
+		}
 
-				local I1 = Instance.new("BillboardGui")
-				local I2 = Instance.new("Frame")
-				local I3 = Instance.new("UIStroke")
-				local I4 = Instance.new("TextLabel")
+		local Scrap_esp = {
+			Golds = M.Functions.CreateInstance("Folder", {Name = "Golds"}, F_esp.Scraps),
+			Reds = M.Functions.CreateInstance("Folder", {Name = "Reds"}, F_esp.Scraps),
+			Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
+			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
+		}
 
 
-				I1.Enabled = true
-				I1.Parent = EspConfig.Gm:WaitForChild(EspConfig.Gm1)
-				I1.Adornee = humpart
-				I1.LightInfluence = 0
-				I1.AlwaysOnTop = true
-				I1.Size = EspConfig.BillSize
-				I1.ResetOnSpawn = false
-				I1.Name = i.Name
+		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
+			local EDBT = {}
 
-				I2.Position = EspConfig.FramePos
-				I2.Size = EspConfig.FrameSize
-				I2.BackgroundTransparency = 1
-				I2.AnchorPoint = EspConfig.FramePoint
-				I2.Parent = I1
+			EDBT.NiceFolder = M_esp
+			EDBT.Parent = BasedProperties.Parent
 
-				I3.Thickness = 2
-				I3.Color = EspConfig.FrameColor
-				I3.Parent = I2
-				I3.LineJoinMode = Enum.LineJoinMode.Miter
+			EDBT.Objects = {}
 
-				I4.Parent = I1
-				I4.Text = i.Name
-				I4.BackgroundTransparency = 1
-				I4.TextColor3 = EspConfig.FrameColor
-				I4.TextStrokeTransparency = 0
-				I4.TextSize = 14
-				I4.TextWrapped = true
-				I4.Font = "MontserratBold"
-				I4.Position = UDim2.new(0.5,0,0.503,0)
-				I4.Size = UDim2.new(0,500,0,50)
-				I4.AnchorPoint = EspConfig.FramePoint
-			end)
+			EDBT.ScreenBoard = M.Functions.CreateInstance("BillboardGui", {
+				Name = "N1",
+				Enabled = true,
+				Adornee = Object,
+				LightInfluence = 0,
+				AlwaysOnTop = true,
+				Size = BasedProperties.GuiSize or I_esp.BillSize,
+				ResetOnSpawn = false,
+			}, BasedProperties.Parent)
+
+			EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
+				Name = "N2",
+				Position = I_esp.FramePos,
+				Size = I_esp.FrameSize,
+				BackgroundTransparency = 1,
+				AnchorPoint = I_esp.FramePoint
+			}, EDBT.ScreenBoard)
+
+			EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
+				Name = "N3",
+				Thickness = 2,
+				Color = BasedProperties.Color or I_esp.FrameColor,
+				LineJoinMode = Enum.LineJoinMode.Miter
+			}, EDBT.VectorFrame)
+
+			EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
+				Name = "N4",
+				Text = BasedProperties.Text or "",
+				TextSize = 14,
+				TextWrapped = true,
+				TextColor3 = BasedProperties.Color or I_esp.FrameColor,
+				TextStrokeTransparency = 0,
+				BackgroundTransparency = 1,
+				Font = "MontserratBold",
+				Position = UDim2.new(0.5,0,0.503,0),
+				Size = UDim2.new(0,500,0,50),
+				AnchorPoint = I_esp.FramePoint
+			}, EDBT.ScreenBoard)
 		end
 
 		B.Scripts.Toggle_InfinityStamina = function(Boolean)
@@ -267,16 +403,20 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		B.Scripts.Give_TeleportTool = function()
-			local TpTool = Instance.new("Tool")
-			TpTool.Name = "Teleport Tool"
-			TpTool.RequiresHandle = false
-			TpTool.Parent = Player.Backpack
-			TpTool.Activated:Connect(function()
-				local Char = Player.Character or workspace:FindFirstChild(Player.Name)
-				local Mouse = Player:GetMouse()
-				local HRP = Char and Char:FindFirstChild("HumanoidRootPart")
-				if not Char or not HRP then return end
-				HRP.CFrame = CFrame.new(Mouse.Hit.X, Mouse.Hit.Y + 3, Mouse.Hit.Z, select(4, HRP.CFrame:components()))
+			local TeleportHandle = M.Functions.CreateInstance("Tool", {
+				Name = "CLICK-TP",
+				RequiresHandle = false,
+			}, M.Local.Player.Backpack)
+
+			TeleportHandle.Activated:Connect(function(DBT)
+				DBT = {
+					Character = M.Functions.GetOwnCharacter(),
+					Mouse = M.Local.Mouse,
+					HRP = M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart")
+				}
+
+				if not DBT.Character or not DBT.HRP then return end
+				DBT.CFrame = CFrame.new(DBT.Mouse.Hit.X, DBT.Mouse.Hit.Y + 3, DBT.Mouse.Hit.Z, select(4, DBT.HRP.CFrame:components()))
 			end)
 		end
 
@@ -312,18 +452,70 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			end
 		end
 
-		B.Scripts.Toggle_ExtraSensoryPerception = function(Boolean)
+		B.Scripts.Toggle_ExtraSensoryPerceptionPlayers = function(Boolean)
 			if Boolean then
-				for _,i in PlayerService:GetChildren() do
-					if i.Name ~= Player.Name then
-						if i.Character then
-							new_esp(i)
+				for _, Player in M.Services.Players:GetPlayers() do
+					if Player ~= M.Local.Player then
+						if Player.Character then
+							if Player.Character:FindFirstChild("HumanoidRootPart") then
+								local Apart = Player.Character:FindFirstChild("HumanoidRootPart")
+								B.Scripts.CreatePossibleEsp(Apart, {Text = Player.Name, Color = B.Values.Wallhacking.Players.Color, Parent = F_esp.Players})
+							end
 						end
 					end
 				end
 			else
-				if EspConfig.Gm:FindFirstChild(EspConfig.Gm1) then
-					EspConfig.Gm[EspConfig.Gm1]:Destroy()
+				F_esp.Players:ClearAllChildren()
+			end
+		end
+
+		B.Scripts.Toggle_ExtraSensoryPerceptionObjects = function(Boolean, Folder, CustomDBT)
+			if Boolean then
+				if Folder then
+					for _, Object in Folder:GetChildren() do
+						if string.find(string.lower(CustomDBT.Text), "crate") or string.find(string.lower(CustomDBT.Text), "scrap") then
+							local color_ = B.Values.Wallhacking.Crates.ColorWhite
+
+							local CurrentRare = Object:GetAttribute("LPBRs")
+
+							if Object:GetAttribute("LPBRs") == 2 then
+								color_ = B.Values.Wallhacking.Crates.ColorRed
+							elseif Object:GetAttribute("LPBrs") == 1 then
+								color_ = B.Values.Wallhacking.Crates.ColorGreen
+							end
+
+							local LoadA = function(ParentProgress)
+								B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = ParentProgress, GuiSize = UDim2.new(0.004,0,0.002,0)})
+							end
+
+							if CurrentRare == 1 and string.find(string.lower(CustomDBT.Text), "green") then
+								LoadA(Scrap_esp.Greens)
+							elseif CurrentRare == 2 and string.find(string.lower(CustomDBT.Text), "red") then
+								LoadA(Scrap_esp.Reds)
+							elseif CurrentRare == nil and string.find(string.lower(CustomDBT.Text), "white") and (Object.Name == "S1" or Object.Name == "S2") then
+								LoadA(Scrap_esp.Whites)
+							end
+
+						elseif CustomDBT.Text == "Safe" then
+							if B.Values.Wallhacking.Safes.Registers then
+								if string.find(string.lower(Object.Name), "register") then
+									B.Scripts.CreatePossibleEsp(Object, {Text = "Register", Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+								else
+									B.Scripts.CreatePossibleEsp(Object, {Text = "Safe", Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+								end
+							else
+								B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+							end
+						else
+							B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+						end
+					end
+				end
+			else
+				if CustomDBT.DeleteFolder then
+					CustomDBT.DeleteFolder:ClearAllChildren()
+				else
+					CustomDBT.Folder:ClearAllChildren()
 				end
 			end
 		end
@@ -346,7 +538,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		B.Scripts.Toggle_LockpickResize = function(Boolean)
-			local PlayerGui = Player.PlayerGui
+			local PlayerGui = M.Local.Player.PlayerGui
 
 			local Baty = function(gui)
 				if gui:FindFirstChild("MF") then
@@ -395,10 +587,10 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			coroutine.wrap(function()
 				while true do task.wait(7.5)
-					if B.Values.Wallhacking.EspBool == true then
-						B.Scripts.Toggle_ExtraSensoryPerception(false)
+					if B.Values.Wallhacking.Players.Enabled == true then
+						B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(false)
 						task.wait(.05)
-						B.Scripts.Toggle_ExtraSensoryPerception(true)
+						B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(true)
 					end
 				end
 			end)()
@@ -420,6 +612,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end)
 
 
+
+
 		--  //  1  \\  --
 
 
@@ -432,14 +626,14 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Speed  //  --
-		Sections.Misc.Movement:AddLabel('Speed-Hacking')
+		M.Library.Sections.Misc.Movement:AddLabel('Speed-Hacking')
 
-		Sections.Misc.Movement:AddToggle('Toggle Speed', B.Values.Walkspeed.SpeedBool, Enum.KeyCode.Z, function(Boolean)
+		M.Library.Sections.Misc.Movement:AddToggle('Toggle Speed', B.Values.Walkspeed.SpeedBool, Enum.KeyCode.Z, function(Boolean)
 			B.Values.Walkspeed.SpeedBool = Boolean
 			B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
 		end)
 
-		Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
+		M.Library.Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
 			B.Values.Walkspeed.SpeedValue = Number
 			if B.Values.Walkspeed.SpeedBool == false then
 				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
@@ -450,9 +644,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Acceleration  //  --
-		Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
+		M.Library.Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
 
-		Sections.Misc.Movement:AddSlider('Change Acceleration', 10, 0, 1, function(Number)
+		M.Library.Sections.Misc.Movement:AddSlider('Change Acceleration', 10, 0, 1, function(Number)
 			B.Values.Acceleration.AccelValue = Number
 			B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
 		end)
@@ -461,28 +655,28 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Stamina  //  --
-		Sections.Misc.Character:AddLabel('Other')	
+		M.Library.Sections.Misc.Character:AddLabel('Other')	
 
-		Sections.Misc.Character:AddToggle('Toggle Inf-Stamina', B.Values.StaminaMods.StaminaBool, Enum.KeyCode.I, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Toggle Inf-Stamina', B.Values.StaminaMods.StaminaBool, Enum.KeyCode.I, function(Boolean)
 			B.Values.StaminaMods.StaminaBool = Boolean
 			B.Scripts.Toggle_InfinityStamina(B.Values.StaminaMods.StaminaBool)
 		end)
 
-		Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
 			B.Values.FastUsage.PromptsBool = Boolean
 		end)
 
-		Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
 			B.Values.CameraHack.MoreZoomBool = Boolean
 			B.Scripts.Toggle_CameraProperties(Boolean, "distance")
 		end)
 
-		Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
 			B.Values.CameraHack.InvisCameraBool = Boolean
 			B.Scripts.Toggle_CameraProperties(Boolean, "mode")
 		end)
 
-		Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
 			B.Values.Flinging.FlingBool = Boolean
 			B.Scripts.Toggle_Fling(Boolean)
 		end)
@@ -493,11 +687,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--  \\  Other  //  --
 
 
-		Sections.Misc.Character:AddToggle('Disable Neck-Movement', true, nil, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Disable Neck-Movement', true, nil, function(Boolean)
 			B.Scripts.Toggle_NeckMovement(Boolean)
 		end)
 
-		Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
 			B.Scripts.Toggle_BodyRotation(Boolean)
 		end)
 
@@ -505,7 +699,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Lockpicking  //  --
-		Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
+		M.Library.Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
 			B.Values.Lockpicking.LockpickBool = Boolean
 			B.Scripts.Toggle_LockpickResize(Boolean)
 		end)
@@ -514,203 +708,264 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--	--
 		--end)
 
-		Sections.Misc.Character:AddButton('Get Teleport-Tool',false,nil, function() 
-			B.Scripts.Give_TeleportTool()
-		end)
+		--M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
+		--	B.Scripts.Give_TeleportTool()
+		--end)
 
 
 
 
 		--  \\  Esp  //  --
-		Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.EspBool, Enum.KeyCode.J, function(Boolean)
-			B.Values.Wallhacking.EspBool = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerception(Boolean)
+
+
+		--Players
+		M.Library.Sections.Visual.Sense:AddLabel('Players')
+
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.Players.Enabled, Enum.KeyCode.K, function(Boolean)
+			B.Values.Wallhacking.Players.Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(Boolean)
 		end)
 
-		Sections.Misc.Character:AddLabel('Menu')	
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Players.Color,function(a) 
+			B.Values.Wallhacking.Players.Color = a
+		end)
 
-		Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
+
+		--Crates
+		M.Library.Sections.Visual.Sense:AddLabel('Crates')
+
+
+		--Reds
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Red Crate-Esp', B.Values.Wallhacking.Crates.Red_Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Crates.Red_Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Red Crate", DeleteFolder = Scrap_esp.Reds})
+		end)
+
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
+			B.Values.Wallhacking.Crates.ColorRed = a
+		end)
+
+
+		--Greens
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Green Crate-Esp', B.Values.Wallhacking.Crates.Green_Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Crates.Green_Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Green Crate", DeleteFolder = Scrap_esp.Greens})
+		end)
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGreen,function(a) 
+			B.Values.Wallhacking.Crates.ColorGreen = a
+		end)
+
+
+		--Whites
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle White Crate-Esp', B.Values.Wallhacking.Crates.White_Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Crates.White_Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "White Crate", DeleteFolder = Scrap_esp.Whites})
+		end)
+
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
+			B.Values.Wallhacking.Crates.ColorWhite = a
+		end)
+
+
+
+		--M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
+		--	B.Values.Wallhacking.Crates.ColorGold = a
+		--end)
+
+
+		--Safes
+		M.Library.Sections.Visual.Sense:AddLabel('Safes')
+
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Safe-Esp', B.Values.Wallhacking.Safes.Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Safes.Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.BredMakurz, {Folder = F_esp.Safes, Text = "Safe", Color = B.Values.Wallhacking.Safes.Color})
+		end)
+
+		M.Library.Sections.Visual.Sense:AddToggle('Registers Check', B.Values.Wallhacking.Safes.Registers, nil, function(Boolean)
+			B.Values.Wallhacking.Registers.Enabled = Boolean
+		end)
+
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
+			B.Values.Wallhacking.Safes.Color = a
+		end)
+
+
+		--ATMs
+		M.Library.Sections.Visual.Sense:AddLabel('ATMs')
+
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.ATMs.Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.ATMz, {Folder = F_esp.ATMs, Text = "ATM", Color = B.Values.Wallhacking.ATMs.Color})
+		end)
+
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
+			B.Values.Wallhacking.ATMs.Color = a
+		end)
+
+		--Dealers
+		M.Library.Sections.Visual.Sense:AddLabel('Dealers')
+
+		M.Library.Sections.Visual.Sense:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
+			B.Values.Wallhacking.Dealers.Enabled = Boolean
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.Shopz, {Folder = F_esp.Dealers, Text = "Dealer", Color = B.Values.Wallhacking.Dealers.Color})
+		end)
+
+		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
+			B.Values.Wallhacking.Dealers.Color = a
+		end)
+
+
+		--end
+
+
+		--  \\  Menu  //  --
+		M.Library.Sections.Misc.Character:AddLabel('Menu')	
+
+		M.Library.Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
 		end)
-		
-		Sections.CopeTrials.info:AddLabel('Script will be runned automaticly after getting in trials.')	
-		
-		task.wait(2)
-		
-		
-		
-		if workspace.Map:FindFirstChild("CopeTrialsDirectory") then
-			pcall(function()
-				task.wait(1)
 
-				local list = {
 
-					__printmemory = function()
-						local directories = {}
-						directories.dir1 = workspace.Map
 
-						if directories.dir1:FindFirstChild("CopeTrialsDirectory") then
-							directories.dir2 = directories.dir1.CopeTrialsDirectory	
-							if directories.dir2:FindFirstChild("Memory") then
-								directories.dir3 = directories.dir2.Memory
-							end
-						end	
+		--  \\  Aim-Lock  //  --
+		pcall(function()
+			local Aimlock_temps = {	
+				target = nil,
+				is_m2_p = false,
+			}
 
-						local init = {}
+			local f_d = {}
 
-						init.new = function()
-							local data={}
-							data.stress_folder = Instance.new("Folder", workspace.Terrain)
+			f_d.Target = nil
+			f_d.getTarget = function()
+				local Distance = B.Values.Aimlock.DistanceValue
+				local Part = B.Values.Aimlock.TargetPart
+				local Target = nil
 
-							data.directory = directories.dir3.Scriptables
-							data.stages = {}
+				for _, P in M.Services.Players:GetPlayers() do
+					if P ~= M.Local.Player then
+						if P.Character then
+							if P.Character:FindFirstChild("Humanoid") then
+								if P.Character:FindFirstChild("HumanoidRootPart") then
+									if (M.Functions.GetOwnCharacter().HumanoidRootPart.Position - M.Functions.GetCharacter(P).HumanoidRootPart.Position).Magnitude < B.Values.Aimlock.DistanceValue then
+										local doM = function()
+											local char = P.Character
+											local root, vis = M.Local.Camera:WorldToViewportPoint(char[Part].Position)
+											if vis then
+												local m = (Vector2.new(M.Local.Mouse.X, M.Local.Mouse.Y) - Vector2.new(root.X, root.Y)).Magnitude
+												if m < Distance and m < I_aimlock.Radius then
+													Distance = m
+													Target = char
+												end
+											end
+										end
 
-							task.spawn(function()
-								local no_fall_brick = Instance.new("Part", directories.dir3.Parts.RockBase)
-								no_fall_brick.Name = "CubeBruh"
-								no_fall_brick.Anchored = true
-								no_fall_brick.CanCollide = true
-								no_fall_brick.Transparency = 0.75
-								no_fall_brick.CastShadow = false
 
-								no_fall_brick.Massless = true
-								no_fall_brick.Size = Vector3.new(333, 1, 55)
-								no_fall_brick.Position = Vector3.new(999.444, 928.053, 98.319)
-								no_fall_brick.Rotation = Vector3.new(0, 0, 0)
-							end)
-
-							for _, v in data.directory.Stages:GetChildren() do if string.find(string.lower(v.Name), "stage") and v:FindFirstChild("Rows") then data.stages[v.Name] = v end end
-
-							for _, Stage in data.stages do
-								print(Stage)
-
-								local Symbols = {}
-								local Rows = {}
-
-								for _, r1 in Stage.Symbols:GetChildren() do
-									Symbols[r1.Name] = r1
-								end
-								for _, r1 in Stage.Rows:GetChildren() do
-									Rows[r1.Name] = r1
-								end
-
-								for _, S in Symbols do
-									local entire_name = "Row"..S.Name
-
-									local current_row = Rows[entire_name]
-									local platforms = current_row:GetChildren()
-
-									local symbol
-									local platform
-
-									local s_id
-
-									print(platforms)
-
-									for _, part in S.Part:GetChildren() do
-										if string.find(string.lower(part.Name),"symbol_") then 
-											symbol = part 
-										end 
-									end 
-
-									s_id = symbol.MeshId
-
-									for _, platformz in platforms do 
-										for _, mesh_obj in platformz:GetChildren() do
-											if string.find(string.lower(mesh_obj.Name),"symbol_") then 
-												if mesh_obj.MeshId == s_id then 
-													platform = mesh_obj.Parent 
-												end 
-											end 
+										if B.Values.Aimlock.DeadCheck then
+											if P.Character.Humanoid.Health > 0 then
+												if B.Values.Aimlock.DownedCheck then
+													local NewFolder = M.Services.ReplicatedStorage["CharStats"]:FindFirstChild(P.Name) or nil
+													if NewFolder then
+														if NewFolder.Downed.Value ~= true then
+															doM()
+														end
+													end
+												else
+													doM()
+												end
+											end
+										else
+											doM()
 										end
 									end
-
-
-
-									task.spawn(function()
-										local highlight = Instance.new("Highlight")
-										highlight.OutlineTransparency = 1
-										highlight.FillTransparency = 0.5
-										highlight.FillColor = Color3.fromRGB(0, 255, 0)
-										highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-										highlight.Enabled = true
-
-										highlight.Adornee = platform
-										highlight.Parent = data.stress_folder
-									end)
 								end
-							end		
-						end
-
-						init.new()
-					end,
-
-					__printhunt = function()
-						local directories = {}
-						directories.dir1 = workspace.Map
-
-						if directories.dir1:FindFirstChild("CopeTrialsDirectory") then
-							directories.dir2 = directories.dir1.CopeTrialsDirectory	
-							if directories.dir2:FindFirstChild("Hunt") then
-								directories.dir3 = directories.dir2.Hunt
 							end
-						end	
-
-						local init = {}
-
-						init.new = function()
-							repeat task.wait(1)
-								local pages = {}
-
-								for _, v in directories.dir3.Scriptables.Pages:GetChildren() do
-									if not v:FindFirstChildOfClass("Highlight") then
-										local HL = Instance.new("Highlight")
-										HL.FillTransparency = 1
-										HL.OutlineTransparency = 0
-
-										HL.OutlineColor = Color3.fromRGB(8, 230, 255)
-										HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-
-										HL.Enabled = true
-										HL.Parent = v
-										HL.Adornee = v
-									end
-								end
-
-								if directories.dir3:FindFirstChild("Copeman") then
-									if not directories.dir3.Copeman:FindFirstChildOfClass("Highlight") then
-										local HL = Instance.new("Highlight")
-										HL.FillTransparency = 1
-										HL.OutlineTransparency = 0
-
-										HL.OutlineColor = Color3.fromRGB(255, 0, 0)
-										HL.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-
-										HL.Enabled = true
-										HL.Parent = directories.dir3.Copeman
-										HL.Adornee = directories.dir3.Copeman
-									end
-								end
-							until Player.Character == nil
 						end
+					end
+				end
+				return Target
+			end
 
-						init.new()
-					end,
-				}
+			local UIS = game:GetService("UserInputService")
+			local TSS = game:GetService("TweenService")
 
-				repeat task.wait(1) 
-				until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory")
-				list.__printmemory()
-				
-				print("You're getting if hunting forest")
-				
-				repeat task.wait(2) 
-				until workspace.Map.CopeTrialsDirectory:FindFirstChild("Memory") 
-				list.__printhunt()
+			local RSS = game:GetService("RunService")
+			local PSS = game:GetService("Players")
 
-				-- Ends Cope's Stuff
+			local chart
+
+			UIS.InputEnded:Connect(function(Input, GameProccess)
+				if GameProccess then return end
+				if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+					Aimlock_temps.is_m2_p = false
+				end
 			end)
-		end
+
+			UIS.InputBegan:Connect(function(Input, GameProccess)
+				if GameProccess then return end
+				if B.Values.Aimlock.AimlockBool then
+					if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+						Aimlock_temps.is_m2_p = true
+						chart = f_d.getTarget()
+					end
+				end
+			end)
+
+			coroutine.wrap(function()
+				while true do RSS.Heartbeat:Wait()
+					pcall(function()
+						if M.Functions.GetOwnCharacter() then
+							if M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart") then
+								local gotten_vctr
+
+								if chart then
+									gotten_vctr = chart[B.Values.Aimlock.TargetPart].Position
+
+
+									local tss = TSS:Create(M.Local.Camera, TweenInfo.new(B.Values.Aimlock.TargetSense, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.lookAt(M.Local.Camera.CFrame.Position, gotten_vctr)})
+									if UIS.MouseBehavior == Enum.MouseBehavior.LockCenter and Aimlock_temps.is_m2_p == true then
+										tss:Play()
+										coroutine.wrap(function()
+											task.wait()
+											if UIS.MouseBehavior ~= Enum.MouseBehavior.LockCenter or Aimlock_temps.is_m2_p ~= true then
+												tss:Pause()
+											end
+										end)()
+									end
+								end
+							end
+						end
+					end)
+				end
+			end)()
+
+			M.Library.Sections.Combat.Aim:AddLabel('Aim Trigger')
+
+			M.Library.Sections.Combat.Aim:AddToggle('Toggle Locking', B.Values.Aimlock.AimlockBool, Enum.KeyCode.L, function(Boolean)
+				B.Values.Aimlock.AimlockBool = Boolean
+			end)
+
+			M.Library.Sections.Combat.Aim:AddToggle('Dead Check', B.Values.Aimlock.DeadCheck, nil, function(Boolean)
+				B.Values.Aimlock.DeadCheck = Boolean
+			end)
+
+			M.Library.Sections.Combat.Aim:AddToggle('Downed Check', B.Values.Aimlock.DownedCheck, nil, function(Boolean)
+				B.Values.Aimlock.DownedCheck = Boolean
+			end)
+
+			M.Library.Sections.Combat.Aim:AddSlider('Locking Sense', 3, 0.075, 0.5, function(Number)
+				B.Values.Aimlock.TargetSense = Number
+			end)
+
+			M.Library.Sections.Combat.Aim:AddSlider('Locking Distance', 2000, 100, 450, function(Number)
+				B.Values.Aimlock.DistanceValue = Number
+			end)
+
+			M.Library.Sections.Combat.Aim:AddDropdown('Locking Part',{'Head','Torso','HumanoidRootPart'},'Head',function(a) 
+				B.Values.Aimlock.TargetPart = a
+			end)
+		end)
+
 
 		coroutine.wrap(function()
 			while wait(1) do
