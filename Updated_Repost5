@@ -23,7 +23,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		local C = {
 
-			Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport,
+			Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport.." | "..ScriptDB.ScriptBuild,
 			Build_Core2 = "Subscribe-days left: "..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)),
 		}
 
