@@ -3,7 +3,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	task.spawn(function()
 		local ScriptDB = {
 			
-			ScriptBuild =				"Alpha v1.00",
+			ScriptBuild =				"Alpha v0.51",
 			ScriptType =				"Legit",
 			
 			ScriptName =				"Celebrials",
@@ -38,6 +38,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Combat = A:AddWindow('Combat'),
 			Visual = A:AddWindow('Visual'),
 			Misc =   A:AddWindow('Misc'),
+			Membership =   A:AddWindow('Membership'),
 			--CopeTrials = A:AddWindow('Cope-Trials'),
 
 			WaterM = A:AddWatermark('')
@@ -55,6 +56,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Misc = {
 				Character = wd.Misc:AddSection('Character Modifier'),
 				Movement = wd.Misc:AddSection('Movement Modifier'),
+			},
+			Membership = {
+				Information = wd.Membership:AddSection('♥')
 			},
 			--CopeTrials = {
 			--	info = wd.CopeTrials:AddSection('Information'),
@@ -965,7 +969,15 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				B.Values.Aimlock.TargetPart = a
 			end)
 		end)
+		
+		local AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
+		
+		M.Library.Sections.Membership.Information:AddLabel(' Version: \n'..ScriptDB.Membership_Info.Build)
+		M.Library.Sections.Membership.Information:AddLabel(' Account: \n'..AU)
+		M.Library.Sections.Membership.Information:AddLabel(' License: \n'..ScriptDB.Membership_Info.Days)
 
+
+		
 
 		coroutine.wrap(function()
 			while wait(1) do
