@@ -3,7 +3,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	task.spawn(function()
 		local ScriptDB = {
 			
-			ScriptBuild =				"Alpha v0.51",
+			ScriptBuild =				"Alpha v0.52",
 			ScriptType =				"Legit",
 			
 			ScriptName =				"Celebrials",
@@ -624,7 +624,13 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--  //    Misc    \\  --
 		--  || ========== ||  --
 		--  \\  Movement  //  --
-		local AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
+		local AU
+		
+		if ScriptDB.Membership_Info.Account ~= nil then
+			AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
+		else
+			AU = "unobstructed"
+		end
 
 		M.Library.Sections.Membership.Information:AddLabel(' Version: '..ScriptDB.Membership_Info.Build)
 		M.Library.Sections.Membership.Information:AddLabel(' Account: '..AU)
