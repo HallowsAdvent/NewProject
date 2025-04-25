@@ -3,7 +3,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	task.spawn(function()
 		local ScriptDB = {
 			
-			ScriptBuild =				"Alpha v0.51",
+			ScriptBuild =				"Alpha v1.06",
 			ScriptType =				"Legit",
 			
 			ScriptName =				"Celebrials",
@@ -33,40 +33,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
 
-		B.Assets.Windows = {
-
-			Combat = A:AddWindow('Combat'),
-			Visual = A:AddWindow('Visual'),
-			Misc =   A:AddWindow('Misc'),
-			Membership =   A:AddWindow('Membership'),
-			--CopeTrials = A:AddWindow('Cope-Trials'),
-
-			WaterM = A:AddWatermark('')
-		}
-		local wd = B.Assets.Windows
-
-		B.Assets.Sections = {
-
-			Combat = {
-				Aim = wd.Combat:AddSection('Aim-locking')	
-			},
-			Visual = {
-				Sense = wd.Visual:AddSection('Palpability')
-			},
-			Misc = {
-				Character = wd.Misc:AddSection('Character Modifier'),
-				Movement = wd.Misc:AddSection('Movement Modifier'),
-			},
-			Membership = {
-				Information = wd.Membership:AddSection('♥')
-			},
-			--CopeTrials = {
-			--	info = wd.CopeTrials:AddSection('Information'),
-			--},
-		}
-
 		--  //  0  \\  --
-		local Sections = B.Assets.Sections
+		--local Sections = B.Assets.Sections
 		local ReplicatedStorage = game:GetService("ReplicatedStorage")
 		local PlayerService = game:GetService("Players")
 		local RunService = game:GetService("RunService")
@@ -615,17 +583,38 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			end)
 		end)
 
-
-
-
-		--  //  1  \\  --
-
-
-		--  //    Misc    \\  --
-		--  || ========== ||  --
-		--  \\  Movement  //  --
-		local AU
 		
+		B.Assets.Windows = {
+
+			Combat = 		A:AddWindow('Combat'),
+			Visual = 		A:AddWindow('Palpability'),
+			Misc =   		A:AddWindow('Miscellaneous'),
+			Membership =    A:AddWindow('Membership'),
+			WaterM = 		A:AddWatermark('')
+		}
+		local wd = B.Assets.Windows
+
+		B.Assets.Sections = {
+
+			Combat = {
+				Aim = wd.Combat:AddSection('Aim-locking')	
+			},
+			Visual = {
+				Sense = wd.Visual:AddSection('Palpability'),
+				Sense2 = wd.Visual:AddSection('Other'),
+			},
+			Misc = {
+				Character = wd.Misc:AddSection('Character Modifier'),
+				Movement = wd.Misc:AddSection('Movement Modifier'),
+			},
+			Membership = {
+				Information = wd.Membership:AddSection('♥')
+			},
+
+		}
+
+
+		local AU
 		if ScriptDB.Membership_Info.Account ~= nil then
 			AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
 		else
@@ -635,9 +624,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Library.Sections.Membership.Information:AddLabel(' Version: '..ScriptDB.Membership_Info.Build)
 		M.Library.Sections.Membership.Information:AddLabel(' Account: '..AU)
 		M.Library.Sections.Membership.Information:AddLabel(' License: '..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)).." days")
-		M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
-			print('yess work)))')
-		end)
+		--M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
+		--	print('yess work)))')
+		--end)
 
 
 		--  \\  Speed  //  --
@@ -719,11 +708,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Scripts.Toggle_LockpickResize(Boolean)
 		end)
 
-		--Sections.Misc.Character:AddTextBox('Disguise (Client)',nil,false,5,function(a) 
-		--	--
-		--end)
-
-		M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
+		M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', function() 
 			B.Scripts.Give_TeleportTool()
 		end)
 
@@ -747,7 +732,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--Crates
-		M.Library.Sections.Visual.Sense:AddLabel('Crates')
+		M.Library.Sections.Visual.Sense:AddLabel('\nCrates')
 
 
 		--Reds
@@ -789,43 +774,43 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--Safes
-		M.Library.Sections.Visual.Sense:AddLabel('Safes')
+		M.Library.Sections.Visual.Sense2:AddLabel('\nSafes')
 
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle Safe-Esp', B.Values.Wallhacking.Safes.Enabled, nil, function(Boolean)
+		M.Library.Sections.Visual.Sense2:AddToggle('Toggle Safe-Esp', B.Values.Wallhacking.Safes.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Safes.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.BredMakurz, {Folder = F_esp.Safes, Text = "Safe", Color = B.Values.Wallhacking.Safes.Color})
 		end)
 
-		M.Library.Sections.Visual.Sense:AddToggle('Registers Check', B.Values.Wallhacking.Safes.Registers, nil, function(Boolean)
+		M.Library.Sections.Visual.Sense2:AddToggle('Registers Check', B.Values.Wallhacking.Safes.Registers, nil, function(Boolean)
 			B.Values.Wallhacking.Registers.Enabled = Boolean
 		end)
 
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
+		M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
 			B.Values.Wallhacking.Safes.Color = a
 		end)
 
 
 		--ATMs
-		M.Library.Sections.Visual.Sense:AddLabel('ATMs')
+		M.Library.Sections.Visual.Sense2:AddLabel('\nATMs')
 
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
+		M.Library.Sections.Visual.Sense2:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.ATMs.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.ATMz, {Folder = F_esp.ATMs, Text = "ATM", Color = B.Values.Wallhacking.ATMs.Color})
 		end)
 
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
+		M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
 			B.Values.Wallhacking.ATMs.Color = a
 		end)
 
 		--Dealers
-		M.Library.Sections.Visual.Sense:AddLabel('Dealers')
+		M.Library.Sections.Visual.Sense2:AddLabel('\nDealers')
 
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
+		M.Library.Sections.Visual.Sense2:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Dealers.Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.Shopz, {Folder = F_esp.Dealers, Text = "Dealer", Color = B.Values.Wallhacking.Dealers.Color})
 		end)
 
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
+		M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
 			B.Values.Wallhacking.Dealers.Color = a
 		end)
 
@@ -834,7 +819,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Menu  //  --
-		M.Library.Sections.Misc.Character:AddLabel('Menu')	
+		M.Library.Sections.Misc.Character:AddLabel('\nMenu')	
 
 		M.Library.Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
