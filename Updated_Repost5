@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.10",
+		ScriptBuild =				"Alpha v0.51",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -668,9 +668,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			_G.Celebrial_nonYieldLoaded = false
 			_G.Id_Verify_Celebrial_WithoutYielding = false
 
-			task.wait(2)
-
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/HallowsAdvent/Main/refs/heads/main/Source1'))()
+			game.CoreGui:SetAttribute("Celebrial_Destroying", true)
 		end)
 		
 		
@@ -1029,9 +1027,17 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		B.Assets.Windows.WaterM:Visible(true)
 	end)
 	
+	coroutine.resume(Script)
+	
 	game.CoreGui:GetAttributeChangedSignal("Celebrial_Destroying"):Once(function()
 		if game.CoreGui:GetAttribute("Celebrial_Destroying") == true then
 			coroutine.close(Script)
+			task.wait()
+			
+			game.CoreGui:GetAttribute("Celebrial_Destroying", nil)
+			task.wait(1.45)
+
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/HallowsAdvent/Main/refs/heads/main/Source1'))()
 		end
 	end)
 end
