@@ -1,23 +1,30 @@
 if _G.Celebrial_nonYieldLoaded ~= true then
 	_G.Celebrial_nonYieldLoaded = true
 	task.spawn(function()
-		local ScriptData = {
-
-			ScriptLevel = 		"1",
-			ScriptBuild = 		"Legit",
-
-			ScriptDaysL =		_G.daysLeft_Core,
-			ScriptCalls =		"Celebrial",	
-
-			ScriptSpprt =		"Criminality | v0.51",
-			ScriptSVrsn =		"unknown",
+		local ScriptDB = {
+			
+			ScriptBuild =				"Alpha v1.00",
+			ScriptType =				"Legit",
+			
+			ScriptName =				"Celebrials",
+			ScriptSupport =				"Criminality",
+			
+			Membership_Info =			_G.Memberships_logger,
 		}
+		
+		local A = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2'
+		local B = {}
+		
+		B.Plugins = {}
+		B.Scripts = {}
+		B.Assets =  {}
 
+		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
 
-		local A, B, C = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2',{},{
+		local C = {
 
-			Build_Core1 = ScriptData.ScriptCalls..": "..ScriptData.ScriptSpprt,
-			Build_Core2 = "Days left: "..tostring(ScriptData.ScriptDaysL),
+			Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport,
+			Build_Core2 = "Subscribe-days left: "..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)),
 		}
 
 		local Init = function(DataCore)
@@ -25,13 +32,6 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end
 
 		if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
-
-		B.Plugins = {}
-		B.Scripts = {}
-		B.Assets =  {}
-
-		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
-
 
 		B.Assets.Windows = {
 
@@ -179,7 +179,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					Green_Enabled = true,
 					Red_Enabled = true,
 					Gold_Enabled = true,
-					
+
 					ColorWhite = Color3.fromRGB(189, 189, 189),
 					ColorGreen = Color3.fromRGB(128, 255, 126),
 					ColorRed = Color3.fromRGB(255, 74, 74),
@@ -258,14 +258,14 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			ATMs = M.Functions.CreateInstance("Folder", {Name = "ATMsEsp"}, M_esp),
 			Safes = M.Functions.CreateInstance("Folder", {Name = "SafeEsp"}, M_esp),
 		}
-		
+
 		local Scrap_esp = {
 			Golds = M.Functions.CreateInstance("Folder", {Name = "Golds"}, F_esp.Scraps),
 			Reds = M.Functions.CreateInstance("Folder", {Name = "Reds"}, F_esp.Scraps),
 			Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
 			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
 		}
-		
+
 
 		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
 			local EDBT = {}
@@ -475,19 +475,19 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					for _, Object in Folder:GetChildren() do
 						if string.find(string.lower(CustomDBT.Text), "crate") or string.find(string.lower(CustomDBT.Text), "scrap") then
 							local color_ = B.Values.Wallhacking.Crates.ColorWhite
-							
+
 							local CurrentRare = Object:GetAttribute("LPBRs")
-							
+
 							if Object:GetAttribute("LPBRs") == 2 then
 								color_ = B.Values.Wallhacking.Crates.ColorRed
 							elseif Object:GetAttribute("LPBrs") == 1 then
 								color_ = B.Values.Wallhacking.Crates.ColorGreen
 							end
-							
+
 							local LoadA = function(ParentProgress)
 								B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = ParentProgress, GuiSize = UDim2.new(0.004,0,0.002,0)})
 							end
-							
+
 							if CurrentRare == 1 and string.find(string.lower(CustomDBT.Text), "green") then
 								LoadA(Scrap_esp.Greens)
 							elseif CurrentRare == 2 and string.find(string.lower(CustomDBT.Text), "red") then
@@ -495,7 +495,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 							elseif CurrentRare == nil and string.find(string.lower(CustomDBT.Text), "white") and (Object.Name == "S1" or Object.Name == "S2") then
 								LoadA(Scrap_esp.Whites)
 							end
-							
+
 						elseif CustomDBT.Text == "Safe" then
 							if B.Values.Wallhacking.Safes.Registers then
 								if string.find(string.lower(Object.Name), "register") then
@@ -734,18 +734,18 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--Crates
 		M.Library.Sections.Visual.Sense:AddLabel('Crates')
 
-		
+
 		--Reds
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Red Crate-Esp', B.Values.Wallhacking.Crates.Red_Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Crates.Red_Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Red Crate", DeleteFolder = Scrap_esp.Reds})
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
 			B.Values.Wallhacking.Crates.ColorRed = a
 		end)
-		
-		
+
+
 		--Greens
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle Green Crate-Esp', B.Values.Wallhacking.Crates.Green_Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Crates.Green_Enabled = Boolean
@@ -754,18 +754,18 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGreen,function(a) 
 			B.Values.Wallhacking.Crates.ColorGreen = a
 		end)
-		
-		
+
+
 		--Whites
 		M.Library.Sections.Visual.Sense:AddToggle('Toggle White Crate-Esp', B.Values.Wallhacking.Crates.White_Enabled, nil, function(Boolean)
 			B.Values.Wallhacking.Crates.White_Enabled = Boolean
 			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "White Crate", DeleteFolder = Scrap_esp.Whites})
 		end)
-		
+
 		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
 			B.Values.Wallhacking.Crates.ColorWhite = a
 		end)
-		
+
 
 
 		--M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
