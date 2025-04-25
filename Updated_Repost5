@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v0.51",
+		ScriptBuild =				"Alpha v1.10",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
