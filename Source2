@@ -30,7 +30,7 @@ local function intersects (p, edge)
 	if t and u and t > 0 and t < 1 and u > 0 then
 		return true
 	end
- 
+
 	return false
 end
 
@@ -441,8 +441,8 @@ function OpenedColor(text,ColourDisplay,Action,def)
 		COLORPALLETE.Visible = false
 
 		pcall(function()
-            Action( Color3.fromRGB(ColourDisplayBIG.ImageColor3.R * 200 ,ColourDisplayBIG.ImageColor3.G * 200 ,ColourDisplayBIG.ImageColor3.B* 200) )
-        end)
+			Action( Color3.fromRGB(ColourDisplayBIG.ImageColor3.R * 200 ,ColourDisplayBIG.ImageColor3.G * 200 ,ColourDisplayBIG.ImageColor3.B* 200) )
+		end)
 
 	end)
 
@@ -917,24 +917,24 @@ function library:AddWatermark(Text)
 end
 
 function library:Init(name)
-    for i,v in pairs(Upper:GetChildren()) do
-        if v:IsA('TextButton') then
-            if v.Name == name then
-                TweenService:Create(v , TweenInfo.new(0.26, Enum.EasingStyle.Quad , Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(210, 210, 210)}):Play()	
-            else
-                TweenService:Create(v , TweenInfo.new(0.26, Enum.EasingStyle.Quad , Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(138, 138, 138)}):Play()	
-            end
-        end
-    end
-    for i,v in pairs(limit1:GetChildren()) do
-        if v:IsA('Frame') or v:IsA('ScrollingFrame') then
-            if v.Name == name then
-                v.Visible = true
-            else
-                v.Visible = false
-            end
-        end
-    end
+	for i,v in pairs(Upper:GetChildren()) do
+		if v:IsA('TextButton') then
+			if v.Name == name then
+				TweenService:Create(v , TweenInfo.new(0.26, Enum.EasingStyle.Quad , Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(210, 210, 210)}):Play()	
+			else
+				TweenService:Create(v , TweenInfo.new(0.26, Enum.EasingStyle.Quad , Enum.EasingDirection.InOut), {TextColor3 = Color3.fromRGB(138, 138, 138)}):Play()	
+			end
+		end
+	end
+	for i,v in pairs(limit1:GetChildren()) do
+		if v:IsA('Frame') or v:IsA('ScrollingFrame') then
+			if v.Name == name then
+				v.Visible = true
+			else
+				v.Visible = false
+			end
+		end
+	end
 end
 
 function library:AddWindow(text)
@@ -1326,7 +1326,7 @@ function library:AddWindow(text)
 				PassBox.Text=colador(obj5.Text,Type)
 
 				if PassBox.Text == nil or PassBox.Text == '' then
-   
+
 					if #PassBox.Text <= 5 then
 						obj2:TweenSize(UDim2.new(0,#PassBox.PlaceholderText*10,0,16),'Out','Quint',0.4,true);
 					else
@@ -1368,7 +1368,7 @@ function library:AddWindow(text)
 			UpdateMainSize(nil,true)
 
 		end
- 
+
 		function inside:AddSlider(Text,Max,Min,def,Action)
 			Text = Text or 'Not Defined'
 			Max = Max or 100
@@ -1607,7 +1607,7 @@ function library:AddWindow(text)
 			TextLabel.TextWrapped = true
 			TextLabel.TextXAlignment = Enum.TextXAlignment.Left
 			TextLabel.TextYAlignment = Enum.TextYAlignment.Top
-			
+
 			TextLabel.AutomaticSize = Enum.AutomaticSize.Y
 
 
@@ -2201,23 +2201,27 @@ function library:AddWindow(text)
 			TemplateButton.Name = "TemplateButton"
 			TemplateButton.Parent = HOLDER_2
 			TemplateButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			TemplateButton.BackgroundTransparency = 0
 			TemplateButton.BorderSizePixel = 0
 			TemplateButton.Position = UDim2.new(0.0430313908, 0, 0, 0)
 			TemplateButton.Size = UDim2.new(0, 243, 0, 21)
 			TemplateButton.ZIndex = 14
 			TemplateButton.ClipsDescendants = true
+			TemplateButton.Interactable = true
+			
 			TextLabel.Parent = TemplateButton
 			TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-			TextLabel.BackgroundTransparency = 1.000
+			TextLabel.BackgroundTransparency = 1
 			TextLabel.BorderSizePixel = 0
 			TextLabel.Position = UDim2.new(0, 0, 0, 0)
 			TextLabel.Size = UDim2.new(0,243,0,19)
 			TextLabel.ZIndex = 15
-            TextLabel.Text=Text
+			TextLabel.Text=Text
 			TextLabel.Font = Enum.Font.SourceSansBold
-			TextLabel.TextColor3 = Color3.fromRGB(84, 84, 84)
+			TextLabel.TextColor3 = Color3.fromRGB(197, 197, 197)
 			TextLabel.TextSize = 17.000
-
+			TextLabel.Interactable = true
+			
 			Interactive.Name = "Interactive"
 			Interactive.Parent = TemplateButton
 			Interactive.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -2230,6 +2234,7 @@ function library:AddWindow(text)
 			Interactive.Text = ""
 			Interactive.TextColor3 = Color3.fromRGB(0, 0, 0)
 			Interactive.TextSize = 18.000
+			Interactive.Interactable = true
 			--Interactive.ClipsDescendants = true
 			UICorner.CornerRadius = UDim.new(0, 4)
 			UICorner.Parent = TemplateButton
@@ -2248,6 +2253,7 @@ function library:AddWindow(text)
 
 			Interactive.MouseButton1Click:Connect(function()
 				spawn(function()
+					print("callbacking ..")
 					pcall(function()
 						Callback()
 					end)
