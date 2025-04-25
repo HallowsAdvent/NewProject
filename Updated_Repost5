@@ -1,54 +1,90 @@
 if _G.Celebrial_nonYieldLoaded ~= true then
 	_G.Celebrial_nonYieldLoaded = true
-	task.spawn(function()
-		local ScriptDB = {
-			
-			ScriptBuild =				"Alpha v0.51",
-			ScriptType =				"Legit",
-			
-			ScriptName =				"Celebrials",
-			ScriptSupport =				"Criminality",
-			
-			Membership_Info =			_G.Memberships_logger,
-		}
-		
-		local A = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2'
-		local B = {}
-		
-		B.Plugins = {}
-		B.Scripts = {}
-		B.Assets =  {}
+	
+	local ACTIVE_MODIFIES = {}
+	game.CoreGui:SetAttribute("Celebrial_Destroying", false)
+	
+	
+	local ScriptDB = {
 
-		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
+		ScriptBuild =				"Alpha v0.51",
+		ScriptType =				"Legit",
 
-		local C = {
+		ScriptName =				"Celebrials",
+		ScriptSupport =				"Criminality",
 
-			Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport.." | "..ScriptDB.ScriptBuild,
-			Build_Core2 = "Subscribe-days left: "..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)),
-		}
+		Membership_Info =			_G.Memberships_logger,
+	}
 
-		local Init = function(DataCore)
-			_G.DataCore = DataCore
-		end
+	local A = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2'
+	local B = {}
 
-		if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
+	B.Plugins = {}
+	B.Scripts = {}
+	B.Assets =  {}
 
-		--  //  0  \\  --
-		--local Sections = B.Assets.Sections
-		local ReplicatedStorage = game:GetService("ReplicatedStorage")
-		local PlayerService = game:GetService("Players")
-		local RunService = game:GetService("RunService")
-		local Player = PlayerService.LocalPlayer
+	B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
 
-		local camera = workspace.CurrentCamera
-		local mousee = Player:GetMouse()
-		
-		local M = {}
+	local C = {
 
-		M.Functions = {}
-		M.Library = {}
-		M.Local = {}
-		--
+		Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport.." | "..ScriptDB.ScriptBuild,
+		Build_Core2 = "Subscribe-days left: "..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)),
+	}
+
+	local Init = function(DataCore)
+		_G.DataCore = DataCore
+	end
+
+	if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
+
+	--  //  0  \\  --
+	--local Sections = B.Assets.Sections
+	local ReplicatedStorage = game:GetService("ReplicatedStorage")
+	local PlayerService = game:GetService("Players")
+	local RunService = game:GetService("RunService")
+	local Player = PlayerService.LocalPlayer
+
+	local camera = workspace.CurrentCamera
+	local mousee = Player:GetMouse()
+
+	local M = {}
+	
+	M.Functions = {}
+	M.Library = {}
+	M.Local = {}
+	
+	B.Assets.Windows = {
+
+		Combat = 		A:AddWindow('Combat'),
+		Visual = 		A:AddWindow('Palpability'),
+		Misc =   		A:AddWindow('Miscellaneous'),
+		Membership =    A:AddWindow('Membership'),
+		WaterM = 		A:AddWatermark('')
+	}
+	local wd = B.Assets.Windows
+
+	B.Assets.Sections = {
+
+		Combat = {
+			Aim = wd.Combat:AddSection('Aim-locking')	
+		},
+		Visual = {
+			Sense = wd.Visual:AddSection('Palpability'),
+			Sense2 = wd.Visual:AddSection('Other'),
+		},
+		Misc = {
+			Character = wd.Misc:AddSection('Character Modifier'),
+			Movement = wd.Misc:AddSection('Movement Modifier'),
+		},
+		Membership = {
+			Information = wd.Membership:AddSection('♥')
+		},
+
+	}
+	
+	M.Library.Sections = B.Assets.Sections
+	
+	local Script = coroutine.create(function()
 		M.Services = {
 			ReplicatedFirst = 				game:GetService("ReplicatedFirst"),
 			ReplicatedStorage = 			game:GetService("ReplicatedStorage"),
@@ -110,7 +146,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				return M.Functions.GetOwnCharacter()
 			end
 		end
-		
+
 		B.Values =  {
 
 			Aimlock = {
@@ -568,8 +604,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 				if B.Values.Walkspeed.SpeedBool == true then
 					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
+					
 				end
 				if B.Values.Acceleration.AccelBool == true then
+					ACTIVE_MODIFIES["Acceleration_Value"] = ReplicatedStorage.CharStats[Player.Name].AccelerationModifier.Value
+					task.wait()
 					B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
 				end
 				if B.Values.StaminaMods.StaminaBool == true then
@@ -580,37 +619,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end)
 
 		
-		B.Assets.Windows = {
-
-			Combat = 		A:AddWindow('Combat'),
-			Visual = 		A:AddWindow('Palpability'),
-			Misc =   		A:AddWindow('Miscellaneous'),
-			Membership =    A:AddWindow('Membership'),
-			WaterM = 		A:AddWatermark('')
-		}
-		local wd = B.Assets.Windows
-
-		B.Assets.Sections = {
-
-			Combat = {
-				Aim = wd.Combat:AddSection('Aim-locking')	
-			},
-			Visual = {
-				Sense = wd.Visual:AddSection('Palpability'),
-				Sense2 = wd.Visual:AddSection('Other'),
-			},
-			Misc = {
-				Character = wd.Misc:AddSection('Character Modifier'),
-				Movement = wd.Misc:AddSection('Movement Modifier'),
-			},
-			Membership = {
-				Information = wd.Membership:AddSection('♥')
-			},
-
-		}
 		
-		M.Library.Sections = B.Assets.Sections
-
+		
 		local AU
 		if ScriptDB.Membership_Info.Account ~= nil then
 			AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
@@ -621,10 +631,51 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Library.Sections.Membership.Information:AddLabel(' Version: '..ScriptDB.Membership_Info.Build)
 		M.Library.Sections.Membership.Information:AddLabel(' Account: '..AU)
 		M.Library.Sections.Membership.Information:AddLabel(' License: '..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)).." days")
-		--M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
-		--	print('yess work)))')
-		--end)
+		M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
+			task.wait(.085)
+			_G.IsScreenGui_toggler_actor:Destroy()
+			
+			task.wait(.3)
+			
+			B.Scripts.Change_WalkSpeed(false)
+			B.Scripts.Change_Acceleration(1)
+			B.Scripts.Toggle_InfinityStamina(false)
+			B.Scripts.Toggle_CameraProperties(false, "distance")
+			B.Scripts.Toggle_CameraProperties(false, "mode")
+			B.Scripts.Toggle_Fling(false)
+			B.Scripts.Toggle_NeckMovement(true)
+			B.Scripts.Toggle_BodyRotation(false)
+			B.Scripts.Toggle_LockpickResize(false)
+			
+			B.Values.Wallhacking.Players.Enabled = false
+			
+			B.Values.Wallhacking.Crates.Red_Enabled = false
+			B.Values.Wallhacking.Crates.Green_Enabled = false
+			B.Values.Wallhacking.Crates.White_Enabled = false
+			B.Values.Wallhacking.Crates.Gold_Enabled = false
+			
+			B.Values.Wallhacking.Safes.Enabled = false
+			B.Values.Wallhacking.Dealers.Enabled = false
+			B.Values.Wallhacking.ATMs.Enabled = false
+			
+			B.Values.Aimlock.AimlockBool = false
+			
+			I_aimlock:Destroy()
+			M_esp:Destroy()
+			
+			task.wait(.5)
+			
+			_G.Celebrial_nonYieldLoaded = false
+			_G.Id_Verify_Celebrial_WithoutYielding = false
 
+			task.wait(2)
+
+			loadstring(game:HttpGet('https://raw.githubusercontent.com/HallowsAdvent/Main/refs/heads/main/Source1'))()
+		end)
+		
+		
+		
+		
 
 		--  \\  Speed  //  --
 		M.Library.Sections.Misc.Movement:AddLabel('Speed-Hacking')
@@ -636,7 +687,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		M.Library.Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
 			B.Values.Walkspeed.SpeedValue = Number
-			if B.Values.Walkspeed.SpeedBool == false then
+			if B.Values.Walkspeed.SpeedBool == true then
 				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
 			end
 		end)
@@ -963,7 +1014,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			end)
 		end)
 
-		
+
 
 		coroutine.wrap(function()
 			while wait(1) do
@@ -976,5 +1027,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		end)()
 
 		B.Assets.Windows.WaterM:Visible(true)
+	end)
+	
+	game.CoreGui:GetAttributeChangedSignal("Celebrial_Destroying"):Once(function()
+		if game.CoreGui:GetAttribute("Celebrial_Destroying") == true then
+			coroutine.close(Script)
+		end
 	end)
 end
