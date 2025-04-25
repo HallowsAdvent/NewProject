@@ -3,7 +3,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	task.spawn(function()
 		local ScriptDB = {
 			
-			ScriptBuild =				"Alpha v0.52",
+			ScriptBuild =				"Alpha v0.51",
 			ScriptType =				"Legit",
 			
 			ScriptName =				"Celebrials",
@@ -635,7 +635,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Library.Sections.Membership.Information:AddLabel(' Version: '..ScriptDB.Membership_Info.Build)
 		M.Library.Sections.Membership.Information:AddLabel(' Account: '..AU)
 		M.Library.Sections.Membership.Information:AddLabel(' License: '..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)).." days")
-
+		M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
+			print('yess work)))')
+		end)
 
 
 		--  \\  Speed  //  --
@@ -721,9 +723,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		--	--
 		--end)
 
-		--M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
-		--	B.Scripts.Give_TeleportTool()
-		--end)
+		M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', true, nil, function() 
+			B.Scripts.Give_TeleportTool()
+		end)
 
 
 
