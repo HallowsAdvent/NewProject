@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.17",
+		ScriptBuild =				"Alpha v1.18",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -294,7 +294,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			Crosshair.init = function()
 				Crosshair.cross_settings = {}
-				Crosshair.VisualFolder = Instance.new("Folder", game.StarterGui)		
+				Crosshair.VisualFolder = Instance.new("Folder", game.CoreGui)		
 			end
 
 			Crosshair.unload = function()
