@@ -1,13 +1,13 @@
 if _G.Celebrial_nonYieldLoaded ~= true then
 	_G.Celebrial_nonYieldLoaded = true
-	
+
 	local ACTIVE_MODIFIES = {}
 	game.CoreGui:SetAttribute("Celebrial_Destroying", false)
-	
-	
+
+
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.16",
+		ScriptBuild =				"Alpha v1.17",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -48,11 +48,11 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 	local mousee = Player:GetMouse()
 
 	local M = {}
-	
+
 	M.Functions = {}
 	M.Library = {}
 	M.Local = {}
-	
+
 	B.Assets.Windows = {
 
 		Combat = 		A:AddWindow('Combat'),
@@ -75,15 +75,16 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		Misc = {
 			Character = wd.Misc:AddSection('Character Modifier'),
 			Movement = wd.Misc:AddSection('Movement Modifier'),
+			Crosshair = wd.Misc:AddSection('Crosshair'),
 		},
 		Membership = {
 			Information = wd.Membership:AddSection('♥')
 		},
 
 	}
-	
+
 	M.Library.Sections = B.Assets.Sections
-	
+
 	local Script = coroutine.create(function()
 		M.Services = {
 			ReplicatedFirst = 				game:GetService("ReplicatedFirst"),
@@ -269,7 +270,132 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
 			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
 		}
+		
+		
+		local Crosshair = {}
+		task.spawn(function()
+			Crosshair.defaults = {
+				["Lines 1"] = 		99889902798389,
+				["Circle 1"] = 		81340365683174,
+				["Circle 2"] = 		136837163590802,
+				["Circle 3"] = 		102905283755286,
+				["Circle 4"] = 		83335526367176,
+				["Circle 5"] = 		87547903982672,
+				["Circle 6"] = 		83053021526164,
+				["Circle 7"] = 		111309197797890,
+				["Circle 8"] = 		133888102128265,
+				["Heart 1"] = 		88466704493625,
+				["Focus 1"] = 		115424703989562,
+				["Focus 2"] = 		116342124658278,
+				["Hello Kitty"] = 	122334015699194,
+				["Anime 1"] = 		132635850677690,
+				["Scope 1"] = 		117164191256894,
+			}
 
+			Crosshair.init = function()
+				Crosshair.cross_settings = {}
+				Crosshair.VisualFolder = Instance.new("Folder", game.StarterGui)		
+			end
+
+			Crosshair.unload = function()
+				Crosshair.cross_settings = nil
+				if Crosshair.VisualFolder then pcall(function()
+						Crosshair.VisualFolder:Destroy()
+					end)
+				end
+			end
+
+			Crosshair.update = function(Mode, Settings)
+				if Crosshair.VisualFolder then
+					if Mode == "new" then
+						Settings = Settings or {}
+
+						for _, old in Crosshair.VisualFolder:GetChildren() do
+							if old:IsA("ScreenGui") and old:HasTag("IsCrosshair") then old:Destroy() end
+						end
+
+						local NewScreen = Instance.new("ScreenGui", Crosshair.VisualFolder)
+						NewScreen.Enabled = true
+						NewScreen.ResetOnSpawn = false
+						NewScreen.IgnoreGuiInset = true
+						NewScreen.DisplayOrder = 9999999
+						NewScreen:AddTag("IsCrosshair")
+
+						local NewImage = Instance.new("ImageLabel", NewScreen)
+						NewImage.Name = "crosshair"
+						NewImage.AnchorPoint = Vector2.new(0.5, 0.5)
+						NewImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						NewImage.BackgroundTransparency = 1
+						NewImage.BorderSizePixel = 0
+						NewImage.Interactable = 0
+						NewImage.LayoutOrder = 0
+						NewImage.Active = false
+						NewImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+						NewImage.Size = UDim2.new(0, 20, 0, 20)
+						NewImage.Rotation = 0
+						NewImage.Visible = true
+						NewImage.ZIndex = 9
+						-- Yes
+						NewImage.ImageRectSize = Vector2.new(0, 0)
+						NewImage.ImageRectOffset = Vector2.new(0, 0)
+						NewImage.ScaleType = Enum.ScaleType.Stretch
+						NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
+
+						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults[1]
+						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
+						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
+						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
+
+						local NewScale = Instance.new("UIScale", NewImage)
+						NewScale.Name = "scale"
+						NewScale.Scale = 			Settings.Crosshair_Scale or 1
+
+						Crosshair.CurrentCross = NewScreen
+					elseif Mode == "update" or Mode == "upd" then
+						Settings = Settings or {}
+
+						local NewImage = Crosshair.CurrentCross.crosshair
+						-- Yes
+						NewImage.ImageRectSize = Vector2.new(0, 0)
+						NewImage.ImageRectOffset = Vector2.new(0, 0)
+						NewImage.ScaleType = Enum.ScaleType.Stretch
+						NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
+
+						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults[1]
+						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
+						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
+						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
+						
+						local NewScale = NewImage.scale
+						NewScale.Scale = 			Settings.Crosshair_Scale or 1
+					end
+				end
+			end
+			
+			Crosshair.remove = function(AnyCrosshair)
+				if Crosshair.VisualFolder then
+					AnyCrosshair = AnyCrosshair or Crosshair.CurrentCross
+
+					if AnyCrosshair ~= nil then
+						Crosshair:Destroy()
+					end
+				end
+			end
+
+			Crosshair.toggle = function(Boolean)
+				if Crosshair.VisualFolder then
+					if Crosshair.CurrentCross ~= nil then
+						Crosshair.CurrentCross.Enabled = false
+					end
+				end
+			end
+			
+			Crosshair.new = function(mode, settings_i)
+				Crosshair.update(mode, settings_i)
+			end
+		end)
+
+		
 
 		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
 			local EDBT = {}
@@ -604,7 +730,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 				if B.Values.Walkspeed.SpeedBool == true then
 					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
-					
+
 				end
 				if B.Values.Acceleration.AccelBool == true then
 					ACTIVE_MODIFIES["Acceleration_Value"] = ReplicatedStorage.CharStats[Player.Name].AccelerationModifier.Value
@@ -618,9 +744,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			end)
 		end)
 
-		
-		
-		
+
+
+
 		local AU
 		if ScriptDB.Membership_Info.Account ~= nil then
 			AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
@@ -634,7 +760,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
 			task.wait(.085)
 			_G.IsScreenGui_toggler_actor:Destroy()
-			
+
 			task.wait(.3)
 			
 			B.Scripts.Change_WalkSpeed(false)
@@ -646,33 +772,132 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			B.Scripts.Toggle_NeckMovement(true)
 			B.Scripts.Toggle_BodyRotation(false)
 			B.Scripts.Toggle_LockpickResize(false)
-			
+
 			B.Values.Wallhacking.Players.Enabled = false
-			
+
 			B.Values.Wallhacking.Crates.Red_Enabled = false
 			B.Values.Wallhacking.Crates.Green_Enabled = false
 			B.Values.Wallhacking.Crates.White_Enabled = false
 			B.Values.Wallhacking.Crates.Gold_Enabled = false
-			
+
 			B.Values.Wallhacking.Safes.Enabled = false
 			B.Values.Wallhacking.Dealers.Enabled = false
 			B.Values.Wallhacking.ATMs.Enabled = false
-			
+
 			B.Values.Aimlock.AimlockBool = false
-			
+
 			I_aimlock:Destroy()
 			M_esp:Destroy()
 			
-			task.wait(.5)
+			Crosshair.unload()
 			
+			task.wait(.5)
+
 			_G.Celebrial_nonYieldLoaded = false
 			_G.Id_Verify_Celebrial_WithoutYielding = false
 
 			game.CoreGui:SetAttribute("Celebrial_Destroying", true)
 		end)
-		
-		
-		
+
+		--  \\  Crosshair Setup  //  --
+		task.spawn(function()
+			local Current_Path = M.Library.Sections
+			local Current_Section = Current_Path.Misc.Crosshair
+			
+			B.Values.Crosshair = {
+				
+				Enabled = true, -- Inverted (if true then default'll be false)
+				Color = Color3.fromRGB(255, 255, 255),
+				ViewMode = Enum.ResamplerMode.Default,
+				Scale = 1,
+				Image = Crosshair.defaults[1],
+				Transparency = 0,
+			}
+			
+			local CrosshairValues = B.Values.Crosshair
+			
+			--local default_table = {
+			--	Crosshair_Color = Color3.fromRGB(255, 255, 255),
+			--	Crosshair_ViewMode = Enum.ResamplerMode.Default,
+			--	Crosshair_Transparency = 0,
+			--	Crosshair_Image = 0,
+			--	Crosshair_Scale = 1,
+			--}
+			
+			Crosshair.init()
+			Crosshair.new("new")
+			Crosshair.toggle(not CrosshairValues.Enabled)
+			
+			
+			Current_Section:AddToggle('Crosshair', CrosshairValues.Enabled, Enum.KeyCode.M, function(Boolean)
+				CrosshairValues.Enabled = Boolean
+				Crosshair.toggle(Boolean)
+			end)
+			
+			Current_Section:AddSlider('Size', 5, 0.1, 1, function(Number)
+				CrosshairValues.Scale = Number
+				Crosshair.new("upd", {
+						Crosshair_Color = 			CrosshairValues.Color,
+						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+						Crosshair_Transparency = 	CrosshairValues.Transparency,
+						Crosshair_Image = 			CrosshairValues.Image,
+						Crosshair_Scale = 			CrosshairValues.Scale,
+					})
+			end)
+			
+			Current_Section:AddSlider('Transparency', 1, 0, 0, function(Number)
+				CrosshairValues.Transparency = Number
+				Crosshair.new("upd", {
+					Crosshair_Color = 			CrosshairValues.Color,
+					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+					Crosshair_Transparency = 	CrosshairValues.Transparency,
+					Crosshair_Image = 			CrosshairValues.Image,
+					Crosshair_Scale = 			CrosshairValues.Scale,
+				})
+			end)
+			
+			Current_Section:AddColorPallete('Color', CrosshairValues.Color,function(a) 
+				CrosshairValues.Color = a
+				Crosshair.new("upd", {
+					Crosshair_Color = 			CrosshairValues.Color,
+					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+					Crosshair_Transparency = 	CrosshairValues.Transparency,
+					Crosshair_Image = 			CrosshairValues.Image,
+					Crosshair_Scale = 			CrosshairValues.Scale,
+				})
+			end)
+			
+			Current_Section:AddDropdown('ResampleMode',{'Default','Pixeled'},'Default',function(a) 
+				if a == 'Default' then
+					CrosshairValues.ViewMode = Enum.ResamplerMode.Default
+				elseif a == 'Pixeled' then
+					CrosshairValues.ViewMode = Enum.ResamplerMode.Pixelated
+				end
+				Crosshair.new("upd", {
+					Crosshair_Color = 			CrosshairValues.Color,
+					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+					Crosshair_Transparency = 	CrosshairValues.Transparency,
+					Crosshair_Image = 			CrosshairValues.Image,
+					Crosshair_Scale = 			CrosshairValues.Scale,
+				})
+			end)
+			
+			local variants = {}
+			for variant,_ in Crosshair.defaults do
+				table.insert(variants, variant)
+			end
+			
+			Current_Section:AddDropdown('Crosshairs',variants,variants[1],function(a) 
+				CrosshairValues.Image = Crosshair.defaults[a]
+				Crosshair.new("upd", {
+					Crosshair_Color = 			CrosshairValues.Color,
+					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+					Crosshair_Transparency = 	CrosshairValues.Transparency,
+					Crosshair_Image = 			CrosshairValues.Image,
+					Crosshair_Scale = 			CrosshairValues.Scale,
+				})
+			end)
+		end)
 		
 
 		--  \\  Speed  //  --
@@ -865,9 +1090,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 
 		--  \\  Menu  //  --
-		M.Library.Sections.Misc.Character:AddLabel('\nMenu')	
+		M.Library.Sections.Membership.Information:AddLabel('\nMenu')	
 
-		M.Library.Sections.Misc.Character:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
+		M.Library.Sections.Membership.Information:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
 			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
 		end)
 
@@ -1026,14 +1251,14 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 		B.Assets.Windows.WaterM:Visible(true)
 	end)
-	
+
 	coroutine.resume(Script)
-	
+
 	game.CoreGui:GetAttributeChangedSignal("Celebrial_Destroying"):Once(function()
 		if game.CoreGui:GetAttribute("Celebrial_Destroying") == true then
 			coroutine.close(Script)
 			task.wait()
-			
+
 			game.CoreGui:GetAttribute("Celebrial_Destroying", nil)
 			task.wait(1.45)
 
