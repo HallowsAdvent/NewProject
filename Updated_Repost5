@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.20",
+		ScriptBuild =				"Alpha v1.21",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -270,8 +270,8 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
 			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
 		}
-		
-		
+
+
 		local Crosshair = {}
 		task.spawn(function()
 			Crosshair.defaults = {
@@ -294,7 +294,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			Crosshair.init = function()
 				Crosshair.cross_settings = {}
-				Crosshair.VisualFolder = Instance.new("Folder", game.StarterGui)		
+				Crosshair.VisualFolder = Instance.new("Folder", game.CoreGui)		
 			end
 
 			Crosshair.unload = function()
@@ -365,13 +365,13 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
 						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
 						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
-						
+
 						local NewScale = NewImage.scale
 						NewScale.Scale = 			Settings.Crosshair_Scale or 1
 					end
 				end
 			end
-			
+
 			Crosshair.remove = function(AnyCrosshair)
 				if Crosshair.VisualFolder then
 					AnyCrosshair = AnyCrosshair or Crosshair.CurrentCross
@@ -385,17 +385,17 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Crosshair.toggle = function(Boolean)
 				if Crosshair.VisualFolder then
 					if Crosshair.CurrentCross ~= nil then
-						Crosshair.CurrentCross.Enabled = false
+						Crosshair.CurrentCross.Enabled = Boolean
 					end
 				end
 			end
-			
+
 			Crosshair.new = function(mode, settings_i)
 				Crosshair.update(mode, settings_i)
 			end
 		end)
 
-		
+
 
 		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
 			local EDBT = {}
@@ -762,7 +762,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			_G.IsScreenGui_toggler_actor:Destroy()
 
 			task.wait(.3)
-			
+
 			B.Scripts.Change_WalkSpeed(false)
 			B.Scripts.Change_Acceleration(1)
 			B.Scripts.Toggle_InfinityStamina(false)
@@ -788,9 +788,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			I_aimlock:Destroy()
 			M_esp:Destroy()
-			
+
 			Crosshair.unload()
-			
+
 			task.wait(.5)
 
 			_G.Celebrial_nonYieldLoaded = false
@@ -803,9 +803,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 		task.spawn(function()
 			local Current_Path = M.Library.Sections
 			local Current_Section = Current_Path.Misc.Crosshair
-			
+
 			B.Values.Crosshair = {
-				
+
 				Enabled = true, -- Inverted (if true then default'll be false)
 				Color = Color3.fromRGB(255, 255, 255),
 				ViewMode = Enum.ResamplerMode.Default,
@@ -813,9 +813,9 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Image = Crosshair.defaults["Lines 1"],
 				Transparency = 0,
 			}
-			
+
 			local CrosshairValues = B.Values.Crosshair
-			
+
 			--local default_table = {
 			--	Crosshair_Color = Color3.fromRGB(255, 255, 255),
 			--	Crosshair_ViewMode = Enum.ResamplerMode.Default,
@@ -823,7 +823,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			--	Crosshair_Image = 0,
 			--	Crosshair_Scale = 1,
 			--}
-			
+
 			Crosshair.init()
 			Crosshair.new("new", {
 				Crosshair_Color = 			CrosshairValues.Color,
@@ -833,24 +833,24 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Crosshair_Scale = 			CrosshairValues.Scale,
 			})
 			Crosshair.toggle(not CrosshairValues.Enabled)
-			
-			
+
+
 			Current_Section:AddToggle('Crosshair', CrosshairValues.Enabled, Enum.KeyCode.M, function(Boolean)
 				CrosshairValues.Enabled = Boolean
 				Crosshair.toggle(Boolean)
 			end)
-			
+
 			Current_Section:AddSlider('Size', 5, 0.1, 1, function(Number)
 				CrosshairValues.Scale = Number
 				Crosshair.new("upd", {
-						Crosshair_Color = 			CrosshairValues.Color,
-						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
-						Crosshair_Transparency = 	CrosshairValues.Transparency,
-						Crosshair_Image = 			CrosshairValues.Image,
-						Crosshair_Scale = 			CrosshairValues.Scale,
+					Crosshair_Color = 			CrosshairValues.Color,
+					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+					Crosshair_Transparency = 	CrosshairValues.Transparency,
+					Crosshair_Image = 			CrosshairValues.Image,
+					Crosshair_Scale = 			CrosshairValues.Scale,
 				})
 			end)
-			
+
 			Current_Section:AddSlider('Transparency', 1, 0, 0, function(Number)
 				CrosshairValues.Transparency = Number
 				Crosshair.new("upd", {
@@ -861,7 +861,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					Crosshair_Scale = 			CrosshairValues.Scale,
 				})
 			end)
-			
+
 			Current_Section:AddColorPallete('Color', CrosshairValues.Color,function(a) 
 				CrosshairValues.Color = a
 				Crosshair.new("upd", {
@@ -872,7 +872,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					Crosshair_Scale = 			CrosshairValues.Scale,
 				})
 			end)
-			
+
 			Current_Section:AddDropdown('ResampleMode',{'Default','Pixeled'},'Default',function(a) 
 				if a == 'Default' then
 					CrosshairValues.ViewMode = Enum.ResamplerMode.Default
@@ -887,12 +887,12 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 					Crosshair_Scale = 			CrosshairValues.Scale,
 				})
 			end)
-			
+
 			local variants = {}
 			for variant,_ in Crosshair.defaults do
 				table.insert(variants, variant)
 			end
-			
+
 			Current_Section:AddDropdown('Crosshairs',variants,variants[1],function(a) 
 				CrosshairValues.Image = Crosshair.defaults[a]
 				Crosshair.new("upd", {
@@ -904,7 +904,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				})
 			end)
 		end)
-		
+
 
 		--  \\  Speed  //  --
 		M.Library.Sections.Misc.Movement:AddLabel('Speed-Hacking')
