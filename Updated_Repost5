@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.18",
+		ScriptBuild =				"Alpha v1.19",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -294,7 +294,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 			Crosshair.init = function()
 				Crosshair.cross_settings = {}
-				Crosshair.VisualFolder = Instance.new("Folder", game.CoreGui)		
+				Crosshair.VisualFolder = Instance.new("Folder", game.StarterGui)		
 			end
 
 			Crosshair.unload = function()
@@ -825,7 +825,13 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			--}
 			
 			Crosshair.init()
-			Crosshair.new("new")
+			Crosshair.new("new", {
+				Crosshair_Color = 			CrosshairValues.Color,
+				Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+				Crosshair_Transparency = 	CrosshairValues.Transparency,
+				Crosshair_Image = 			CrosshairValues.Image,
+				Crosshair_Scale = 			CrosshairValues.Scale,
+			})
 			Crosshair.toggle(not CrosshairValues.Enabled)
 			
 			
@@ -842,7 +848,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 						Crosshair_Transparency = 	CrosshairValues.Transparency,
 						Crosshair_Image = 			CrosshairValues.Image,
 						Crosshair_Scale = 			CrosshairValues.Scale,
-					})
+				})
 			end)
 			
 			Current_Section:AddSlider('Transparency', 1, 0, 0, function(Number)
