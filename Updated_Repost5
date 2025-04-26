@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.19",
+		ScriptBuild =				"Alpha v1.20",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -341,7 +341,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 						NewImage.ScaleType = Enum.ScaleType.Stretch
 						NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
 
-						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults[1]
+						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults["Lines 1"]
 						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
 						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
 						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
@@ -361,7 +361,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 						NewImage.ScaleType = Enum.ScaleType.Stretch
 						NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
 
-						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults[1]
+						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults["Lines 1"]
 						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
 						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
 						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
@@ -810,7 +810,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 				Color = Color3.fromRGB(255, 255, 255),
 				ViewMode = Enum.ResamplerMode.Default,
 				Scale = 1,
-				Image = Crosshair.defaults[1],
+				Image = Crosshair.defaults["Lines 1"],
 				Transparency = 0,
 			}
 			
