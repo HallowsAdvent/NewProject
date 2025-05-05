@@ -7,7 +7,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 
 	local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.22",
+		ScriptBuild =				"Alpha v1.24",
 		ScriptType =				"Legit",
 
 		ScriptName =				"Celebrials",
@@ -76,6 +76,7 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Character = wd.Misc:AddSection('Character Modifier'),
 			Movement = wd.Misc:AddSection('Movement Modifier'),
 			Crosshair = wd.Misc:AddSection('Crosshair'),
+			Alerts = wd.Misc:AddSection('Alerts'),
 		},
 		Membership = {
 			Information = wd.Membership:AddSection('♥')
@@ -271,7 +272,304 @@ if _G.Celebrial_nonYieldLoaded ~= true then
 			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
 		}
 
+		
+		local Alerts = {}
+		task.spawn(function()
+			
+			Alerts.init_cfg = {
 
+				list_padding = 4,
+				scale = 2,
+			}
+
+			Alerts.init = function()
+				local NewScreen = Instance.new("ScreenGui", game.CoreGui)
+				NewScreen.ResetOnSpawn = false
+				NewScreen.IgnoreGuiInset = true
+				NewScreen.Enabled = true
+				NewScreen.DisplayOrder = (((1000*1000)*1000)*1000)*1000
+
+				local list1 = Instance.new("UIListLayout", NewScreen)
+				list1.HorizontalAlignment = Enum.HorizontalAlignment.Right
+				list1.VerticalAlignment = Enum.VerticalAlignment.Center
+				list1.Name = "ggbrosska"
+
+				local tframe = Instance.new("Frame", NewScreen)
+				tframe.BackgroundTransparency = 1
+				tframe.Size = UDim2.new(0,10,0,10)
+
+				local scale = Instance.new("UIScale", tframe)
+				scale = Alerts.init_cfg.scale or 1
+
+				local list2 = Instance.new("UIListLayout", tframe)
+				list2.HorizontalAlignment = list1.HorizontalAlignment
+				list2.VerticalAlignment = list1.VerticalAlignment
+				list2.Padding = UDim.new(0,4)
+
+				local pad1 = Instance.new("UIPadding", tframe)
+				pad1.PaddingTop = UDim.new(0,Alerts.init_cfg.list_padding)
+				pad1.PaddingLeft = UDim.new(0,Alerts.init_cfg.list_padding)
+				pad1.PaddingRight = UDim.new(0,Alerts.init_cfg.list_padding)
+				pad1.PaddingBottom = UDim.new(0,Alerts.init_cfg.list_padding)
+
+				Alerts.screen = NewScreen
+			end
+
+			Alerts.new = function(DB, doAnim)
+				DB = DB or {
+					Text = "test",
+					Timeout = 3,			
+				}
+
+				coroutine.wrap(function()
+					local text = Instance.new("TextButton")
+					text.TextSize = 15
+					text.Text = DB.Text.." ["..DB.Timeout.."] " 
+					text.Size = UDim2.new(1, 0, 1, 0)
+					text.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+					text.Position = UDim2.new(0.5, 0, 0.5, 0)
+					local bounds
+					local lastpos
+
+					text.AnchorPoint = Vector2.new(0.5, 0.5)
+					text.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+					text.BackgroundTransparency = 0.8
+					text.TextStrokeTransparency = 0
+					text.TextTransparency = 0
+
+					text.BorderSizePixel = 0
+					text.Interactable = false
+
+					text.Visible = true
+					text.Font = Enum.Font.SourceSans
+
+					if Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Right then
+						text.TextXAlignment = Enum.TextXAlignment.Right
+
+						lastpos = UDim2.new(3, 0, 0.5, 0)
+						text.Position = lastpos
+					elseif Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Center then
+						text.TextXAlignment = Enum.TextXAlignment.Center
+
+						lastpos = UDim2.new(0.5, 0, -1000, 0)
+						text.Position = lastpos
+					elseif Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Left then
+						text.TextXAlignment = Enum.TextXAlignment.Left
+
+						lastpos = UDim2.new(-3, 0, 0.5, 0)
+						text.Position = lastpos
+					end
+
+					if Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Top then
+						text.TextYAlignment = Enum.TextYAlignment.Top
+					elseif Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Center then
+						text.TextYAlignment = Enum.TextYAlignment.Center
+					elseif Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Bottom then
+						text.TextYAlignment = Enum.TextYAlignment.Bottom
+					end
+
+					local tframe = Instance.new("Frame", Alerts.screen.Frame)
+					tframe.BackgroundTransparency = 1
+					tframe.Interactable = true
+					tframe.Visible = true
+
+					text.Parent = tframe
+
+					task.wait()
+					bounds = text.TextBounds
+					tframe.Size = UDim2.new(0, bounds.X + Alerts.init_cfg.list_padding, 0, bounds.Y)
+
+
+					local decor1 = Instance.new("UIGradient", text)
+					decor1.Color = ColorSequence.new{
+						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+						ColorSequenceKeypoint.new(0.31, Color3.fromRGB(255, 254, 255)),
+						ColorSequenceKeypoint.new(1, DB.Color or Color3.fromRGB(241, 185, 255)),
+					}
+
+					--decor1.Transparency = 0
+					decor1.Rotation = 0
+
+					local decor2 = Instance.new("UIStroke", text)
+					decor2.Color = Color3.fromRGB(0,0,0)
+					decor2.Thickness = 1
+					decor2.Transparency = 0
+					decor2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+					local scale = Instance.new("UIScale", tframe)
+					scale.Scale = DB.Scale or 1
+					local t = game:GetService("TweenService")
+
+					local scaled_up = false
+
+					local Anims = {
+
+						show = function()
+							t:Create(text, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
+							--t:Create(tframe, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(tframe.Size.X.Scale, tframe.Size.X.Offset, 0, bounds.Y)}):Play()
+							--scaled_up = true
+						end,
+
+						hide = function()
+							t:Create(text, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = lastpos}):Play()
+							t:Create(tframe, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(tframe.Size.X.Scale, tframe.Size.X.Offset, 0, -Alerts.init_cfg.list_padding)}):Play()
+							--scaled_up = false
+							task.wait(0.8)
+							tframe:Destroy()
+						end,
+					}
+
+					Anims.show()
+
+					local CountTimer=DB.Timeout or 3
+					local pressed = false
+					if DB.Callback then
+						text.Interactable = true				
+						text.MouseButton1Click:Once(function()
+							pressed = true
+							Anims.hide()
+							coroutine.wrap(function()
+								pcall(function() DB.Callback() end)
+							end)()
+						end)
+					end
+
+					local attach = text.Text
+					coroutine.wrap(function()
+						repeat
+							CountTimer = CountTimer - 1
+							if pressed then CountTimer = 0 end
+							task.wait(1) text.Text = DB.Text.." ["..CountTimer.."] " 
+
+							if not scaled_up then
+								local tf_next_bounds = text.TextBounds
+								tframe.Size = UDim2.new(0, tf_next_bounds.X + Alerts.init_cfg.list_padding, 0, tf_next_bounds.Y)
+							end
+						until CountTimer < .001 or CountTimer == 0
+
+						if not pressed then
+							Anims.hide()
+						end
+					end)()
+				end)()
+			end
+			
+			Alerts.Values = {
+
+				Enabled = true,
+				Bounty = true,
+				KillTrack = true,
+				AdminSpy = true,
+				DealerRestock = {v = true, selected = ""},	
+			}
+			
+			Alerts.Callbacks = {
+				
+				Killmonitor = function(plrName, id, typ, cash, xp, isHidden, charInstance)
+					if Alerts.Values.KillTrack and Alerts.Values.Enabled then
+						Alerts.new({
+							
+							Text = typ.. ": ".. plrName,
+							Timeout = 60,
+							Scale = 1,
+							Callback = function() --its just skipping lol 
+							end,
+						})
+					end
+				end,
+				
+				AdminMonitor = function(plr)
+					if Alerts.Values.AdminSpy and Alerts.Values.Enabled then
+						local group = 4165692
+						if Player:IsInGroup(group) and Player:GetRankInGroup(group) > 1 then
+							Alerts.new({
+
+								Text = "Moderation Spy: "..plr.Name.." joined. Click to close",
+								Timeout = 99999,
+								Scale = 1,
+								Callback = function() --its just skipping lol 
+								end,
+							})
+						end
+					end
+				end,
+				
+				RestockMonitor = function(plr, dealer)
+					if Alerts.Values.DealerRestock.v and (type(Alerts.Values.DealerRestock.selected) == "string" and Alerts.Values.DealerRestock.selected ~= "") and Alerts.Values.Enabled then
+						Alerts.new({
+
+							Text = "Item has been spawned: "..Alerts.Values.DealerRestock.selected..", Click to spectate dealer",
+							Timeout = 60,
+							Scale = 1,
+							Callback = function()
+								local hl = Instance.new("Highlight", dealer)
+								hl.FillTransparency = 1
+								hl.OutlineTransparency = 0
+								hl.OutlineColor = Color3.fromRGB(251, 255, 217)
+								
+								Alerts.new({
+
+									Text = "Spectating dealer, Click to stop spectating",
+									Timeout = 99999,
+									Scale = 1,
+									Callback = function()
+										hl:Destroy()
+									end,
+								})
+							end,
+						})
+					end
+				end,
+			}
+			
+			ReplicatedStorage:WaitForChild("Events"):WaitForChild("KillEvent").OnClientEvent:Connect(Alerts.Callbacks.Killmonitor)
+			PlayerService.PlayerAdded:Connect(Alerts.Callbacks.AdminMonitor)
+			
+			local Current_Path = M.Library.Sections
+			local Current_Section = Current_Path.Misc.Alerts
+			
+			Current_Section:AddToggle('Sending', Alerts.Values.Enabled, function(Boolean)
+				Alerts.Values.Enabled = Boolean
+			end)
+			
+			Current_Section:AddToggle('Kills', Alerts.Values.KillTrack, function(Boolean)
+				Alerts.Values.KillTrack = Boolean
+			end)
+			
+			Current_Section:AddToggle('AdminSpy', Alerts.Values.AdminSpy, function(Boolean)
+				Alerts.Values.AdminSpy = Boolean
+			end)
+			
+			--Current_Section:AddToggle('RestockSpy', Alerts.Values.DealerRestock.v, function(Boolean)
+			--	Alerts.Values.DealerRestock.v = Boolean
+				
+			--	--coroutine.wrap(function()
+			--	--	while Alerts.Values.DealerRestock.v == true do task.wait(10)
+			--	--		for _, dealer in workspace.Map.Shopz:GetChildren() do
+			--	--			if dealer.Restock[Alerts.Values.DealerRestock.selected].Stock > 1 then
+								
+			--	--			end
+			--	--		end
+			--	--	end
+			--	--end)()
+			--end)
+			
+			
+			--local ItemNames = {}
+			--for _, Ix in ReplicatedStorage.Storage.ItemStats:GetChildren() do
+			--	for _, Iz in Ix:GetChildren() do
+			--		if Iz.MaxStock.Value > 0 then
+			--			table.insert(ItemNames, Iz.FullName.Value)
+			--		end
+			--	end 
+			--end
+			
+			--Current_Section:AddDropdown('Items',ItemNames,'Airstrike',function(a) 
+			--	Alerts.Values.DealerRestock.selected = a
+			--end)
+		end)
+		
 		local Crosshair = {}
 		task.spawn(function()
 			Crosshair.defaults = {
