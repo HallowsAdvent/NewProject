@@ -1,1572 +1,1790 @@
-if _G.Celebrial_nonYieldLoaded ~= true then
-	_G.Celebrial_nonYieldLoaded = true
+local Scripts = {}
 
-	local ACTIVE_MODIFIES = {}
-	game.CoreGui:SetAttribute("Celebrial_Destroying", false)
+Scripts.Main = function(License)
+	
+	if _G.Celebrial_nonYieldLoaded ~= true then
+		_G.Celebrial_nonYieldLoaded = true
+
+		local ACTIVE_MODIFIES = {}
+		game.CoreGui:SetAttribute("Celebrial_Destroying", false)
 
 
-	local ScriptDB = {
+		local ScriptDB = {
 
-		ScriptBuild =				"Alpha v1.24",
-		ScriptType =				"Legit",
+			ScriptBuild =				"Alpha v1.26",
+			ScriptType =				"Legit",
 
-		ScriptName =				"Celebrials",
-		ScriptSupport =				"Criminality",
+			ScriptName =				"Celebrials",
+			ScriptSupport =				"Criminality",
 
-		Membership_Info =			_G.Memberships_logger,
-	}
-
-	local A = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2'
-	local B = {}
-
-	B.Plugins = {}
-	B.Scripts = {}
-	B.Assets =  {}
-
-	B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
-
-	local C = {
-
-		Build_Core1 = ScriptDB.ScriptName.."."..ScriptDB.ScriptSupport.." | "..ScriptDB.ScriptBuild,
-		Build_Core2 = "Subscribe-days left: "..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)),
-	}
-
-	local Init = function(DataCore)
-		_G.DataCore = DataCore
-	end
-
-	if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
-
-	--  //  0  \\  --
-	--local Sections = B.Assets.Sections
-	local ReplicatedStorage = game:GetService("ReplicatedStorage")
-	local PlayerService = game:GetService("Players")
-	local RunService = game:GetService("RunService")
-	local Player = PlayerService.LocalPlayer
-
-	local camera = workspace.CurrentCamera
-	local mousee = Player:GetMouse()
-
-	local M = {}
-
-	M.Functions = {}
-	M.Library = {}
-	M.Local = {}
-
-	B.Assets.Windows = {
-
-		Combat = 		A:AddWindow('Combat'),
-		Visual = 		A:AddWindow('Palpability'),
-		Misc =   		A:AddWindow('Miscellaneous'),
-		Membership =    A:AddWindow('Membership'),
-		WaterM = 		A:AddWatermark('')
-	}
-	local wd = B.Assets.Windows
-
-	B.Assets.Sections = {
-
-		Combat = {
-			Aim = wd.Combat:AddSection('Aim-locking')	
-		},
-		Visual = {
-			Sense = wd.Visual:AddSection('Palpability'),
-			Sense2 = wd.Visual:AddSection('Other'),
-		},
-		Misc = {
-			Character = wd.Misc:AddSection('Character Modifier'),
-			Movement = wd.Misc:AddSection('Movement Modifier'),
-			Crosshair = wd.Misc:AddSection('Crosshair'),
-			Alerts = wd.Misc:AddSection('Alerts'),
-		},
-		Membership = {
-			Information = wd.Membership:AddSection('♥')
-		},
-
-	}
-
-	M.Library.Sections = B.Assets.Sections
-
-	local Script = coroutine.create(function()
-		M.Services = {
-			ReplicatedFirst = 				game:GetService("ReplicatedFirst"),
-			ReplicatedStorage = 			game:GetService("ReplicatedStorage"),
-
-			StarterGui = 					game:GetService("StarterGui"),
-			StarterPack = 					game:GetService("StarterPack"),
-			StarterPlayer = 				game:GetService("StarterPlayer"),
-
-			Players = 						game:GetService("Players"),
-			Lighting = 						game:GetService("Lighting"),
-			Workspace = 					game:GetService("Workspace"),
-
-			RunService = 					game:GetService("RunService"),
-			TweenService = 					game:GetService("TweenService"),
+			Membership_Info =			License,
 		}
 
-		M.Local.Camera = M.Services.Workspace.CurrentCamera
-		M.Local.Player = M.Services.Players.LocalPlayer
-		M.Local.Mouse = M.Local.Player:GetMouse()
+		local A = 'https://raw.githubusercontent.com/HallowsAdvent/NewProject/refs/heads/main/Source2'
+		local B = {}
 
+		B.Plugins = {}
+		B.Scripts = {}
+		B.Assets =  {}
 
-		M.Functions.CreateInstance = function(instance, PropertyBase, Parent)
-			local connected_instance = Instance.new(instance)
-			for PropertyName, PropertyValue in PropertyBase do
-				if PropertyName ~= "Parent" then
-					connected_instance[PropertyName] = PropertyValue
-				end
-			end 
+		B.Plugins.__Commas = function(data) local vdata = data local gdata while game do vdata, gdata = string.gsub(vdata, '^(-?%d+)(%d%d%d)', '%1,%2') if (gdata == 0) then break end end return vdata end
+		B.Plugins.LET = function(x, i)
+			local Time = x.Expire - tick()
+			if Time < 0 then return false end
+			if not i then return true else return Time end
+		end		
+		
+		local C = {
+			Build_Core1 = ScriptDB.ScriptName .. "." .. ScriptDB.ScriptSupport .. " | " .. ScriptDB.ScriptBuild,
+			Build_Core2 = "Subscribe-days left: " .. tostring(B.Plugins.__Commas(os.date("!*t", B.Plugins.LET(License, true)).day)),
+		}
 
-			if Parent then connected_instance.Parent = Parent end
-			return connected_instance
+		local Init = function(DataCore)
+			_G.DataCore = DataCore
 		end
 
-		M.Functions.FindInstance = function(PropertyTable, ParentFolder, IsMulti)
-			local PossibleFinds = {}
-			local PossibleFind = nil
+		if type(A) == "string" and string.find(string.lower(A), "githubusercontent") then Init(C) A = loadstring(game:HttpGet(A, true))() end
 
-			if ParentFolder then
-				for _, V in ParentFolder do
-					if string.lower(V.ClassName) == string.lower(PropertyTable.Class) and string.lower(V.Name) == string.lower(PropertyTable.Name) then
-						if IsMulti then
-							table.insert(PossibleFinds, V)
-						else
-							PossibleFind = V
+		--  //  0  \\  --
+		--local Sections = B.Assets.Sections
+		local ReplicatedStorage = game:GetService("ReplicatedStorage")
+		local PlayerService = game:GetService("Players")
+		local RunService = game:GetService("RunService")
+		local Player = PlayerService.LocalPlayer
+
+		local camera = workspace.CurrentCamera
+		local mousee = Player:GetMouse()
+
+		local M = {}
+
+		M.Functions = {}
+		M.Library = {}
+		M.Local = {}
+
+		B.Assets.Windows = {
+
+			Combat = 		A:AddWindow('Combat'),
+			Visual = 		A:AddWindow('Palpability'),
+			Misc =   		A:AddWindow('Miscellaneous'),
+			Membership =    A:AddWindow('Membership'),
+			WaterM = 		A:AddWatermark('')
+		}
+		local wd = B.Assets.Windows
+
+		B.Assets.Sections = {
+
+			Combat = {
+				Aim = wd.Combat:AddSection('Aim-locking')	
+			},
+			Visual = {
+				Sense = wd.Visual:AddSection('Palpability'),
+				Sense2 = wd.Visual:AddSection('Other'),
+			},
+			Misc = {
+				Character = wd.Misc:AddSection('Character Modifier'),
+				Movement = wd.Misc:AddSection('Movement Modifier'),
+				Crosshair = wd.Misc:AddSection('Crosshair'),
+				Teleport = wd.Misc:AddSection('Teleport'),
+				Alerts = wd.Misc:AddSection('Alerts'),
+			},
+			Membership = {
+				Information = wd.Membership:AddSection('♥')
+			},
+
+		}
+
+		M.Library.Sections = B.Assets.Sections
+
+		local Script = coroutine.create(function()
+			M.Services = {
+				ReplicatedFirst = 				game:GetService("ReplicatedFirst"),
+				ReplicatedStorage = 			game:GetService("ReplicatedStorage"),
+
+				StarterGui = 					game:GetService("StarterGui"),
+				StarterPack = 					game:GetService("StarterPack"),
+				StarterPlayer = 				game:GetService("StarterPlayer"),
+
+				Players = 						game:GetService("Players"),
+				Lighting = 						game:GetService("Lighting"),
+				Workspace = 					game:GetService("Workspace"),
+
+				RunService = 					game:GetService("RunService"),
+				TweenService = 					game:GetService("TweenService"),
+			}
+
+			M.Local.Camera = M.Services.Workspace.CurrentCamera
+			M.Local.Player = M.Services.Players.LocalPlayer
+			M.Local.Mouse = M.Local.Player:GetMouse()
+
+
+			M.Functions.CreateInstance = function(instance, PropertyBase, Parent)
+				local connected_instance = Instance.new(instance)
+				for PropertyName, PropertyValue in PropertyBase do
+					if PropertyName ~= "Parent" then
+						connected_instance[PropertyName] = PropertyValue
+					end
+				end 
+
+				if Parent then connected_instance.Parent = Parent end
+				return connected_instance
+			end
+
+			M.Functions.FindInstance = function(PropertyTable, ParentFolder, IsMulti)
+				local PossibleFinds = {}
+				local PossibleFind = nil
+
+				if ParentFolder then
+					for _, V in ParentFolder do
+						if string.lower(V.ClassName) == string.lower(PropertyTable.Class) and string.lower(V.Name) == string.lower(PropertyTable.Name) then
+							if IsMulti then
+								table.insert(PossibleFinds, V)
+							else
+								PossibleFind = V
+							end
 						end
 					end
 				end
 			end
-		end
 
-		M.Functions.GetOwnCharacter = function()
-			return M.Local.Player.Character
-		end
-
-		M.Functions.GetCharacter = function(Player)
-			if Player ~= M.Local.Player then
-				return Player.Character
-			else
-				return M.Functions.GetOwnCharacter()
+			M.Functions.GetOwnCharacter = function()
+				return M.Local.Player.Character
 			end
-		end
 
-		B.Values =  {
+			M.Functions.GetCharacter = function(Player)
+				if Player ~= M.Local.Player then
+					return Player.Character
+				else
+					return M.Functions.GetOwnCharacter()
+				end
+			end
 
-			Aimlock = {
-				TargetPart = "Head",
-				TargetSense = 0.5,
-				AimlockBool = true,
-				DistanceValue = 250,
-				DownedCheck = true,
-				DeadCheck = true,
-			},
+			B.Values =  {
 
-			Walkspeed = {
-				SpeedValue = 1,
-				SpeedBool = true,
-			},
-
-			Acceleration = {
-				AccelValue = 1,
-				AccelBool = true,
-			},
-
-			StaminaMods = {
-				StaminaBool = true,
-			},
-
-			Wallhacking = {
-				Players = {
-					Enabled = true,
-					Color = Color3.fromRGB(255, 255, 255)
+				Aimlock = {
+					TargetPart = "Head",
+					TargetSense = 0.5,
+					AimlockBool = true,
+					DistanceValue = 250,
+					DownedCheck = true,
+					DeadCheck = true,
 				},
 
-				Crates = {
-					White_Enabled = true,
-					Green_Enabled = true,
-					Red_Enabled = true,
-					Gold_Enabled = true,
-
-					ColorWhite = Color3.fromRGB(189, 189, 189),
-					ColorGreen = Color3.fromRGB(128, 255, 126),
-					ColorRed = Color3.fromRGB(255, 74, 74),
-					ColorGold = Color3.fromRGB(229, 191, 41)
+				Walkspeed = {
+					SpeedValue = 1,
+					SpeedBool = true,
 				},
 
-				Dealers = {
-					Enabled = true,
-					Color = Color3.fromRGB(58, 137, 255),
+				Acceleration = {
+					AccelValue = 1,
+					AccelBool = true,
 				},
 
-				ATMs = {
-					Enabled = true,
-					Color = Color3.fromRGB(80, 255, 191),
+				StaminaMods = {
+					StaminaBool = true,
 				},
 
-				Safes = {
-					Enabled = true,
-					Registers = true,
-					Color = Color3.fromRGB(255, 190, 134),
+				Wallhacking = {
+					Players = {
+						Enabled = true,
+						Color = Color3.fromRGB(255, 255, 255)
+					},
+
+					Crates = {
+						White_Enabled = true,
+						Green_Enabled = true,
+						Red_Enabled = true,
+						Gold_Enabled = true,
+
+						ColorWhite = Color3.fromRGB(189, 189, 189),
+						ColorGreen = Color3.fromRGB(128, 255, 126),
+						ColorRed = Color3.fromRGB(255, 74, 74),
+						ColorGold = Color3.fromRGB(229, 191, 41)
+					},
+
+					Dealers = {
+						Enabled = true,
+						Color = Color3.fromRGB(58, 137, 255),
+					},
+
+					ATMs = {
+						Enabled = true,
+						Color = Color3.fromRGB(80, 255, 191),
+					},
+
+					Safes = {
+						Enabled = true,
+						Registers = true,
+						Color = Color3.fromRGB(255, 190, 134),
+					},
 				},
-			},
 
-			Lockpicking = {
-				LockpickBool = true,
-			},
+				Lockpicking = {
+					LockpickBool = true,
+				},
 
-			FastUsage = {
-				PromptsBool = true,
-			},
+				FastUsage = {
+					PromptsBool = true,
+				},
 
-			CameraHack = {
-				FreecamBool = true,
-				MoreZoomBool = true,
-				InvisCameraBool = true,
-			},
+				CameraHack = {
+					FreecamBool = true,
+					MoreZoomBool = true,
+					InvisCameraBool = true,
+				},
 
-			Flinging = {
-				FlingBool = true,
-			},
-		}
-
-		local AimlockTable = {
-			Radius = 200,
-			Color = Color3.fromRGB(60, 255, 0),
-			NumSides = 64,
-			Filled = false,
-			Visible = true,
-			Thickness = 1,
-			Transparency = 0,
-			Position = Vector2.new(M.Local.Camera.ViewportSize.X / 2, M.Local.Camera.ViewportSize.Y / 2)
-		}
-
-		local I_aimlock = Drawing.new("Circle")
-		for PropertyName, PropertyValue in AimlockTable do
-			I_aimlock[PropertyName] = PropertyValue
-		end
-
-
-		local I_esp = {
-			BillSize = UDim2.new(1000,0,1000,0),
-			FrameSize = UDim2.new(0.005,0,0.005,0),
-			FramePos = UDim2.new(0.5,0,0.5,0),
-			FramePoint = Vector2.new(0.5,0.5),
-			FrameColor = Color3.fromRGB(255,255,255),
-			Gm = game.Workspace.Terrain,
-			Gm1 = "espcnc"
-		}
-
-		local M_esp = M.Functions.CreateInstance("Folder", {Name = "tempest attachments"}, game.Workspace.Terrain)
-		local F_esp = {
-
-			Players = M.Functions.CreateInstance("Folder", {Name = "PlayerEsp"}, M_esp),
-			Scraps = M.Functions.CreateInstance("Folder", {Name = "ScrapEsp"}, M_esp),
-			Dealers = M.Functions.CreateInstance("Folder", {Name = "DealerEsp"}, M_esp),
-			ATMs = M.Functions.CreateInstance("Folder", {Name = "ATMsEsp"}, M_esp),
-			Safes = M.Functions.CreateInstance("Folder", {Name = "SafeEsp"}, M_esp),
-		}
-
-		local Scrap_esp = {
-			Golds = M.Functions.CreateInstance("Folder", {Name = "Golds"}, F_esp.Scraps),
-			Reds = M.Functions.CreateInstance("Folder", {Name = "Reds"}, F_esp.Scraps),
-			Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
-			Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
-		}
-
-		
-		local Alerts = {}
-		task.spawn(function()
-			
-			Alerts.init_cfg = {
-
-				list_padding = 4,
-				scale = 2,
+				Flinging = {
+					FlingBool = true,
+				},
 			}
 
-			Alerts.init = function()
-				local NewScreen = Instance.new("ScreenGui", game.CoreGui)
-				NewScreen.ResetOnSpawn = false
-				NewScreen.IgnoreGuiInset = true
-				NewScreen.Enabled = true
-				NewScreen.DisplayOrder = (((1000*1000)*1000)*1000)*1000
+			local AimlockTable = {
+				Radius = 200,
+				Color = Color3.fromRGB(60, 255, 0),
+				NumSides = 64,
+				Filled = false,
+				Visible = true,
+				Thickness = 1,
+				Transparency = 0,
+				Position = Vector2.new(M.Local.Camera.ViewportSize.X / 2, M.Local.Camera.ViewportSize.Y / 2)
+			}
 
-				local list1 = Instance.new("UIListLayout", NewScreen)
-				list1.HorizontalAlignment = Enum.HorizontalAlignment.Right
-				list1.VerticalAlignment = Enum.VerticalAlignment.Center
-				list1.Name = "ggbrosska"
-
-				local tframe = Instance.new("Frame", NewScreen)
-				tframe.BackgroundTransparency = 1
-				tframe.Size = UDim2.new(0,10,0,10)
-
-				local scale = Instance.new("UIScale", tframe)
-				scale = Alerts.init_cfg.scale or 1
-
-				local list2 = Instance.new("UIListLayout", tframe)
-				list2.HorizontalAlignment = list1.HorizontalAlignment
-				list2.VerticalAlignment = list1.VerticalAlignment
-				list2.Padding = UDim.new(0,4)
-
-				local pad1 = Instance.new("UIPadding", tframe)
-				pad1.PaddingTop = UDim.new(0,Alerts.init_cfg.list_padding)
-				pad1.PaddingLeft = UDim.new(0,Alerts.init_cfg.list_padding)
-				pad1.PaddingRight = UDim.new(0,Alerts.init_cfg.list_padding)
-				pad1.PaddingBottom = UDim.new(0,Alerts.init_cfg.list_padding)
-
-				Alerts.screen = NewScreen
+			local I_aimlock = Drawing.new("Circle")
+			for PropertyName, PropertyValue in AimlockTable do
+				I_aimlock[PropertyName] = PropertyValue
 			end
 
-			Alerts.new = function(DB, doAnim)
-				DB = DB or {
-					Text = "test",
-					Timeout = 3,			
+
+			local I_esp = {
+				BillSize = UDim2.new(1000,0,1000,0),
+				FrameSize = UDim2.new(0.005,0,0.005,0),
+				FramePos = UDim2.new(0.5,0,0.5,0),
+				FramePoint = Vector2.new(0.5,0.5),
+				FrameColor = Color3.fromRGB(255,255,255),
+				Gm = game.Workspace.Terrain,
+				Gm1 = "espcnc"
+			}
+
+			local M_esp = M.Functions.CreateInstance("Folder", {Name = "tempest attachments"}, game.Workspace.Terrain)
+			local F_esp = {
+
+				Players = M.Functions.CreateInstance("Folder", {Name = "PlayerEsp"}, M_esp),
+				Scraps = M.Functions.CreateInstance("Folder", {Name = "ScrapEsp"}, M_esp),
+				Dealers = M.Functions.CreateInstance("Folder", {Name = "DealerEsp"}, M_esp),
+				ATMs = M.Functions.CreateInstance("Folder", {Name = "ATMsEsp"}, M_esp),
+				Safes = M.Functions.CreateInstance("Folder", {Name = "SafeEsp"}, M_esp),
+			}
+
+			local Scrap_esp = {
+				Golds = M.Functions.CreateInstance("Folder", {Name = "Golds"}, F_esp.Scraps),
+				Reds = M.Functions.CreateInstance("Folder", {Name = "Reds"}, F_esp.Scraps),
+				Greens = M.Functions.CreateInstance("Folder", {Name = "Greens"}, F_esp.Scraps),
+				Whites = M.Functions.CreateInstance("Folder", {Name = "Whites"}, F_esp.Scraps),
+			}
+
+
+			local Alerts = {}
+			task.spawn(function()
+
+				Alerts.init_cfg = {
+
+					list_padding = 4,
+					scale = 2,
 				}
 
-				coroutine.wrap(function()
-					local text = Instance.new("TextButton")
-					text.TextSize = 15
-					text.Text = DB.Text.." ["..DB.Timeout.."] " 
-					text.Size = UDim2.new(1, 0, 1, 0)
-					text.TextColor3 = Color3.fromRGB(255, 255, 255)
+				Alerts.init = function()
+					local NewScreen = Instance.new("ScreenGui", game.CoreGui)
+					NewScreen.ResetOnSpawn = false
+					NewScreen.IgnoreGuiInset = true
+					NewScreen.Enabled = true
+					NewScreen.DisplayOrder = (((1000*1000)*1000)*1000)*1000
 
-					text.Position = UDim2.new(0.5, 0, 0.5, 0)
-					local bounds
-					local lastpos
+					local list1 = Instance.new("UIListLayout", NewScreen)
+					list1.HorizontalAlignment = Enum.HorizontalAlignment.Right
+					list1.VerticalAlignment = Enum.VerticalAlignment.Center
+					list1.Name = "ggbrosska"
 
-					text.AnchorPoint = Vector2.new(0.5, 0.5)
-					text.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-					text.BackgroundTransparency = 0.8
-					text.TextStrokeTransparency = 0
-					text.TextTransparency = 0
-
-					text.BorderSizePixel = 0
-					text.Interactable = false
-
-					text.Visible = true
-					text.Font = Enum.Font.SourceSans
-
-					if Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Right then
-						text.TextXAlignment = Enum.TextXAlignment.Right
-
-						lastpos = UDim2.new(3, 0, 0.5, 0)
-						text.Position = lastpos
-					elseif Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Center then
-						text.TextXAlignment = Enum.TextXAlignment.Center
-
-						lastpos = UDim2.new(0.5, 0, -1000, 0)
-						text.Position = lastpos
-					elseif Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Left then
-						text.TextXAlignment = Enum.TextXAlignment.Left
-
-						lastpos = UDim2.new(-3, 0, 0.5, 0)
-						text.Position = lastpos
-					end
-
-					if Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Top then
-						text.TextYAlignment = Enum.TextYAlignment.Top
-					elseif Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Center then
-						text.TextYAlignment = Enum.TextYAlignment.Center
-					elseif Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Bottom then
-						text.TextYAlignment = Enum.TextYAlignment.Bottom
-					end
-
-					local tframe = Instance.new("Frame", Alerts.screen.Frame)
+					local tframe = Instance.new("Frame", NewScreen)
 					tframe.BackgroundTransparency = 1
-					tframe.Interactable = true
-					tframe.Visible = true
-
-					text.Parent = tframe
-
-					task.wait()
-					bounds = text.TextBounds
-					tframe.Size = UDim2.new(0, bounds.X + Alerts.init_cfg.list_padding, 0, bounds.Y)
-
-
-					local decor1 = Instance.new("UIGradient", text)
-					decor1.Color = ColorSequence.new{
-						ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-						ColorSequenceKeypoint.new(0.31, Color3.fromRGB(255, 254, 255)),
-						ColorSequenceKeypoint.new(1, DB.Color or Color3.fromRGB(241, 185, 255)),
-					}
-
-					--decor1.Transparency = 0
-					decor1.Rotation = 0
-
-					local decor2 = Instance.new("UIStroke", text)
-					decor2.Color = Color3.fromRGB(0,0,0)
-					decor2.Thickness = 1
-					decor2.Transparency = 0
-					decor2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+					tframe.Size = UDim2.new(0,10,0,10)
 
 					local scale = Instance.new("UIScale", tframe)
-					scale.Scale = DB.Scale or 1
-					local t = game:GetService("TweenService")
+					scale = Alerts.init_cfg.scale or 1
 
-					local scaled_up = false
+					local list2 = Instance.new("UIListLayout", tframe)
+					list2.HorizontalAlignment = list1.HorizontalAlignment
+					list2.VerticalAlignment = list1.VerticalAlignment
+					list2.Padding = UDim.new(0,4)
 
-					local Anims = {
+					local pad1 = Instance.new("UIPadding", tframe)
+					pad1.PaddingTop = UDim.new(0,Alerts.init_cfg.list_padding)
+					pad1.PaddingLeft = UDim.new(0,Alerts.init_cfg.list_padding)
+					pad1.PaddingRight = UDim.new(0,Alerts.init_cfg.list_padding)
+					pad1.PaddingBottom = UDim.new(0,Alerts.init_cfg.list_padding)
 
-						show = function()
-							t:Create(text, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
-							--t:Create(tframe, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(tframe.Size.X.Scale, tframe.Size.X.Offset, 0, bounds.Y)}):Play()
-							--scaled_up = true
-						end,
+					Alerts.screen = NewScreen
+				end
 
-						hide = function()
-							t:Create(text, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = lastpos}):Play()
-							t:Create(tframe, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(tframe.Size.X.Scale, tframe.Size.X.Offset, 0, -Alerts.init_cfg.list_padding)}):Play()
-							--scaled_up = false
-							task.wait(0.8)
-							tframe:Destroy()
-						end,
+				Alerts.new = function(DB, doAnim)
+					DB = DB or {
+						Text = "test",
+						Timeout = 3,			
 					}
 
-					Anims.show()
-
-					local CountTimer=DB.Timeout or 3
-					local pressed = false
-					if DB.Callback then
-						text.Interactable = true				
-						text.MouseButton1Click:Once(function()
-							pressed = true
-							Anims.hide()
-							coroutine.wrap(function()
-								pcall(function() DB.Callback() end)
-							end)()
-						end)
-					end
-
-					local attach = text.Text
 					coroutine.wrap(function()
-						repeat
-							CountTimer = CountTimer - 1
-							if pressed then CountTimer = 0 end
-							task.wait(1) text.Text = DB.Text.." ["..CountTimer.."] " 
+						local text = Instance.new("TextButton")
+						text.TextSize = 15
+						text.Text = DB.Text.." ["..DB.Timeout.."] " 
+						text.Size = UDim2.new(1, 0, 1, 0)
+						text.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-							if not scaled_up then
-								local tf_next_bounds = text.TextBounds
-								tframe.Size = UDim2.new(0, tf_next_bounds.X + Alerts.init_cfg.list_padding, 0, tf_next_bounds.Y)
-							end
-						until CountTimer < .001 or CountTimer == 0
+						text.Position = UDim2.new(0.5, 0, 0.5, 0)
+						local bounds
+						local lastpos
 
-						if not pressed then
-							Anims.hide()
+						text.AnchorPoint = Vector2.new(0.5, 0.5)
+						text.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+						text.BackgroundTransparency = 0.8
+						text.TextStrokeTransparency = 0
+						text.TextTransparency = 0
+
+						text.BorderSizePixel = 0
+						text.Interactable = false
+
+						text.Visible = true
+						text.Font = Enum.Font.SourceSans
+
+						if Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Right then
+							text.TextXAlignment = Enum.TextXAlignment.Right
+
+							lastpos = UDim2.new(3, 0, 0.5, 0)
+							text.Position = lastpos
+						elseif Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Center then
+							text.TextXAlignment = Enum.TextXAlignment.Center
+
+							lastpos = UDim2.new(0.5, 0, -1000, 0)
+							text.Position = lastpos
+						elseif Alerts.screen.ggbrosska.HorizontalAlignment == Enum.HorizontalAlignment.Left then
+							text.TextXAlignment = Enum.TextXAlignment.Left
+
+							lastpos = UDim2.new(-3, 0, 0.5, 0)
+							text.Position = lastpos
 						end
-					end)()
-				end)()
-			end
-			
-			Alerts.Values = {
 
-				Enabled = true,
-				Bounty = true,
-				KillTrack = true,
-				AdminSpy = true,
-				DealerRestock = {v = true, selected = ""},	
-			}
-			
-			Alerts.Callbacks = {
-				
-				Killmonitor = function(plrName, id, typ, cash, xp, isHidden, charInstance)
-					if Alerts.Values.KillTrack and Alerts.Values.Enabled then
-						Alerts.new({
-							
-							Text = typ.. ": ".. plrName,
-							Timeout = 60,
-							Scale = 1,
-							Callback = function() --its just skipping lol 
+						if Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Top then
+							text.TextYAlignment = Enum.TextYAlignment.Top
+						elseif Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Center then
+							text.TextYAlignment = Enum.TextYAlignment.Center
+						elseif Alerts.screen.ggbrosska.VerticalAlignment == Enum.VerticalAlignment.Bottom then
+							text.TextYAlignment = Enum.TextYAlignment.Bottom
+						end
+
+						local tframe = Instance.new("Frame", Alerts.screen.Frame)
+						tframe.BackgroundTransparency = 1
+						tframe.Interactable = true
+						tframe.Visible = true
+
+						text.Parent = tframe
+
+						task.wait()
+						bounds = text.TextBounds
+						tframe.Size = UDim2.new(0, bounds.X + Alerts.init_cfg.list_padding, 0, bounds.Y)
+
+
+						local decor1 = Instance.new("UIGradient", text)
+						decor1.Color = ColorSequence.new{
+							ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+							ColorSequenceKeypoint.new(0.31, Color3.fromRGB(255, 254, 255)),
+							ColorSequenceKeypoint.new(1, DB.Color or Color3.fromRGB(241, 185, 255)),
+						}
+
+						--decor1.Transparency = 0
+						decor1.Rotation = 0
+
+						local decor2 = Instance.new("UIStroke", text)
+						decor2.Color = Color3.fromRGB(0,0,0)
+						decor2.Thickness = 1
+						decor2.Transparency = 0
+						decor2.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+						local scale = Instance.new("UIScale", tframe)
+						scale.Scale = DB.Scale or 1
+						local t = game:GetService("TweenService")
+
+						local scaled_up = false
+
+						local Anims = {
+
+							show = function()
+								t:Create(text, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.5, 0, 0.5, 0)}):Play()
+								--t:Create(tframe, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(tframe.Size.X.Scale, tframe.Size.X.Offset, 0, bounds.Y)}):Play()
+								--scaled_up = true
 							end,
-						})
-					end
-				end,
-				
-				AdminMonitor = function(plr)
-					if Alerts.Values.AdminSpy and Alerts.Values.Enabled then
-						local group = 4165692
-						if Player:IsInGroup(group) and Player:GetRankInGroup(group) > 1 then
+
+							hide = function()
+								t:Create(text, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Position = lastpos}):Play()
+								t:Create(tframe, TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.new(tframe.Size.X.Scale, tframe.Size.X.Offset, 0, -Alerts.init_cfg.list_padding)}):Play()
+								--scaled_up = false
+								task.wait(0.8)
+								tframe:Destroy()
+							end,
+						}
+
+						Anims.show()
+
+						local CountTimer=DB.Timeout or 3
+						local pressed = false
+						if DB.Callback then
+							text.Interactable = true				
+							text.MouseButton1Click:Once(function()
+								pressed = true
+								Anims.hide()
+								coroutine.wrap(function()
+									pcall(function() DB.Callback() end)
+								end)()
+							end)
+						end
+
+						local attach = text.Text
+						coroutine.wrap(function()
+							repeat
+								CountTimer = CountTimer - 1
+								if pressed then CountTimer = 0 end
+								task.wait(1) text.Text = DB.Text.." ["..CountTimer.."] " 
+
+								if not scaled_up then
+									local tf_next_bounds = text.TextBounds
+									tframe.Size = UDim2.new(0, tf_next_bounds.X + Alerts.init_cfg.list_padding, 0, tf_next_bounds.Y)
+								end
+							until CountTimer < .001 or CountTimer == 0
+
+							if not pressed then
+								Anims.hide()
+							end
+						end)()
+					end)()
+				end
+
+				Alerts.Values = {
+
+					Enabled = true,
+					Bounty = true,
+					KillTrack = true,
+					AdminSpy = true,
+					DealerRestock = {v = true, selected = ""},	
+				}
+
+				Alerts.Callbacks = {
+
+					Killmonitor = function(plrName, id, typ, cash, xp, isHidden, charInstance)
+						if Alerts.Values.KillTrack and Alerts.Values.Enabled then
 							Alerts.new({
 
-								Text = "Moderation Spy: "..plr.Name.." joined. Click to close",
-								Timeout = 99999,
+								Text = typ.. ": ".. plrName,
+								Timeout = 60,
 								Scale = 1,
 								Callback = function() --its just skipping lol 
 								end,
 							})
 						end
-					end
-				end,
-				
-				RestockMonitor = function(plr, dealer)
-					if Alerts.Values.DealerRestock.v and (type(Alerts.Values.DealerRestock.selected) == "string" and Alerts.Values.DealerRestock.selected ~= "") and Alerts.Values.Enabled then
-						Alerts.new({
+					end,
 
-							Text = "Item has been spawned: "..Alerts.Values.DealerRestock.selected..", Click to spectate dealer",
-							Timeout = 60,
-							Scale = 1,
-							Callback = function()
-								local hl = Instance.new("Highlight", dealer)
-								hl.FillTransparency = 1
-								hl.OutlineTransparency = 0
-								hl.OutlineColor = Color3.fromRGB(251, 255, 217)
-								
+					AdminMonitor = function(plr)
+						if Alerts.Values.AdminSpy and Alerts.Values.Enabled then
+							local group = 4165692
+							if Player:IsInGroup(group) and Player:GetRankInGroup(group) > 1 then
 								Alerts.new({
 
-									Text = "Spectating dealer, Click to stop spectating",
+									Text = "Moderation Spy: "..plr.Name.." joined. Click to close",
 									Timeout = 99999,
 									Scale = 1,
-									Callback = function()
-										hl:Destroy()
+									Callback = function() --its just skipping lol 
 									end,
 								})
-							end,
-						})
-					end
-				end,
-			}
-			
-			ReplicatedStorage:WaitForChild("Events"):WaitForChild("KillEvent").OnClientEvent:Connect(Alerts.Callbacks.Killmonitor)
-			PlayerService.PlayerAdded:Connect(Alerts.Callbacks.AdminMonitor)
-			
-			local Current_Path = M.Library.Sections
-			local Current_Section = Current_Path.Misc.Alerts
-			
-			Current_Section:AddToggle('Sending', Alerts.Values.Enabled, function(Boolean)
-				Alerts.Values.Enabled = Boolean
-			end)
-			
-			Current_Section:AddToggle('Kills', Alerts.Values.KillTrack, function(Boolean)
-				Alerts.Values.KillTrack = Boolean
-			end)
-			
-			Current_Section:AddToggle('AdminSpy', Alerts.Values.AdminSpy, function(Boolean)
-				Alerts.Values.AdminSpy = Boolean
-			end)
-			
-			--Current_Section:AddToggle('RestockSpy', Alerts.Values.DealerRestock.v, function(Boolean)
-			--	Alerts.Values.DealerRestock.v = Boolean
-				
-			--	--coroutine.wrap(function()
-			--	--	while Alerts.Values.DealerRestock.v == true do task.wait(10)
-			--	--		for _, dealer in workspace.Map.Shopz:GetChildren() do
-			--	--			if dealer.Restock[Alerts.Values.DealerRestock.selected].Stock > 1 then
-								
-			--	--			end
-			--	--		end
-			--	--	end
-			--	--end)()
-			--end)
-			
-			
-			--local ItemNames = {}
-			--for _, Ix in ReplicatedStorage.Storage.ItemStats:GetChildren() do
-			--	for _, Iz in Ix:GetChildren() do
-			--		if Iz.MaxStock.Value > 0 then
-			--			table.insert(ItemNames, Iz.FullName.Value)
-			--		end
-			--	end 
-			--end
-			
-			--Current_Section:AddDropdown('Items',ItemNames,'Airstrike',function(a) 
-			--	Alerts.Values.DealerRestock.selected = a
-			--end)
-		end)
-		
-		local Crosshair = {}
-		task.spawn(function()
-			Crosshair.defaults = {
-				["Lines 1"] = 		99889902798389,
-				["Circle 1"] = 		81340365683174,
-				["Circle 2"] = 		136837163590802,
-				["Circle 3"] = 		102905283755286,
-				["Circle 4"] = 		83335526367176,
-				["Circle 5"] = 		87547903982672,
-				["Circle 6"] = 		83053021526164,
-				["Circle 7"] = 		111309197797890,
-				["Circle 8"] = 		133888102128265,
-				["Heart 1"] = 		88466704493625,
-				["Focus 1"] = 		115424703989562,
-				["Focus 2"] = 		116342124658278,
-				["Hello Kitty"] = 	122334015699194,
-				["Anime 1"] = 		132635850677690,
-				["Scope 1"] = 		117164191256894,
-			}
-
-			Crosshair.init = function()
-				Crosshair.cross_settings = {}
-				Crosshair.VisualFolder = Instance.new("Folder", game.CoreGui)		
-			end
-
-			Crosshair.unload = function()
-				Crosshair.cross_settings = nil
-				if Crosshair.VisualFolder then pcall(function()
-						Crosshair.VisualFolder:Destroy()
-					end)
-				end
-			end
-
-			Crosshair.update = function(Mode, Settings)
-				if Crosshair.VisualFolder then
-					if Mode == "new" then
-						Settings = Settings or {}
-
-						for _, old in Crosshair.VisualFolder:GetChildren() do
-							if old:IsA("ScreenGui") and old:HasTag("IsCrosshair") then old:Destroy() end
+							end
 						end
+					end,
 
-						local NewScreen = Instance.new("ScreenGui", Crosshair.VisualFolder)
-						NewScreen.Enabled = true
-						NewScreen.ResetOnSpawn = false
-						NewScreen.IgnoreGuiInset = true
-						NewScreen.DisplayOrder = 9999999
-						NewScreen:AddTag("IsCrosshair")
+					RestockMonitor = function(plr, dealer)
+						if Alerts.Values.DealerRestock.v and (type(Alerts.Values.DealerRestock.selected) == "string" and Alerts.Values.DealerRestock.selected ~= "") and Alerts.Values.Enabled then
+							Alerts.new({
 
-						local NewImage = Instance.new("ImageLabel", NewScreen)
-						NewImage.Name = "crosshair"
-						NewImage.AnchorPoint = Vector2.new(0.5, 0.5)
-						NewImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-						NewImage.BackgroundTransparency = 1
-						NewImage.BorderSizePixel = 0
-						NewImage.Interactable = 0
-						NewImage.LayoutOrder = 0
-						NewImage.Active = false
-						NewImage.Position = UDim2.new(0.5, 0, 0.5, 0)
-						NewImage.Size = UDim2.new(0, 20, 0, 20)
-						NewImage.Rotation = 0
-						NewImage.Visible = true
-						NewImage.ZIndex = 9
-						-- Yes
-						NewImage.ImageRectSize = Vector2.new(0, 0)
-						NewImage.ImageRectOffset = Vector2.new(0, 0)
-						NewImage.ScaleType = Enum.ScaleType.Stretch
-						NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
+								Text = "Item has been spawned: "..Alerts.Values.DealerRestock.selected..", Click to spectate dealer",
+								Timeout = 60,
+								Scale = 1,
+								Callback = function()
+									local hl = Instance.new("Highlight", dealer)
+									hl.FillTransparency = 1
+									hl.OutlineTransparency = 0
+									hl.OutlineColor = Color3.fromRGB(251, 255, 217)
 
-						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults["Lines 1"]
-						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
-						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
-						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
+									Alerts.new({
 
-						local NewScale = Instance.new("UIScale", NewImage)
-						NewScale.Name = "scale"
-						NewScale.Scale = 			Settings.Crosshair_Scale or 1
-
-						Crosshair.CurrentCross = NewScreen
-					elseif Mode == "update" or Mode == "upd" then
-						Settings = Settings or {}
-
-						local NewImage = Crosshair.CurrentCross.crosshair
-						-- Yes
-						NewImage.ImageRectSize = Vector2.new(0, 0)
-						NewImage.ImageRectOffset = Vector2.new(0, 0)
-						NewImage.ScaleType = Enum.ScaleType.Stretch
-						NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
-
-						NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults["Lines 1"]
-						NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
-						NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
-						NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
-
-						local NewScale = NewImage.scale
-						NewScale.Scale = 			Settings.Crosshair_Scale or 1
-					end
-				end
-			end
-
-			Crosshair.remove = function(AnyCrosshair)
-				if Crosshair.VisualFolder then
-					AnyCrosshair = AnyCrosshair or Crosshair.CurrentCross
-
-					if AnyCrosshair ~= nil then
-						Crosshair:Destroy()
-					end
-				end
-			end
-
-			Crosshair.toggle = function(Boolean)
-				if Crosshair.VisualFolder then
-					if Crosshair.CurrentCross ~= nil then
-						Crosshair.CurrentCross.Enabled = Boolean
-					end
-				end
-			end
-
-			Crosshair.new = function(mode, settings_i)
-				Crosshair.update(mode, settings_i)
-			end
-		end)
-
-
-
-		B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
-			local EDBT = {}
-
-			EDBT.NiceFolder = M_esp
-			EDBT.Parent = BasedProperties.Parent
-
-			EDBT.Objects = {}
-
-			EDBT.ScreenBoard = M.Functions.CreateInstance("BillboardGui", {
-				Name = "N1",
-				Enabled = true,
-				Adornee = Object,
-				LightInfluence = 0,
-				AlwaysOnTop = true,
-				Size = BasedProperties.GuiSize or I_esp.BillSize,
-				ResetOnSpawn = false,
-			}, BasedProperties.Parent)
-
-			EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
-				Name = "N2",
-				Position = I_esp.FramePos,
-				Size = I_esp.FrameSize,
-				BackgroundTransparency = 1,
-				AnchorPoint = I_esp.FramePoint
-			}, EDBT.ScreenBoard)
-
-			EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
-				Name = "N3",
-				Thickness = 2,
-				Color = BasedProperties.Color or I_esp.FrameColor,
-				LineJoinMode = Enum.LineJoinMode.Miter
-			}, EDBT.VectorFrame)
-
-			EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
-				Name = "N4",
-				Text = BasedProperties.Text or "",
-				TextSize = 14,
-				TextWrapped = true,
-				TextColor3 = BasedProperties.Color or I_esp.FrameColor,
-				TextStrokeTransparency = 0,
-				BackgroundTransparency = 1,
-				Font = "MontserratBold",
-				Position = UDim2.new(0.5,0,0.503,0),
-				Size = UDim2.new(0,500,0,50),
-				AnchorPoint = I_esp.FramePoint
-			}, EDBT.ScreenBoard)
-		end
-
-		B.Scripts.Toggle_InfinityStamina = function(Boolean)
-			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
-
-			if NewFolder then
-				if Boolean then
-					local meanline = NewFolder.Currents:FindFirstChild("2.39418")
-
-					if not meanline then
-						local instance_boolean = Instance.new("BoolValue")
-						instance_boolean.Value = true
-						instance_boolean.Name = "2.39418"
-						instance_boolean.Parent = NewFolder.Currents
-					end
-				else
-					if NewFolder.Currents:FindFirstChild("2.39418") then
-						NewFolder.Currents["2.39418"]:Destroy()
-					end
-				end
-			end
-		end
-
-		B.Scripts.Change_WalkSpeed = function(Boolean, Number)
-			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
-			Number = Number or 0
-
-			if NewFolder then
-				if Boolean then
-					local meanline
-
-					if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
-						meanline = NewFolder.Currents
-						meanline.Value = Number
-					else
-						meanline = Instance.new("NumberValue")
-						meanline.Name = "SP_ADONIS"
-						meanline.Value = Number
-						meanline.Parent = NewFolder.Currents
-					end	
-				else
-					local meanline
-
-					if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
-						meanline = NewFolder.Currents.SP_ADONIS
-						meanline:Destroy()
-					end
-				end
-			end
-		end
-
-		B.Scripts.Change_Acceleration = function(Number)
-			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
-			Number = Number or 1
-
-			if NewFolder then
-				local meanline = NewFolder:FindFirstChild("AccelerationModifier")
-				if meanline then
-					meanline.Value = Number
-				end
-			end
-		end
-
-		B.Scripts.Toggle_NeckMovement = function(Boolean)
-			if Player.Character then
-				Player.Character:SetAttribute("NoNeckMovement", Boolean)
-			end
-		end
-
-		B.Scripts.Toggle_BodyRotation = function(Boolean)
-			local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
-
-			if NewFolder then
-				if Boolean then
-					local meanline = NewFolder.Currents:FindFirstChild("ROTROOT")
-
-					if not meanline then
-						local instance_boolean = Instance.new("BoolValue")
-						instance_boolean.Name = "ROTROOT"
-						instance_boolean.Parent = NewFolder.Currents
-					end
-				else
-					if NewFolder.Currents:FindFirstChild("ROTROOT") then
-						NewFolder.Currents["ROTROOT"]:Destroy()
-					end
-				end
-			end
-		end
-
-		B.Scripts.Give_TeleportTool = function()
-			local TeleportHandle = M.Functions.CreateInstance("Tool", {
-				Name = "CLICK-TP",
-				RequiresHandle = false,
-			}, M.Local.Player.Backpack)
-
-			TeleportHandle.Activated:Connect(function(DBT)
-				DBT = {
-					Character = M.Functions.GetOwnCharacter(),
-					Mouse = M.Local.Mouse,
-					HRP = M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart")
+										Text = "Spectating dealer, Click to stop spectating",
+										Timeout = 99999,
+										Scale = 1,
+										Callback = function()
+											hl:Destroy()
+										end,
+									})
+								end,
+							})
+						end
+					end,
 				}
 
-				if not DBT.Character or not DBT.HRP then return end
-				DBT.CFrame = CFrame.new(DBT.Mouse.Hit.X, DBT.Mouse.Hit.Y + 3, DBT.Mouse.Hit.Z, select(4, DBT.HRP.CFrame:components()))
+				ReplicatedStorage:WaitForChild("Events"):WaitForChild("KillEvent").OnClientEvent:Connect(Alerts.Callbacks.Killmonitor)
+				PlayerService.PlayerAdded:Connect(Alerts.Callbacks.AdminMonitor)
+
+				local Current_Path = M.Library.Sections
+				local Current_Section = Current_Path.Misc.Alerts
+
+				Current_Section:AddToggle('Sending', Alerts.Values.Enabled, function(Boolean)
+					Alerts.Values.Enabled = Boolean
+				end)
+
+				Current_Section:AddToggle('Kills', Alerts.Values.KillTrack, function(Boolean)
+					Alerts.Values.KillTrack = Boolean
+				end)
+
+				Current_Section:AddToggle('AdminSpy', Alerts.Values.AdminSpy, function(Boolean)
+					Alerts.Values.AdminSpy = Boolean
+				end)
+
+				--Current_Section:AddToggle('RestockSpy', Alerts.Values.DealerRestock.v, function(Boolean)
+				--	Alerts.Values.DealerRestock.v = Boolean
+
+				--	--coroutine.wrap(function()
+				--	--	while Alerts.Values.DealerRestock.v == true do task.wait(10)
+				--	--		for _, dealer in workspace.Map.Shopz:GetChildren() do
+				--	--			if dealer.Restock[Alerts.Values.DealerRestock.selected].Stock > 1 then
+
+				--	--			end
+				--	--		end
+				--	--	end
+				--	--end)()
+				--end)
+
+
+				--local ItemNames = {}
+				--for _, Ix in ReplicatedStorage.Storage.ItemStats:GetChildren() do
+				--	for _, Iz in Ix:GetChildren() do
+				--		if Iz.MaxStock.Value > 0 then
+				--			table.insert(ItemNames, Iz.FullName.Value)
+				--		end
+				--	end 
+				--end
+
+				--Current_Section:AddDropdown('Items',ItemNames,'Airstrike',function(a) 
+				--	Alerts.Values.DealerRestock.selected = a
+				--end)
 			end)
-		end
 
-		B.Scripts.Toggle_Fling = function(Boolean)
-			if Boolean then
-				coroutine.wrap(function()
-					repeat RunService.Heartbeat:Wait()
-						local character = Player.Character
-						local root = character:WaitForChild("HumanoidRootPart")
-						local vel, movel = nil, 0.1
+			local Crosshair = {}
+			task.spawn(function()
+				Crosshair.defaults = {
+					["Lines 1"] = 		99889902798389,
+					["Circle 1"] = 		81340365683174,
+					["Circle 2"] = 		136837163590802,
+					["Circle 3"] = 		102905283755286,
+					["Circle 4"] = 		83335526367176,
+					["Circle 5"] = 		87547903982672,
+					["Circle 6"] = 		83053021526164,
+					["Circle 7"] = 		111309197797890,
+					["Circle 8"] = 		133888102128265,
+					["Heart 1"] = 		88466704493625,
+					["Focus 1"] = 		115424703989562,
+					["Focus 2"] = 		116342124658278,
+					["Hello Kitty"] = 	122334015699194,
+					["Anime 1"] = 		132635850677690,
+					["Scope 1"] = 		117164191256894,
+				}
 
-						while not (character and character.Parent and root and root.Parent) do
-							RunService.Heartbeat:Wait()
-							character = Player.Character
-							root = character:WaitForChild("HumanoidRootPart")
+				Crosshair.init = function()
+					Crosshair.cross_settings = {}
+					Crosshair.VisualFolder = Instance.new("Folder", game.CoreGui)		
+				end
+
+				Crosshair.unload = function()
+					Crosshair.cross_settings = nil
+					if Crosshair.VisualFolder then pcall(function()
+							Crosshair.VisualFolder:Destroy()
+						end)
+					end
+				end
+
+				Crosshair.update = function(Mode, Settings)
+					if Crosshair.VisualFolder then
+						if Mode == "new" then
+							Settings = Settings or {}
+
+							for _, old in Crosshair.VisualFolder:GetChildren() do
+								if old:IsA("ScreenGui") and old:HasTag("IsCrosshair") then old:Destroy() end
+							end
+
+							local NewScreen = Instance.new("ScreenGui", Crosshair.VisualFolder)
+							NewScreen.Enabled = true
+							NewScreen.ResetOnSpawn = false
+							NewScreen.IgnoreGuiInset = true
+							NewScreen.DisplayOrder = 9999999
+							NewScreen:AddTag("IsCrosshair")
+
+							local NewImage = Instance.new("ImageLabel", NewScreen)
+							NewImage.Name = "crosshair"
+							NewImage.AnchorPoint = Vector2.new(0.5, 0.5)
+							NewImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+							NewImage.BackgroundTransparency = 1
+							NewImage.BorderSizePixel = 0
+							NewImage.Interactable = 0
+							NewImage.LayoutOrder = 0
+							NewImage.Active = false
+							NewImage.Position = UDim2.new(0.5, 0, 0.5, 0)
+							NewImage.Size = UDim2.new(0, 20, 0, 20)
+							NewImage.Rotation = 0
+							NewImage.Visible = true
+							NewImage.ZIndex = 9
+							-- Yes
+							NewImage.ImageRectSize = Vector2.new(0, 0)
+							NewImage.ImageRectOffset = Vector2.new(0, 0)
+							NewImage.ScaleType = Enum.ScaleType.Stretch
+							NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
+
+							NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults["Lines 1"]
+							NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
+							NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
+							NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
+
+							local NewScale = Instance.new("UIScale", NewImage)
+							NewScale.Name = "scale"
+							NewScale.Scale = 			Settings.Crosshair_Scale or 1
+
+							Crosshair.CurrentCross = NewScreen
+						elseif Mode == "update" or Mode == "upd" then
+							Settings = Settings or {}
+
+							local NewImage = Crosshair.CurrentCross.crosshair
+							-- Yes
+							NewImage.ImageRectSize = Vector2.new(0, 0)
+							NewImage.ImageRectOffset = Vector2.new(0, 0)
+							NewImage.ScaleType = Enum.ScaleType.Stretch
+							NewImage.SizeConstraint = Enum.SizeConstraint.RelativeXY
+
+							NewImage.Image = 			"rbxassetid://"..Settings.Crosshair_Image or "rbxassetid://"..Crosshair.defaults["Lines 1"]
+							NewImage.ImageColor3 = 		Settings.Crosshair_Color or Color3.fromRGB(255, 255, 255)
+							NewImage.ResampleMode = 	Settings.Crosshair_ViewMode or Enum.ResamplerMode.Default
+							NewImage.ImageTransparency = Settings.Crosshair_Transparency or 0
+
+							local NewScale = NewImage.scale
+							NewScale.Scale = 			Settings.Crosshair_Scale or 1
 						end
+					end
+				end
 
-						vel = root.Velocity
-						root.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+				Crosshair.remove = function(AnyCrosshair)
+					if Crosshair.VisualFolder then
+						AnyCrosshair = AnyCrosshair or Crosshair.CurrentCross
 
-						RunService.RenderStepped:Wait()
-						if character and character.Parent and root and root.Parent then
-							root.Velocity = vel
+						if AnyCrosshair ~= nil then
+							Crosshair:Destroy()
 						end
+					end
+				end
 
-						RunService.Stepped:Wait()
-						if character and character.Parent and root and root.Parent then
-							root.Velocity = vel + Vector3.new(0, movel, 0)
-							movel = movel * -1
+				Crosshair.toggle = function(Boolean)
+					if Crosshair.VisualFolder then
+						if Crosshair.CurrentCross ~= nil then
+							Crosshair.CurrentCross.Enabled = Boolean
 						end
-					until B.Values.Flinging.FlingBool ~= true
-				end)()
+					end
+				end
+
+				Crosshair.new = function(mode, settings_i)
+					Crosshair.update(mode, settings_i)
+				end
+			end)
+
+
+
+			B.Scripts.CreatePossibleEsp = function(Object, BasedProperties) task.wait()
+				local EDBT = {}
+
+				EDBT.NiceFolder = M_esp
+				EDBT.Parent = BasedProperties.Parent
+
+				EDBT.Objects = {}
+
+				EDBT.ScreenBoard = M.Functions.CreateInstance("BillboardGui", {
+					Name = "N1",
+					Enabled = true,
+					Adornee = Object,
+					LightInfluence = 0,
+					AlwaysOnTop = true,
+					Size = BasedProperties.GuiSize or I_esp.BillSize,
+					ResetOnSpawn = false,
+				}, BasedProperties.Parent)
+
+				EDBT.VectorFrame = M.Functions.CreateInstance("Frame", {
+					Name = "N2",
+					Position = I_esp.FramePos,
+					Size = I_esp.FrameSize,
+					BackgroundTransparency = 1,
+					AnchorPoint = I_esp.FramePoint
+				}, EDBT.ScreenBoard)
+
+				EDBT.VectorStroke = M.Functions.CreateInstance("UIStroke", {
+					Name = "N3",
+					Thickness = 2,
+					Color = BasedProperties.Color or I_esp.FrameColor,
+					LineJoinMode = Enum.LineJoinMode.Miter
+				}, EDBT.VectorFrame)
+
+				EDBT.VectorTLabel = M.Functions.CreateInstance("TextLabel", {
+					Name = "N4",
+					Text = BasedProperties.Text or "",
+					TextSize = 14,
+					TextWrapped = true,
+					TextColor3 = BasedProperties.Color or I_esp.FrameColor,
+					TextStrokeTransparency = 0,
+					BackgroundTransparency = 1,
+					Font = "MontserratBold",
+					Position = UDim2.new(0.5,0,0.503,0),
+					Size = UDim2.new(0,500,0,50),
+					AnchorPoint = I_esp.FramePoint
+				}, EDBT.ScreenBoard)
 			end
-		end
 
-		B.Scripts.Toggle_ExtraSensoryPerceptionPlayers = function(Boolean)
-			if Boolean then
-				for _, Player in M.Services.Players:GetPlayers() do
-					if Player ~= M.Local.Player then
-						if Player.Character then
-							if Player.Character:FindFirstChild("HumanoidRootPart") then
-								local Apart = Player.Character:FindFirstChild("HumanoidRootPart")
-								B.Scripts.CreatePossibleEsp(Apart, {Text = Player.Name, Color = B.Values.Wallhacking.Players.Color, Parent = F_esp.Players})
+			B.Scripts.Toggle_InfinityStamina = function(Boolean)
+				local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+
+				if NewFolder then
+					if Boolean then
+						local meanline = NewFolder.Currents:FindFirstChild("2.39418")
+
+						if not meanline then
+							local instance_boolean = Instance.new("BoolValue")
+							instance_boolean.Value = true
+							instance_boolean.Name = "2.39418"
+							instance_boolean.Parent = NewFolder.Currents
+						end
+					else
+						if NewFolder.Currents:FindFirstChild("2.39418") then
+							NewFolder.Currents["2.39418"]:Destroy()
+						end
+					end
+				end
+			end
+
+			B.Scripts.Change_WalkSpeed = function(Boolean, Number)
+				local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+				Number = Number or 0
+
+				if NewFolder then
+					if Boolean then
+						local meanline
+
+						if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
+							meanline = NewFolder.Currents
+							meanline.Value = Number
+						else
+							meanline = Instance.new("NumberValue")
+							meanline.Name = "SP_ADONIS"
+							meanline.Value = Number
+							meanline.Parent = NewFolder.Currents
+						end	
+					else
+						local meanline
+
+						if NewFolder.Currents:FindFirstChild("SP_ADONIS") then
+							meanline = NewFolder.Currents.SP_ADONIS
+							meanline:Destroy()
+						end
+					end
+				end
+			end
+
+			B.Scripts.Change_Acceleration = function(Number)
+				local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+				Number = Number or 1
+
+				if NewFolder then
+					local meanline = NewFolder:FindFirstChild("AccelerationModifier")
+					if meanline then
+						meanline.Value = Number
+					end
+				end
+			end
+
+			B.Scripts.Toggle_NeckMovement = function(Boolean)
+				if Player.Character then
+					Player.Character:SetAttribute("NoNeckMovement", Boolean)
+				end
+			end
+
+			B.Scripts.Toggle_BodyRotation = function(Boolean)
+				local NewFolder = ReplicatedStorage["CharStats"]:FindFirstChild(Player.Name) or nil
+
+				if NewFolder then
+					if Boolean then
+						local meanline = NewFolder.Currents:FindFirstChild("ROTROOT")
+
+						if not meanline then
+							local instance_boolean = Instance.new("BoolValue")
+							instance_boolean.Name = "ROTROOT"
+							instance_boolean.Parent = NewFolder.Currents
+						end
+					else
+						if NewFolder.Currents:FindFirstChild("ROTROOT") then
+							NewFolder.Currents["ROTROOT"]:Destroy()
+						end
+					end
+				end
+			end
+
+			B.Scripts.Give_TeleportTool = function()
+				local TeleportHandle = M.Functions.CreateInstance("Tool", {
+					Name = "CLICK-TP",
+					RequiresHandle = false,
+				}, M.Local.Player.Backpack)
+
+				TeleportHandle.Activated:Connect(function(DBT)
+					DBT = {
+						Character = M.Functions.GetOwnCharacter(),
+						Mouse = M.Local.Mouse,
+						HRP = M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart")
+					}
+
+					if not DBT.Character or not DBT.HRP then return end
+					DBT.CFrame = CFrame.new(DBT.Mouse.Hit.X, DBT.Mouse.Hit.Y + 3, DBT.Mouse.Hit.Z, select(4, DBT.HRP.CFrame:components()))
+				end)
+			end
+			
+			local Shop = {}
+			local Teleport = {}
+			
+			
+			task.spawn(function()
+				local Modules = {}
+
+				local RAd = Random.new()
+				local vp = game:GetService("Players")
+
+				Teleport.AttachVector = Vector3.new(0, 0, 0)
+				Teleport.IsBeingRoot = false
+
+				Teleport.Config = {
+
+					TeleportMinRaduis = 100,
+					TeleportMaxRaduis = 200,
+				}
+
+
+				Modules.GetPlayer = function(stringName)
+					local dawg = vp:GetPlayers()
+					local yeaph = nil
+					for _, vPlayer in dawg do
+						local lowerString = string.lower(vPlayer.Name)
+						local lowerString2 = string.lower(stringName)
+						if string.find(lowerString, lowerString2) then
+							yeaph = vPlayer break
+						end
+					end
+
+					return yeaph
+				end
+
+				Modules.IsInBound = function(pos)
+					local tP = Instance.new("Part", workspace.Terrain)
+
+					tP.Anchored = true
+					tP.CanCollide = false
+					tP.CanTouch = false
+					tP.Size = Vector3.new(0.2, 0.2, 0.2)
+					tP.Position = pos
+
+					local gtp = tP:GetTouchingParts()
+
+					task.wait()
+					tP:Destroy()
+
+					if #gtp > 0 then
+						return true
+					end
+
+					return false
+				end
+
+				Teleport.new = function(Vector)
+					local Player = vp.LocalPlayer
+					if Player.Character ~= nil then
+						local x = Player.Character
+						x:MoveTo(Vector)
+					end
+				end
+
+				Teleport.RootM = function(MassVector)
+
+					local a1
+					if MassVector:IsA("Player") then
+						a1 = MassVector.Character 
+					else
+						a1 = MassVector:FindFirstChildOfClass("Model")
+					end
+
+					local b1 = a1:WaitForChild("HumanoidRootPart")
+					local c1 = b1.CFrame
+					local d1 = b1.Position
+
+					local endvector = d1 + (c1.LookVector * 5)
+
+					local myChar = vp.LocalPlayer.Character
+					local myRoot = myChar.HumanoidRootPart
+
+
+					myRoot.CFrame = CFrame.new(endvector, d1)
+					repeat task.wait() until myRoot.Anchored ~= true
+					myChar:FindFirstChildWhichIsA("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+				end
+
+				Teleport.GetNewRandomLocation = function(Vector, MassVector)
+					if Modules.IsInBound(Vector) then
+						return false
+					end
+
+					Teleport.IsBeingRoot = true
+					Teleport.AttachVector = Vector
+
+					local Discouge, mass = 430, 50
+
+					coroutine.wrap(function()
+						while Discouge > 0 do task.wait() Discouge -= 1 Teleport.new(Vector) end
+						Teleport.RootM(MassVector)
+					end)()
+				end
+
+				Teleport.MoveMethod = function(ForceVector, CalledPlayer)
+					local pC = vp.LocalPlayer
+
+					if pC.Character ~= nil and CalledPlayer ~= nil then
+						local x = pC.Character
+
+						local jd = Modules.GetPlayer(CalledPlayer)
+						if jd.Parent then
+							CalledPlayer = jd 
+						end
+
+						local anyWay = function()
+							repeat
+								local T = {}
+								T.X = RAd:NextInteger(-RAd:NextInteger(Teleport.Config.TeleportMinRaduis, Teleport.Config.TeleportMaxRaduis), RAd:NextInteger(Teleport.Config.TeleportMinRaduis, Teleport.Config.TeleportMaxRaduis))
+								T.Z = RAd:NextInteger(-RAd:NextInteger(Teleport.Config.TeleportMinRaduis, Teleport.Config.TeleportMaxRaduis), RAd:NextInteger(Teleport.Config.TeleportMinRaduis, Teleport.Config.TeleportMaxRaduis))
+							until Teleport.GetNewRandomLocation(Vector3.new(x:WaitForChild("HumanoidRootPart").Position.X + T.X, x:WaitForChild("HumanoidRootPart").Position.Y, x:WaitForChild("HumanoidRootPart").Position.Z + T.Z), CalledPlayer) ~= false
+						end
+
+
+						if ForceVector then
+							Teleport.new(ForceVector)
+						else
+							if CalledPlayer.Character then
+								local char = CalledPlayer.Character
+								if (char:WaitForChild("HumanoidRootPart").Position - x:WaitForChild("HumanoidRootPart").Position).Magnitude < 24 then
+									Teleport.RootM(CalledPlayer)
+								else
+									anyWay()
+								end
+							else
+								anyWay()
 							end
 						end
 					end
 				end
-			else
-				F_esp.Players:ClearAllChildren()
+
+				--_G.Rescue14 = Teleport.MoveMethod
+
+
+				Shop.Purchase = function(tValue)
+					local events = game:GetService('ReplicatedStorage'):WaitForChild("Events")
+					local remote = events:WaitForChild("SSHPRMTE1")
+
+					local succes, msg = remote:InvokeServer(tValue.ShopType,  tValue.chosenFolder.Name,  tValue.chosenFound,  tValue.ShopValue,  'ResupplyAmmo',  true,  nil)
+				end
+
+				Shop.MoveMethod = function(GivenName)
+					local myChar = vp.LocalPlayer.Character
+					if myChar ~= nil then
+						local root = myChar:WaitForChild("HumanoidRootPart")
+						local Distance = math.huge
+
+						local SellerB = nil
+						local tValue = {}
+
+						for _, Merchant in workspace.Map.Shopz:GetChildren() do
+							if Distance > (Merchant.WorldPivot.Position - root.Position).Magnitude and Merchant.CurrentStocks:FindFirstChild(GivenName) then
+								if Merchant.CurrentStocks[GivenName].Value > 0 then
+									--SellerB = Merchant
+								end
+
+								SellerB = Merchant
+							end
+						end	
+
+						for _, ParentFolder in game:GetService("ReplicatedStorage").Storage.ItemStats:GetChildren() do
+							for _, Item in ParentFolder:GetChildren() do
+								if Item.Name == GivenName then
+									tValue.chosenFound = Item.Name
+									tValue.chosenFolder = Item.Parent
+								end
+							end
+						end
+
+						tValue.ShopValue = SellerB.MainPart
+						tValue.ShopType = SellerB.Type.Value
+
+						Teleport.RootM(SellerB)
+						task.wait(.22)
+						Shop.Purchase(tValue)
+						warn("\nTRYNA BUYYYY")
+					end
+				end
+				
+				local PLAYERDAWGTELEPORTING_AWEELLLAHAHSA = ""
+				local CANTELEPORTCOUNTDOWNGDAWGYEAPH_NOSTUPIDACTIONSYESSSS = false
+				
+				----------------------------------------------------------------------///////////////////////////////////////////
+				B.Assets.Sections.Misc.Teleport:AddTextBox('Username', nil, nil, 5 ,function(a) 
+					 PLAYERDAWGTELEPORTING_AWEELLLAHAHSA = a
+				end)
+				
+				B.Assets.Sections.Misc.Teleport:AddButton('Move', function() 
+					if CANTELEPORTCOUNTDOWNGDAWGYEAPH_NOSTUPIDACTIONSYESSSS == false then
+						CANTELEPORTCOUNTDOWNGDAWGYEAPH_NOSTUPIDACTIONSYESSSS = true
+						Teleport.MoveMethod(nil, PLAYERDAWGTELEPORTING_AWEELLLAHAHSA)
+						coroutine.wrap(function()
+							task.wait(5)
+							CANTELEPORTCOUNTDOWNGDAWGYEAPH_NOSTUPIDACTIONSYESSSS = false
+						end)()
+					end
+				end)
+			end)
+			
+			B.Scripts.Toggle_Fling = function(Boolean)
+				if Boolean then
+					coroutine.wrap(function()
+						repeat RunService.Heartbeat:Wait()
+							local character = Player.Character
+							local root = character:WaitForChild("HumanoidRootPart")
+							local vel, movel = nil, 0.1
+
+							while not (character and character.Parent and root and root.Parent) do
+								RunService.Heartbeat:Wait()
+								character = Player.Character
+								root = character:WaitForChild("HumanoidRootPart")
+							end
+
+							vel = root.Velocity
+							root.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+
+							RunService.RenderStepped:Wait()
+							if character and character.Parent and root and root.Parent then
+								root.Velocity = vel
+							end
+
+							RunService.Stepped:Wait()
+							if character and character.Parent and root and root.Parent then
+								root.Velocity = vel + Vector3.new(0, movel, 0)
+								movel = movel * -1
+							end
+						until B.Values.Flinging.FlingBool ~= true
+					end)()
+				end
 			end
-		end
 
-		B.Scripts.Toggle_ExtraSensoryPerceptionObjects = function(Boolean, Folder, CustomDBT)
-			if Boolean then
-				if Folder then
-					for _, Object in Folder:GetChildren() do
-						if string.find(string.lower(CustomDBT.Text), "crate") or string.find(string.lower(CustomDBT.Text), "scrap") then
-							local color_ = B.Values.Wallhacking.Crates.ColorWhite
-
-							local CurrentRare = Object:GetAttribute("LPBRs")
-
-							if Object:GetAttribute("LPBRs") == 2 then
-								color_ = B.Values.Wallhacking.Crates.ColorRed
-							elseif Object:GetAttribute("LPBrs") == 1 then
-								color_ = B.Values.Wallhacking.Crates.ColorGreen
+			B.Scripts.Toggle_ExtraSensoryPerceptionPlayers = function(Boolean)
+				if Boolean then
+					for _, Player in M.Services.Players:GetPlayers() do
+						if Player ~= M.Local.Player then
+							if Player.Character then
+								if Player.Character:FindFirstChild("HumanoidRootPart") then
+									local Apart = Player.Character:FindFirstChild("HumanoidRootPart")
+									B.Scripts.CreatePossibleEsp(Apart, {Text = Player.Name, Color = B.Values.Wallhacking.Players.Color, Parent = F_esp.Players})
+								end
 							end
+						end
+					end
+				else
+					F_esp.Players:ClearAllChildren()
+				end
+			end
 
-							local LoadA = function(ParentProgress)
-								B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = ParentProgress, GuiSize = UDim2.new(0.004,0,0.002,0)})
-							end
+			B.Scripts.Toggle_ExtraSensoryPerceptionObjects = function(Boolean, Folder, CustomDBT)
+				if Boolean then
+					if Folder then
+						for _, Object in Folder:GetChildren() do
+							if string.find(string.lower(CustomDBT.Text), "crate") or string.find(string.lower(CustomDBT.Text), "scrap") then
+								local color_ = B.Values.Wallhacking.Crates.ColorWhite
 
-							if CurrentRare == 1 and string.find(string.lower(CustomDBT.Text), "green") then
-								LoadA(Scrap_esp.Greens)
-							elseif CurrentRare == 2 and string.find(string.lower(CustomDBT.Text), "red") then
-								LoadA(Scrap_esp.Reds)
-							elseif CurrentRare == nil and string.find(string.lower(CustomDBT.Text), "white") and (Object.Name == "S1" or Object.Name == "S2") then
-								LoadA(Scrap_esp.Whites)
-							end
+								local CurrentRare = Object:GetAttribute("LPBRs")
 
-						elseif CustomDBT.Text == "Safe" then
-							if B.Values.Wallhacking.Safes.Registers then
-								if string.find(string.lower(Object.Name), "register") then
-									B.Scripts.CreatePossibleEsp(Object, {Text = "Register", Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+								if Object:GetAttribute("LPBRs") == 2 then
+									color_ = B.Values.Wallhacking.Crates.ColorRed
+								elseif Object:GetAttribute("LPBrs") == 1 then
+									color_ = B.Values.Wallhacking.Crates.ColorGreen
+								end
+
+								local LoadA = function(ParentProgress)
+									B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = color_, Parent = ParentProgress, GuiSize = UDim2.new(0.004,0,0.002,0)})
+								end
+
+								if CurrentRare == 1 and string.find(string.lower(CustomDBT.Text), "green") then
+									LoadA(Scrap_esp.Greens)
+								elseif CurrentRare == 2 and string.find(string.lower(CustomDBT.Text), "red") then
+									LoadA(Scrap_esp.Reds)
+								elseif CurrentRare == nil and string.find(string.lower(CustomDBT.Text), "white") and (Object.Name == "S1" or Object.Name == "S2") then
+									LoadA(Scrap_esp.Whites)
+								end
+
+							elseif CustomDBT.Text == "Safe" then
+								if B.Values.Wallhacking.Safes.Registers then
+									if string.find(string.lower(Object.Name), "register") then
+										B.Scripts.CreatePossibleEsp(Object, {Text = "Register", Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+									else
+										B.Scripts.CreatePossibleEsp(Object, {Text = "Safe", Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+									end
 								else
-									B.Scripts.CreatePossibleEsp(Object, {Text = "Safe", Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
+									B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
 								end
 							else
 								B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
 							end
-						else
-							B.Scripts.CreatePossibleEsp(Object, {Text = CustomDBT.Text, Color = B.Values.Wallhacking[CustomDBT.Name].Color, Parent = CustomDBT.Folder})
 						end
 					end
-				end
-			else
-				if CustomDBT.DeleteFolder then
-					CustomDBT.DeleteFolder:ClearAllChildren()
 				else
-					CustomDBT.Folder:ClearAllChildren()
-				end
-			end
-		end
-
-		B.Scripts.Toggle_CameraProperties = function(Boolean, Property)
-			local CameraDistance = function()
-				if Boolean then Player.CameraMaxZoomDistance = 1000 else Player.CameraMaxZoomDistance = 10 end
-			end
-
-			local CameraMode = function()
-				if Boolean then Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
-				else Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
-			end
-
-			if string.lower(Property) == "distance" then
-				CameraDistance()
-			elseif string.lower(Property) == "mode" then
-				CameraMode()
-			end
-		end
-
-		B.Scripts.Toggle_LockpickResize = function(Boolean)
-			local PlayerGui = M.Local.Player.PlayerGui
-
-			local Baty = function(gui)
-				if gui:FindFirstChild("MF") then
-					for _, T in gui.MF.LP_Frame.Frames:GetChildren() do
-						if T:IsA("Frame") and T:FindFirstChild("Bar") then
-							if Boolean then
-								T.Bar.UIScale.Scale = 15
-							else
-								T.Bar.UIScale.Scale = 1
-							end
-						end
-					end
-				end
-			end
-
-			if PlayerGui:FindFirstChild("LockpickGUI") then
-				Baty(PlayerGui.LockpickGUI)
-			end
-		end
-
-		task.spawn(function() -- Handling Specific Events / Connections
-			local PlayerGui = Player.PlayerGui
-
-			PlayerGui.ChildAdded:Connect(function(AddedChild)
-				if AddedChild.Name == "LockpickGUI" then
-					if B.Values.Lockpicking.LockpickBool == true then
-						B.Scripts.Toggle_LockpickResize(true)
+					if CustomDBT.DeleteFolder then
+						CustomDBT.DeleteFolder:ClearAllChildren()
 					else
-						B.Scripts.Toggle_LockpickResize(false)
+						CustomDBT.Folder:ClearAllChildren()
 					end
 				end
-			end)
-
-			game:GetService("ProximityPromptService").PromptShown:Connect(function(ActualPrompt)
-				if B.Values.FastUsage.PromptsBool == true then
-					if ActualPrompt:GetAttribute("flag_duration") == nil then
-						ActualPrompt:SetAttribute("flag_duration", ActualPrompt.HoldDuration)
-					end
-					ActualPrompt.HoldDuration = 0
-				elseif ActualPrompt:GetAttribute("flag_duration") ~= nil then
-					if ActualPrompt:GetAttribute("flag_duration") ~= ActualPrompt.HoldDuration then
-						ActualPrompt.HoldDuration = ActualPrompt:GetAttribute("flag_duration")
-					end
-				end
-			end)
-
-			coroutine.wrap(function()
-				while true do task.wait(7.5)
-					if B.Values.Wallhacking.Players.Enabled == true then
-						B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(false)
-						task.wait(.05)
-						B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(true)
-					end
-				end
-			end)()
-
-			Player.CharacterAdded:Connect(function()
-				task.wait(.8)
-
-				if B.Values.Walkspeed.SpeedBool == true then
-					B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
-
-				end
-				if B.Values.Acceleration.AccelBool == true then
-					ACTIVE_MODIFIES["Acceleration_Value"] = ReplicatedStorage.CharStats[Player.Name].AccelerationModifier.Value
-					task.wait()
-					B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
-				end
-				if B.Values.StaminaMods.StaminaBool == true then
-					B.Scripts.Toggle_InfinityStamina(true)
-				end
-
-			end)
-		end)
-
-
-
-
-		local AU
-		if ScriptDB.Membership_Info.Account ~= nil then
-			AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({ScriptDB.Membership_Info.Account})[1].Username
-		else
-			AU = "unobstructed"
-		end
-
-		M.Library.Sections.Membership.Information:AddLabel(' Version: '..ScriptDB.Membership_Info.Build)
-		M.Library.Sections.Membership.Information:AddLabel(' Account: '..AU)
-		M.Library.Sections.Membership.Information:AddLabel(' License: '..tostring(B.Plugins.__Commas(ScriptDB.Membership_Info.Days)).." days")
-		M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
-			task.wait(.085)
-			_G.IsScreenGui_toggler_actor:Destroy()
-
-			task.wait(.3)
-
-			B.Scripts.Change_WalkSpeed(false)
-			B.Scripts.Change_Acceleration(1)
-			B.Scripts.Toggle_InfinityStamina(false)
-			B.Scripts.Toggle_CameraProperties(false, "distance")
-			B.Scripts.Toggle_CameraProperties(false, "mode")
-			B.Scripts.Toggle_Fling(false)
-			B.Scripts.Toggle_NeckMovement(true)
-			B.Scripts.Toggle_BodyRotation(false)
-			B.Scripts.Toggle_LockpickResize(false)
-
-			B.Values.Wallhacking.Players.Enabled = false
-
-			B.Values.Wallhacking.Crates.Red_Enabled = false
-			B.Values.Wallhacking.Crates.Green_Enabled = false
-			B.Values.Wallhacking.Crates.White_Enabled = false
-			B.Values.Wallhacking.Crates.Gold_Enabled = false
-
-			B.Values.Wallhacking.Safes.Enabled = false
-			B.Values.Wallhacking.Dealers.Enabled = false
-			B.Values.Wallhacking.ATMs.Enabled = false
-
-			B.Values.Aimlock.AimlockBool = false
-
-			I_aimlock:Destroy()
-			M_esp:Destroy()
-
-			Crosshair.unload()
-
-			task.wait(.5)
-
-			_G.Celebrial_nonYieldLoaded = false
-			_G.Id_Verify_Celebrial_WithoutYielding = false
-
-			game.CoreGui:SetAttribute("Celebrial_Destroying", true)
-		end)
-
-		--  \\  Crosshair Setup  //  --
-		task.spawn(function()
-			local Current_Path = M.Library.Sections
-			local Current_Section = Current_Path.Misc.Crosshair
-
-			B.Values.Crosshair = {
-
-				Enabled = true, -- Inverted (if true then default'll be false)
-				Color = Color3.fromRGB(255, 255, 255),
-				ViewMode = Enum.ResamplerMode.Default,
-				Scale = 1,
-				Image = Crosshair.defaults["Lines 1"],
-				Transparency = 0,
-			}
-
-			local CrosshairValues = B.Values.Crosshair
-
-			--local default_table = {
-			--	Crosshair_Color = Color3.fromRGB(255, 255, 255),
-			--	Crosshair_ViewMode = Enum.ResamplerMode.Default,
-			--	Crosshair_Transparency = 0,
-			--	Crosshair_Image = 0,
-			--	Crosshair_Scale = 1,
-			--}
-
-			Crosshair.init()
-			Crosshair.new("new", {
-				Crosshair_Color = 			CrosshairValues.Color,
-				Crosshair_ViewMode = 		CrosshairValues.ViewMode,
-				Crosshair_Transparency = 	CrosshairValues.Transparency,
-				Crosshair_Image = 			CrosshairValues.Image,
-				Crosshair_Scale = 			CrosshairValues.Scale,
-			})
-			Crosshair.toggle(not CrosshairValues.Enabled)
-
-
-			Current_Section:AddToggle('Crosshair', CrosshairValues.Enabled, Enum.KeyCode.M, function(Boolean)
-				CrosshairValues.Enabled = Boolean
-				Crosshair.toggle(Boolean)
-			end)
-
-			Current_Section:AddSlider('Size', 5, 0.1, 1, function(Number)
-				CrosshairValues.Scale = Number
-				Crosshair.new("upd", {
-					Crosshair_Color = 			CrosshairValues.Color,
-					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
-					Crosshair_Transparency = 	CrosshairValues.Transparency,
-					Crosshair_Image = 			CrosshairValues.Image,
-					Crosshair_Scale = 			CrosshairValues.Scale,
-				})
-			end)
-
-			Current_Section:AddSlider('Transparency', 1, 0, 0, function(Number)
-				CrosshairValues.Transparency = Number
-				Crosshair.new("upd", {
-					Crosshair_Color = 			CrosshairValues.Color,
-					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
-					Crosshair_Transparency = 	CrosshairValues.Transparency,
-					Crosshair_Image = 			CrosshairValues.Image,
-					Crosshair_Scale = 			CrosshairValues.Scale,
-				})
-			end)
-
-			Current_Section:AddColorPallete('Color', CrosshairValues.Color,function(a) 
-				CrosshairValues.Color = a
-				Crosshair.new("upd", {
-					Crosshair_Color = 			CrosshairValues.Color,
-					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
-					Crosshair_Transparency = 	CrosshairValues.Transparency,
-					Crosshair_Image = 			CrosshairValues.Image,
-					Crosshair_Scale = 			CrosshairValues.Scale,
-				})
-			end)
-
-			Current_Section:AddDropdown('ResampleMode',{'Default','Pixeled'},'Default',function(a) 
-				if a == 'Default' then
-					CrosshairValues.ViewMode = Enum.ResamplerMode.Default
-				elseif a == 'Pixeled' then
-					CrosshairValues.ViewMode = Enum.ResamplerMode.Pixelated
-				end
-				Crosshair.new("upd", {
-					Crosshair_Color = 			CrosshairValues.Color,
-					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
-					Crosshair_Transparency = 	CrosshairValues.Transparency,
-					Crosshair_Image = 			CrosshairValues.Image,
-					Crosshair_Scale = 			CrosshairValues.Scale,
-				})
-			end)
-
-			local variants = {}
-			for variant,_ in Crosshair.defaults do
-				table.insert(variants, variant)
 			end
 
-			Current_Section:AddDropdown('Crosshairs',variants,variants[1],function(a) 
-				CrosshairValues.Image = Crosshair.defaults[a]
-				Crosshair.new("upd", {
+			B.Scripts.Toggle_CameraProperties = function(Boolean, Property)
+				local CameraDistance = function()
+					if Boolean then Player.CameraMaxZoomDistance = 1000 else Player.CameraMaxZoomDistance = 10 end
+				end
+
+				local CameraMode = function()
+					if Boolean then Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam 
+					else Player.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Zoom end
+				end
+
+				if string.lower(Property) == "distance" then
+					CameraDistance()
+				elseif string.lower(Property) == "mode" then
+					CameraMode()
+				end
+			end
+
+			B.Scripts.Toggle_LockpickResize = function(Boolean)
+				local PlayerGui = M.Local.Player.PlayerGui
+
+				local Baty = function(gui)
+					if gui:FindFirstChild("MF") then
+						for _, T in gui.MF.LP_Frame.Frames:GetChildren() do
+							if T:IsA("Frame") and T:FindFirstChild("Bar") then
+								if Boolean then
+									T.Bar.UIScale.Scale = 15
+								else
+									T.Bar.UIScale.Scale = 1
+								end
+							end
+						end
+					end
+				end
+
+				if PlayerGui:FindFirstChild("LockpickGUI") then
+					Baty(PlayerGui.LockpickGUI)
+				end
+			end
+
+			task.spawn(function() -- Handling Specific Events / Connections
+				local PlayerGui = Player.PlayerGui
+
+				PlayerGui.ChildAdded:Connect(function(AddedChild)
+					if AddedChild.Name == "LockpickGUI" then
+						if B.Values.Lockpicking.LockpickBool == true then
+							B.Scripts.Toggle_LockpickResize(true)
+						else
+							B.Scripts.Toggle_LockpickResize(false)
+						end
+					end
+				end)
+
+				game:GetService("ProximityPromptService").PromptShown:Connect(function(ActualPrompt)
+					if B.Values.FastUsage.PromptsBool == true then
+						if ActualPrompt:GetAttribute("flag_duration") == nil then
+							ActualPrompt:SetAttribute("flag_duration", ActualPrompt.HoldDuration)
+						end
+						ActualPrompt.HoldDuration = 0
+					elseif ActualPrompt:GetAttribute("flag_duration") ~= nil then
+						if ActualPrompt:GetAttribute("flag_duration") ~= ActualPrompt.HoldDuration then
+							ActualPrompt.HoldDuration = ActualPrompt:GetAttribute("flag_duration")
+						end
+					end
+				end)
+
+				coroutine.wrap(function()
+					while true do task.wait(7.5)
+						if B.Values.Wallhacking.Players.Enabled == true then
+							B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(false)
+							task.wait(.05)
+							B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(true)
+						end
+					end
+				end)()
+
+				Player.CharacterAdded:Connect(function()
+					task.wait(.8)
+
+					if B.Values.Walkspeed.SpeedBool == true then
+						B.Scripts.Change_WalkSpeed(true, B.Values.Walkspeed.SpeedValue)
+
+					end
+					if B.Values.Acceleration.AccelBool == true then
+						ACTIVE_MODIFIES["Acceleration_Value"] = ReplicatedStorage.CharStats[Player.Name].AccelerationModifier.Value
+						task.wait()
+						B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
+					end
+					if B.Values.StaminaMods.StaminaBool == true then
+						B.Scripts.Toggle_InfinityStamina(true)
+					end
+
+				end)
+			end)
+
+
+
+
+			local AU
+			if License.Account == "N/A" or License.Account == nil then
+				AU = "unobstructed"
+			else
+				AU = game:GetService("UserService"):GetUserInfosByUserIdsAsync({License.Account})[1].Username
+			end
+
+			M.Library.Sections.Membership.Information:AddLabel(' Version: '..ScriptDB.ScriptType)
+			M.Library.Sections.Membership.Information:AddLabel(' Account: '..AU)
+			M.Library.Sections.Membership.Information:AddLabel(' License: '..tostring(B.Plugins.__Commas(os.date("!*t", B.Plugins.LET(License, true)).day)))
+			M.Library.Sections.Membership.Information:AddButton('Log Out', function() 
+				task.wait(.085)
+				_G.IsScreenGui_toggler_actor:Destroy()
+
+				task.wait(.3)
+
+				B.Scripts.Change_WalkSpeed(false)
+				B.Scripts.Change_Acceleration(1)
+				B.Scripts.Toggle_InfinityStamina(false)
+				B.Scripts.Toggle_CameraProperties(false, "distance")
+				B.Scripts.Toggle_CameraProperties(false, "mode")
+				B.Scripts.Toggle_Fling(false)
+				B.Scripts.Toggle_NeckMovement(true)
+				B.Scripts.Toggle_BodyRotation(false)
+				B.Scripts.Toggle_LockpickResize(false)
+
+				B.Values.Wallhacking.Players.Enabled = false
+
+				B.Values.Wallhacking.Crates.Red_Enabled = false
+				B.Values.Wallhacking.Crates.Green_Enabled = false
+				B.Values.Wallhacking.Crates.White_Enabled = false
+				B.Values.Wallhacking.Crates.Gold_Enabled = false
+
+				B.Values.Wallhacking.Safes.Enabled = false
+				B.Values.Wallhacking.Dealers.Enabled = false
+				B.Values.Wallhacking.ATMs.Enabled = false
+
+				B.Values.Aimlock.AimlockBool = false
+
+				I_aimlock:Destroy()
+				M_esp:Destroy()
+
+				Crosshair.unload()
+
+				task.wait(.5)
+
+				_G.Celebrial_nonYieldLoaded = false
+				_G.Id_Verify_Celebrial_WithoutYielding = false
+
+				game.CoreGui:SetAttribute("Celebrial_Destroying", true)
+			end)
+
+			--  \\  Crosshair Setup  //  --
+			task.spawn(function()
+				local Current_Path = M.Library.Sections
+				local Current_Section = Current_Path.Misc.Crosshair
+
+				B.Values.Crosshair = {
+
+					Enabled = true, -- Inverted (if true then default'll be false)
+					Color = Color3.fromRGB(255, 255, 255),
+					ViewMode = Enum.ResamplerMode.Default,
+					Scale = 1,
+					Image = Crosshair.defaults["Lines 1"],
+					Transparency = 0,
+				}
+
+				local CrosshairValues = B.Values.Crosshair
+
+				--local default_table = {
+				--	Crosshair_Color = Color3.fromRGB(255, 255, 255),
+				--	Crosshair_ViewMode = Enum.ResamplerMode.Default,
+				--	Crosshair_Transparency = 0,
+				--	Crosshair_Image = 0,
+				--	Crosshair_Scale = 1,
+				--}
+
+				Crosshair.init()
+				Crosshair.new("new", {
 					Crosshair_Color = 			CrosshairValues.Color,
 					Crosshair_ViewMode = 		CrosshairValues.ViewMode,
 					Crosshair_Transparency = 	CrosshairValues.Transparency,
 					Crosshair_Image = 			CrosshairValues.Image,
 					Crosshair_Scale = 			CrosshairValues.Scale,
 				})
+				Crosshair.toggle(not CrosshairValues.Enabled)
+
+
+				Current_Section:AddToggle('Crosshair', CrosshairValues.Enabled, Enum.KeyCode.M, function(Boolean)
+					CrosshairValues.Enabled = Boolean
+					Crosshair.toggle(Boolean)
+				end)
+
+				Current_Section:AddSlider('Size', 5, 0.1, 1, function(Number)
+					CrosshairValues.Scale = Number
+					Crosshair.new("upd", {
+						Crosshair_Color = 			CrosshairValues.Color,
+						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+						Crosshair_Transparency = 	CrosshairValues.Transparency,
+						Crosshair_Image = 			CrosshairValues.Image,
+						Crosshair_Scale = 			CrosshairValues.Scale,
+					})
+				end)
+
+				Current_Section:AddSlider('Transparency', 1, 0, 0, function(Number)
+					CrosshairValues.Transparency = Number
+					Crosshair.new("upd", {
+						Crosshair_Color = 			CrosshairValues.Color,
+						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+						Crosshair_Transparency = 	CrosshairValues.Transparency,
+						Crosshair_Image = 			CrosshairValues.Image,
+						Crosshair_Scale = 			CrosshairValues.Scale,
+					})
+				end)
+
+				Current_Section:AddColorPallete('Color', CrosshairValues.Color,function(a) 
+					CrosshairValues.Color = a
+					Crosshair.new("upd", {
+						Crosshair_Color = 			CrosshairValues.Color,
+						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+						Crosshair_Transparency = 	CrosshairValues.Transparency,
+						Crosshair_Image = 			CrosshairValues.Image,
+						Crosshair_Scale = 			CrosshairValues.Scale,
+					})
+				end)
+
+				Current_Section:AddDropdown('ResampleMode',{'Default','Pixeled'},'Default',function(a) 
+					if a == 'Default' then
+						CrosshairValues.ViewMode = Enum.ResamplerMode.Default
+					elseif a == 'Pixeled' then
+						CrosshairValues.ViewMode = Enum.ResamplerMode.Pixelated
+					end
+					Crosshair.new("upd", {
+						Crosshair_Color = 			CrosshairValues.Color,
+						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+						Crosshair_Transparency = 	CrosshairValues.Transparency,
+						Crosshair_Image = 			CrosshairValues.Image,
+						Crosshair_Scale = 			CrosshairValues.Scale,
+					})
+				end)
+
+				local variants = {}
+				for variant,_ in Crosshair.defaults do
+					table.insert(variants, variant)
+				end
+
+				Current_Section:AddDropdown('Crosshairs',variants,variants[1],function(a) 
+					CrosshairValues.Image = Crosshair.defaults[a]
+					Crosshair.new("upd", {
+						Crosshair_Color = 			CrosshairValues.Color,
+						Crosshair_ViewMode = 		CrosshairValues.ViewMode,
+						Crosshair_Transparency = 	CrosshairValues.Transparency,
+						Crosshair_Image = 			CrosshairValues.Image,
+						Crosshair_Scale = 			CrosshairValues.Scale,
+					})
+				end)
 			end)
-		end)
 
 
-		--  \\  Speed  //  --
-		M.Library.Sections.Misc.Movement:AddLabel('Speed-Hacking')
+			--  \\  Speed  //  --
+			M.Library.Sections.Misc.Movement:AddLabel('Speed-Hacking')
 
-		M.Library.Sections.Misc.Movement:AddToggle('Toggle Speed', B.Values.Walkspeed.SpeedBool, Enum.KeyCode.Z, function(Boolean)
-			B.Values.Walkspeed.SpeedBool = Boolean
-			B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
-		end)
-
-		M.Library.Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
-			B.Values.Walkspeed.SpeedValue = Number
-			if B.Values.Walkspeed.SpeedBool == true then
+			M.Library.Sections.Misc.Movement:AddToggle('Toggle Speed', B.Values.Walkspeed.SpeedBool, Enum.KeyCode.Z, function(Boolean)
+				B.Values.Walkspeed.SpeedBool = Boolean
 				B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
-			end
-		end)
+			end)
 
+			M.Library.Sections.Misc.Movement:AddSlider('Change Speed', 10, 0, 1, function(Number)
+				B.Values.Walkspeed.SpeedValue = Number
+				if B.Values.Walkspeed.SpeedBool == true then
+					B.Scripts.Change_WalkSpeed(B.Values.Walkspeed.SpeedBool, B.Values.Walkspeed.SpeedValue)
+				end
+			end)
 
 
 
-		--  \\  Acceleration  //  --
-		M.Library.Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
 
-		M.Library.Sections.Misc.Movement:AddSlider('Change Acceleration', 10, 0, 1, function(Number)
-			B.Values.Acceleration.AccelValue = Number
-			B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
-		end)
+			--  \\  Acceleration  //  --
+			M.Library.Sections.Misc.Movement:AddLabel('Acceleration-Hacking')
 
+			M.Library.Sections.Misc.Movement:AddSlider('Change Acceleration', 10, 0, 1, function(Number)
+				B.Values.Acceleration.AccelValue = Number
+				B.Scripts.Change_Acceleration(B.Values.Acceleration.AccelValue)
+			end)
 
 
 
-		--  \\  Stamina  //  --
-		M.Library.Sections.Misc.Character:AddLabel('Other')	
 
-		M.Library.Sections.Misc.Character:AddToggle('Toggle Inf-Stamina', B.Values.StaminaMods.StaminaBool, Enum.KeyCode.I, function(Boolean)
-			B.Values.StaminaMods.StaminaBool = Boolean
-			B.Scripts.Toggle_InfinityStamina(B.Values.StaminaMods.StaminaBool)
-		end)
+			--  \\  Stamina  //  --
+			M.Library.Sections.Misc.Character:AddLabel('Other')	
 
-		M.Library.Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
-			B.Values.FastUsage.PromptsBool = Boolean
-		end)
+			M.Library.Sections.Misc.Character:AddToggle('Toggle Inf-Stamina', B.Values.StaminaMods.StaminaBool, Enum.KeyCode.I, function(Boolean)
+				B.Values.StaminaMods.StaminaBool = Boolean
+				B.Scripts.Toggle_InfinityStamina(B.Values.StaminaMods.StaminaBool)
+			end)
 
-		M.Library.Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
-			B.Values.CameraHack.MoreZoomBool = Boolean
-			B.Scripts.Toggle_CameraProperties(Boolean, "distance")
-		end)
+			M.Library.Sections.Misc.Character:AddToggle('Toggle Fast-Prompts', B.Values.FastUsage.PromptsBool, nil, function(Boolean)
+				B.Values.FastUsage.PromptsBool = Boolean
+			end)
 
-		M.Library.Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
-			B.Values.CameraHack.InvisCameraBool = Boolean
-			B.Scripts.Toggle_CameraProperties(Boolean, "mode")
-		end)
+			M.Library.Sections.Misc.Character:AddToggle('Toggle Max-Camera-Distance', B.Values.CameraHack.MoreZoomBool, nil, function(Boolean)
+				B.Values.CameraHack.MoreZoomBool = Boolean
+				B.Scripts.Toggle_CameraProperties(Boolean, "distance")
+			end)
 
-		M.Library.Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
-			B.Values.Flinging.FlingBool = Boolean
-			B.Scripts.Toggle_Fling(Boolean)
-		end)
+			M.Library.Sections.Misc.Character:AddToggle('Toggle Camera-Occlusion', B.Values.CameraHack.InvisCameraBool, nil, function(Boolean)
+				B.Values.CameraHack.InvisCameraBool = Boolean
+				B.Scripts.Toggle_CameraProperties(Boolean, "mode")
+			end)
 
+			M.Library.Sections.Misc.Character:AddToggle('Toggle Fling', B.Values.Flinging.FlingBool, Enum.KeyCode.PageUp, function(Boolean)
+				B.Values.Flinging.FlingBool = Boolean
+				B.Scripts.Toggle_Fling(Boolean)
+			end)
 
 
 
-		--  \\  Other  //  --
 
+			--  \\  Other  //  --
 
-		M.Library.Sections.Misc.Character:AddToggle('Disable Neck-Movement', true, nil, function(Boolean)
-			B.Scripts.Toggle_NeckMovement(Boolean)
-		end)
 
-		M.Library.Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
-			B.Scripts.Toggle_BodyRotation(Boolean)
-		end)
+			M.Library.Sections.Misc.Character:AddToggle('Disable Neck-Movement', true, nil, function(Boolean)
+				B.Scripts.Toggle_NeckMovement(Boolean)
+			end)
 
+			M.Library.Sections.Misc.Character:AddToggle('Enable Root-Following', true, nil, function(Boolean)
+				B.Scripts.Toggle_BodyRotation(Boolean)
+			end)
 
 
 
-		--  \\  Lockpicking  //  --
-		M.Library.Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
-			B.Values.Lockpicking.LockpickBool = Boolean
-			B.Scripts.Toggle_LockpickResize(Boolean)
-		end)
 
-		M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', function() 
-			B.Scripts.Give_TeleportTool()
-		end)
+			--  \\  Lockpicking  //  --
+			M.Library.Sections.Misc.Character:AddToggle('Easy lockpicks', B.Values.Lockpicking.LockpickBool, nil, function(Boolean)
+				B.Values.Lockpicking.LockpickBool = Boolean
+				B.Scripts.Toggle_LockpickResize(Boolean)
+			end)
 
+			M.Library.Sections.Misc.Character:AddButton('Get Teleport-Tool', function() 
+				B.Scripts.Give_TeleportTool()
+			end)
 
 
 
-		--  \\  Esp  //  --
 
+			--  \\  Esp  //  --
 
-		--Players
-		M.Library.Sections.Visual.Sense:AddLabel('Players')
 
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.Players.Enabled, Enum.KeyCode.K, function(Boolean)
-			B.Values.Wallhacking.Players.Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(Boolean)
-		end)
+			--Players
+			M.Library.Sections.Visual.Sense:AddLabel('Players')
 
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Players.Color,function(a) 
-			B.Values.Wallhacking.Players.Color = a
-		end)
+			M.Library.Sections.Visual.Sense:AddToggle('Toggle Player-Esp', B.Values.Wallhacking.Players.Enabled, Enum.KeyCode.K, function(Boolean)
+				B.Values.Wallhacking.Players.Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionPlayers(Boolean)
+			end)
 
+			M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Players.Color,function(a) 
+				B.Values.Wallhacking.Players.Color = a
+			end)
 
-		--Crates
-		M.Library.Sections.Visual.Sense:AddLabel('\nCrates')
 
+			--Crates
+			M.Library.Sections.Visual.Sense:AddLabel('\nCrates')
 
-		--Reds
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle Red Crate-Esp', B.Values.Wallhacking.Crates.Red_Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.Crates.Red_Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Red Crate", DeleteFolder = Scrap_esp.Reds})
-		end)
 
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
-			B.Values.Wallhacking.Crates.ColorRed = a
-		end)
+			--Reds
+			M.Library.Sections.Visual.Sense:AddToggle('Toggle Red Crate-Esp', B.Values.Wallhacking.Crates.Red_Enabled, nil, function(Boolean)
+				B.Values.Wallhacking.Crates.Red_Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Red Crate", DeleteFolder = Scrap_esp.Reds})
+			end)
 
+			M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorRed,function(a) 
+				B.Values.Wallhacking.Crates.ColorRed = a
+			end)
 
-		--Greens
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle Green Crate-Esp', B.Values.Wallhacking.Crates.Green_Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.Crates.Green_Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Green Crate", DeleteFolder = Scrap_esp.Greens})
-		end)
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGreen,function(a) 
-			B.Values.Wallhacking.Crates.ColorGreen = a
-		end)
 
+			--Greens
+			M.Library.Sections.Visual.Sense:AddToggle('Toggle Green Crate-Esp', B.Values.Wallhacking.Crates.Green_Enabled, nil, function(Boolean)
+				B.Values.Wallhacking.Crates.Green_Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "Green Crate", DeleteFolder = Scrap_esp.Greens})
+			end)
+			M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGreen,function(a) 
+				B.Values.Wallhacking.Crates.ColorGreen = a
+			end)
 
-		--Whites
-		M.Library.Sections.Visual.Sense:AddToggle('Toggle White Crate-Esp', B.Values.Wallhacking.Crates.White_Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.Crates.White_Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "White Crate", DeleteFolder = Scrap_esp.Whites})
-		end)
 
-		M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
-			B.Values.Wallhacking.Crates.ColorWhite = a
-		end)
+			--Whites
+			M.Library.Sections.Visual.Sense:AddToggle('Toggle White Crate-Esp', B.Values.Wallhacking.Crates.White_Enabled, nil, function(Boolean)
+				B.Values.Wallhacking.Crates.White_Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Filter.SpawnedPiles, {Folder = F_esp.Scraps, Text = "White Crate", DeleteFolder = Scrap_esp.Whites})
+			end)
 
+			M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorWhite,function(a) 
+				B.Values.Wallhacking.Crates.ColorWhite = a
+			end)
 
 
-		--M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
-		--	B.Values.Wallhacking.Crates.ColorGold = a
-		--end)
 
+			--M.Library.Sections.Visual.Sense:AddColorPallete('Esp Color', B.Values.Wallhacking.Crates.ColorGold,function(a) 
+			--	B.Values.Wallhacking.Crates.ColorGold = a
+			--end)
 
-		--Safes
-		M.Library.Sections.Visual.Sense2:AddLabel('\nSafes')
 
-		M.Library.Sections.Visual.Sense2:AddToggle('Toggle Safe-Esp', B.Values.Wallhacking.Safes.Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.Safes.Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.BredMakurz, {Folder = F_esp.Safes, Text = "Safe", Color = B.Values.Wallhacking.Safes.Color})
-		end)
+			--Safes
+			M.Library.Sections.Visual.Sense2:AddLabel('\nSafes')
 
-		M.Library.Sections.Visual.Sense2:AddToggle('Registers Check', B.Values.Wallhacking.Safes.Registers, nil, function(Boolean)
-			B.Values.Wallhacking.Registers.Enabled = Boolean
-		end)
+			M.Library.Sections.Visual.Sense2:AddToggle('Toggle Safe-Esp', B.Values.Wallhacking.Safes.Enabled, nil, function(Boolean)
+				B.Values.Wallhacking.Safes.Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.BredMakurz, {Folder = F_esp.Safes, Text = "Safe", Color = B.Values.Wallhacking.Safes.Color})
+			end)
 
-		M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
-			B.Values.Wallhacking.Safes.Color = a
-		end)
+			M.Library.Sections.Visual.Sense2:AddToggle('Registers Check', B.Values.Wallhacking.Safes.Registers, nil, function(Boolean)
+				B.Values.Wallhacking.Registers.Enabled = Boolean
+			end)
 
+			M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.Safes.Color,function(a) 
+				B.Values.Wallhacking.Safes.Color = a
+			end)
 
-		--ATMs
-		M.Library.Sections.Visual.Sense2:AddLabel('\nATMs')
 
-		M.Library.Sections.Visual.Sense2:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.ATMs.Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.ATMz, {Folder = F_esp.ATMs, Text = "ATM", Color = B.Values.Wallhacking.ATMs.Color})
-		end)
+			--ATMs
+			M.Library.Sections.Visual.Sense2:AddLabel('\nATMs')
 
-		M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
-			B.Values.Wallhacking.ATMs.Color = a
-		end)
+			M.Library.Sections.Visual.Sense2:AddToggle('Toggle ATM-Esp', B.Values.Wallhacking.ATMs.Enabled, nil, function(Boolean)
+				B.Values.Wallhacking.ATMs.Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.ATMz, {Folder = F_esp.ATMs, Text = "ATM", Color = B.Values.Wallhacking.ATMs.Color})
+			end)
 
-		--Dealers
-		M.Library.Sections.Visual.Sense2:AddLabel('\nDealers')
+			M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.ATMs.Color,function(a) 
+				B.Values.Wallhacking.ATMs.Color = a
+			end)
 
-		M.Library.Sections.Visual.Sense2:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
-			B.Values.Wallhacking.Dealers.Enabled = Boolean
-			B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.Shopz, {Folder = F_esp.Dealers, Text = "Dealer", Color = B.Values.Wallhacking.Dealers.Color})
-		end)
+			--Dealers
+			M.Library.Sections.Visual.Sense2:AddLabel('\nDealers')
 
-		M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
-			B.Values.Wallhacking.Dealers.Color = a
-		end)
+			M.Library.Sections.Visual.Sense2:AddToggle('Toggle Dealer-Esp', B.Values.Wallhacking.Dealers.Enabled, nil, function(Boolean)
+				B.Values.Wallhacking.Dealers.Enabled = Boolean
+				B.Scripts.Toggle_ExtraSensoryPerceptionObjects(Boolean, M.Services.Workspace.Map.Shopz, {Folder = F_esp.Dealers, Text = "Dealer", Color = B.Values.Wallhacking.Dealers.Color})
+			end)
 
+			M.Library.Sections.Visual.Sense2:AddColorPallete('Esp Color', B.Values.Wallhacking.Dealers.Color,function(a) 
+				B.Values.Wallhacking.Dealers.Color = a
+			end)
 
-		--end
 
+			--end
 
-		--  \\  Menu  //  --
-		M.Library.Sections.Membership.Information:AddLabel('\nMenu')	
 
-		M.Library.Sections.Membership.Information:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
-			_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
-		end)
+			--  \\  Menu  //  --
+			M.Library.Sections.Membership.Information:AddLabel('\nMenu')	
 
+			M.Library.Sections.Membership.Information:AddKeyBind('Toggle ui', Enum.KeyCode.Insert, function() 
+				_G.IsScreenGui_toggler_actor.Enabled = not _G.IsScreenGui_toggler_actor.Enabled
+			end)
 
 
-		--  \\  Aim-Lock  //  --
-		pcall(function()
-			local Aimlock_temps = {	
-				target = nil,
-				is_m2_p = false,
-			}
 
-			local f_d = {}
+			--  \\  Aim-Lock  //  --
+			pcall(function()
+				local Aimlock_temps = {	
+					target = nil,
+					is_m2_p = false,
+				}
 
-			f_d.Target = nil
-			f_d.getTarget = function()
-				local Distance = B.Values.Aimlock.DistanceValue
-				local Part = B.Values.Aimlock.TargetPart
-				local Target = nil
+				local f_d = {}
 
-				for _, P in M.Services.Players:GetPlayers() do
-					if P ~= M.Local.Player then
-						if P.Character then
-							if P.Character:FindFirstChild("Humanoid") then
-								if P.Character:FindFirstChild("HumanoidRootPart") then
-									if (M.Functions.GetOwnCharacter().HumanoidRootPart.Position - M.Functions.GetCharacter(P).HumanoidRootPart.Position).Magnitude < B.Values.Aimlock.DistanceValue then
-										local doM = function()
-											local char = P.Character
-											local root, vis = M.Local.Camera:WorldToViewportPoint(char[Part].Position)
-											if vis then
-												local m = (Vector2.new(M.Local.Mouse.X, M.Local.Mouse.Y) - Vector2.new(root.X, root.Y)).Magnitude
-												if m < Distance and m < I_aimlock.Radius then
-													Distance = m
-													Target = char
-												end
-											end
-										end
+				f_d.Target = nil
+				f_d.getTarget = function()
+					local Distance = B.Values.Aimlock.DistanceValue
+					local Part = B.Values.Aimlock.TargetPart
+					local Target = nil
 
-
-										if B.Values.Aimlock.DeadCheck then
-											if P.Character.Humanoid.Health > 0 then
-												if B.Values.Aimlock.DownedCheck then
-													local NewFolder = M.Services.ReplicatedStorage["CharStats"]:FindFirstChild(P.Name) or nil
-													if NewFolder then
-														if NewFolder.Downed.Value ~= true then
-															doM()
-														end
+					for _, P in M.Services.Players:GetPlayers() do
+						if P ~= M.Local.Player then
+							if P.Character then
+								if P.Character:FindFirstChild("Humanoid") then
+									if P.Character:FindFirstChild("HumanoidRootPart") then
+										if (M.Functions.GetOwnCharacter().HumanoidRootPart.Position - M.Functions.GetCharacter(P).HumanoidRootPart.Position).Magnitude < B.Values.Aimlock.DistanceValue then
+											local doM = function()
+												local char = P.Character
+												local root, vis = M.Local.Camera:WorldToViewportPoint(char[Part].Position)
+												if vis then
+													local m = (Vector2.new(M.Local.Mouse.X, M.Local.Mouse.Y) - Vector2.new(root.X, root.Y)).Magnitude
+													if m < Distance and m < I_aimlock.Radius then
+														Distance = m
+														Target = char
 													end
-												else
-													doM()
 												end
 											end
-										else
-											doM()
+
+
+											if B.Values.Aimlock.DeadCheck then
+												if P.Character.Humanoid.Health > 0 then
+													if B.Values.Aimlock.DownedCheck then
+														local NewFolder = M.Services.ReplicatedStorage["CharStats"]:FindFirstChild(P.Name) or nil
+														if NewFolder then
+															if NewFolder.Downed.Value ~= true then
+																doM()
+															end
+														end
+													else
+														doM()
+													end
+												end
+											else
+												doM()
+											end
 										end
 									end
 								end
 							end
 						end
 					end
+					return Target
 				end
-				return Target
-			end
 
-			local UIS = game:GetService("UserInputService")
-			local TSS = game:GetService("TweenService")
+				local UIS = game:GetService("UserInputService")
+				local TSS = game:GetService("TweenService")
 
-			local RSS = game:GetService("RunService")
-			local PSS = game:GetService("Players")
+				local RSS = game:GetService("RunService")
+				local PSS = game:GetService("Players")
 
-			local chart
+				local chart
 
-			UIS.InputEnded:Connect(function(Input, GameProccess)
-				if GameProccess then return end
-				if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-					Aimlock_temps.is_m2_p = false
-				end
-			end)
-
-			UIS.InputBegan:Connect(function(Input, GameProccess)
-				if GameProccess then return end
-				if B.Values.Aimlock.AimlockBool then
+				UIS.InputEnded:Connect(function(Input, GameProccess)
+					if GameProccess then return end
 					if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-						Aimlock_temps.is_m2_p = true
-						chart = f_d.getTarget()
+						Aimlock_temps.is_m2_p = false
 					end
-				end
+				end)
+
+				UIS.InputBegan:Connect(function(Input, GameProccess)
+					if GameProccess then return end
+					if B.Values.Aimlock.AimlockBool then
+						if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+							Aimlock_temps.is_m2_p = true
+							chart = f_d.getTarget()
+						end
+					end
+				end)
+
+				coroutine.wrap(function()
+					while true do RSS.Heartbeat:Wait()
+						pcall(function()
+							if M.Functions.GetOwnCharacter() then
+								if M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart") then
+									local gotten_vctr
+
+									if chart then
+										gotten_vctr = chart[B.Values.Aimlock.TargetPart].Position
+
+
+										local tss = TSS:Create(M.Local.Camera, TweenInfo.new(B.Values.Aimlock.TargetSense, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.lookAt(M.Local.Camera.CFrame.Position, gotten_vctr)})
+										if UIS.MouseBehavior == Enum.MouseBehavior.LockCenter and Aimlock_temps.is_m2_p == true then
+											tss:Play()
+											coroutine.wrap(function()
+												task.wait()
+												if UIS.MouseBehavior ~= Enum.MouseBehavior.LockCenter or Aimlock_temps.is_m2_p ~= true then
+													tss:Pause()
+												end
+											end)()
+										end
+									end
+								end
+							end
+						end)
+					end
+				end)()
+
+				M.Library.Sections.Combat.Aim:AddLabel('Aim Trigger')
+
+				M.Library.Sections.Combat.Aim:AddToggle('Toggle Locking', B.Values.Aimlock.AimlockBool, Enum.KeyCode.L, function(Boolean)
+					B.Values.Aimlock.AimlockBool = Boolean
+				end)
+
+				M.Library.Sections.Combat.Aim:AddToggle('Dead Check', B.Values.Aimlock.DeadCheck, nil, function(Boolean)
+					B.Values.Aimlock.DeadCheck = Boolean
+				end)
+
+				M.Library.Sections.Combat.Aim:AddToggle('Downed Check', B.Values.Aimlock.DownedCheck, nil, function(Boolean)
+					B.Values.Aimlock.DownedCheck = Boolean
+				end)
+
+				M.Library.Sections.Combat.Aim:AddSlider('Locking Sense', 3, 0.075, 0.5, function(Number)
+					B.Values.Aimlock.TargetSense = Number
+				end)
+
+				M.Library.Sections.Combat.Aim:AddSlider('Locking Distance', 2000, 100, 450, function(Number)
+					B.Values.Aimlock.DistanceValue = Number
+				end)
+
+				M.Library.Sections.Combat.Aim:AddDropdown('Locking Part',{'Head','Torso','HumanoidRootPart'},'Head',function(a) 
+					B.Values.Aimlock.TargetPart = a
+				end)
 			end)
+
+
 
 			coroutine.wrap(function()
-				while true do RSS.Heartbeat:Wait()
-					pcall(function()
-						if M.Functions.GetOwnCharacter() then
-							if M.Functions.GetOwnCharacter():FindFirstChild("HumanoidRootPart") then
-								local gotten_vctr
-
-								if chart then
-									gotten_vctr = chart[B.Values.Aimlock.TargetPart].Position
-
-
-									local tss = TSS:Create(M.Local.Camera, TweenInfo.new(B.Values.Aimlock.TargetSense, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {CFrame = CFrame.lookAt(M.Local.Camera.CFrame.Position, gotten_vctr)})
-									if UIS.MouseBehavior == Enum.MouseBehavior.LockCenter and Aimlock_temps.is_m2_p == true then
-										tss:Play()
-										coroutine.wrap(function()
-											task.wait()
-											if UIS.MouseBehavior ~= Enum.MouseBehavior.LockCenter or Aimlock_temps.is_m2_p ~= true then
-												tss:Pause()
-											end
-										end)()
-									end
-								end
-							end
-						end
-					end)
+				while wait(1) do
+					local time = 'TIME '..os.date("%H:%M:%S", os.time())
+					local fps = A.fps
+					local t = ''			
+					t = time.." / "..fps
+					B.Assets.Windows.WaterM:ChangeText(t)
 				end
 			end)()
 
-			M.Library.Sections.Combat.Aim:AddLabel('Aim Trigger')
-
-			M.Library.Sections.Combat.Aim:AddToggle('Toggle Locking', B.Values.Aimlock.AimlockBool, Enum.KeyCode.L, function(Boolean)
-				B.Values.Aimlock.AimlockBool = Boolean
-			end)
-
-			M.Library.Sections.Combat.Aim:AddToggle('Dead Check', B.Values.Aimlock.DeadCheck, nil, function(Boolean)
-				B.Values.Aimlock.DeadCheck = Boolean
-			end)
-
-			M.Library.Sections.Combat.Aim:AddToggle('Downed Check', B.Values.Aimlock.DownedCheck, nil, function(Boolean)
-				B.Values.Aimlock.DownedCheck = Boolean
-			end)
-
-			M.Library.Sections.Combat.Aim:AddSlider('Locking Sense', 3, 0.075, 0.5, function(Number)
-				B.Values.Aimlock.TargetSense = Number
-			end)
-
-			M.Library.Sections.Combat.Aim:AddSlider('Locking Distance', 2000, 100, 450, function(Number)
-				B.Values.Aimlock.DistanceValue = Number
-			end)
-
-			M.Library.Sections.Combat.Aim:AddDropdown('Locking Part',{'Head','Torso','HumanoidRootPart'},'Head',function(a) 
-				B.Values.Aimlock.TargetPart = a
-			end)
+			B.Assets.Windows.WaterM:Visible(true)
 		end)
 
+		coroutine.resume(Script)
 
+		game.CoreGui:GetAttributeChangedSignal("Celebrial_Destroying"):Once(function()
+			if game.CoreGui:GetAttribute("Celebrial_Destroying") == true then
+				coroutine.close(Script)
+				task.wait()
 
-		coroutine.wrap(function()
-			while wait(1) do
-				local time = 'TIME '..os.date("%H:%M:%S", os.time())
-				local fps = A.fps
-				local t = ''			
-				t = time.." / "..fps
-				B.Assets.Windows.WaterM:ChangeText(t)
+				game.CoreGui:GetAttribute("Celebrial_Destroying", nil)
+				task.wait(1.45)
+
+				loadstring(game:HttpGet('https://raw.githubusercontent.com/HallowsAdvent/Main/refs/heads/main/Source1'))()
 			end
-		end)()
-
-		B.Assets.Windows.WaterM:Visible(true)
-	end)
-
-	coroutine.resume(Script)
-
-	game.CoreGui:GetAttributeChangedSignal("Celebrial_Destroying"):Once(function()
-		if game.CoreGui:GetAttribute("Celebrial_Destroying") == true then
-			coroutine.close(Script)
-			task.wait()
-
-			game.CoreGui:GetAttribute("Celebrial_Destroying", nil)
-			task.wait(1.45)
-
-			loadstring(game:HttpGet('https://raw.githubusercontent.com/HallowsAdvent/Main/refs/heads/main/Source1'))()
-		end
-	end)
+		end)
+	end
 end
