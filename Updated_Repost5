@@ -1788,3 +1788,5 @@ Scripts.Main = function(License)
 		end)
 	end
 end
+
+return Scripts
